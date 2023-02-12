@@ -1,0 +1,39 @@
+{% load static %}
+<!DOCTYPE html>
+<html
+  lang="en"
+  class="has-aside-left has-aside-mobile-transition has-navbar-fixed-top has-aside-expanded"
+>
+  <head>
+    {% include 'Component/meta.html' %}
+    <link rel="stylesheet" href="{% static 'css/main.min.css' %}" />
+    <title>{%block title%}{% endblock %}</title>
+
+  </head>
+
+  <body>
+    <div class="mheight" id="app">
+      {% include 'Component/navbar.html' %}
+      {% include 'Component/aside.html' %}
+
+      {% block content %} {% endblock %}
+    </div>
+
+    {% include 'Component/footer.html' %}
+
+    <script>{% block js %}{% endblock %}</script>
+
+    <!-- Scripts below are for demo only -->
+    <script type="text/javascript" src="{% static 'js/main.min.js' %}"></script>
+    <script
+      type="text/javascript"
+      src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js"
+    ></script>
+
+    <!-- Icons below are for demo only. Feel free to use any icon pack. Docs: https://bulma.io/documentation/elements/icon/ -->
+    <link rel="stylesheet"
+      href="https://cdn.materialdesignicons.com/4.9.95/css/materialdesignicons.min.css"
+    />
+
+  </body>
+</html>

@@ -1,0 +1,213 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title%}Προμηθευτές {% endblock %}
+
+{% block content %}
+  {% include 'Component/page_title.html' with currentPage='Προμηθευτές' %}
+
+  <!-- Supplier Header-->
+  <div class="tile is-ancestor ml-3 mr-3 ">
+    <div class="tile is-parent">
+        <div class="card tile is-child has-background-dark">
+          <div class="card-content">
+            <div class="level is-mobile">
+              <div class="level-item has-widget-icon">
+                <div class="is-widget-icon">
+                  <a href="{% url 'supplier:supplier-create' %}">
+                    <span class="icon has-text-success is-large"><i
+                    class="mdi mdi-plus-thick mdi-48px"></i></span>
+                   </a>
+                </div>
+              </div>
+              <div class="level-item">
+                <div class="is-widget-label ">
+                  <h3 class="subtitle is-spaced has-text-success">
+                      Δημιουργία
+                  </h3>
+                  <h3 class="subtitle is-spaced has-text-success">
+                      Προμηθευτή
+                  </h3>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+        </div>
+    </div>
+      <div class="tile is-parent">
+        <div class="card tile is-child">
+          <div class="card-content has-background-dark ">
+            <div class="level is-mobile">
+              <div class="level-item ">
+                <div class="is-widget-label "><h3 class="subtitle is-spaced has-text-warning">
+                  Προμηθευτές
+                </h3>
+                  <h1 class="title has-text-danger">
+                    {{ paginator.count }}
+                  </h1>
+                </div>
+              </div>
+              <div class="level-item has-widget-icon">
+                <div class="is-widget-icon"><span class="icon has-text-warning is-large"><i
+                    class="mdi mdi-account-multiple mdi-48px"></i></span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+  </div>
+  <!-- Supplier Table Header-->
+  <div class="card has-table has-mobile-sort-spaced">
+    <header class="card-header">
+      <p class="card-header-title">
+        <span class="icon"><i class="mdi mdi-account-multiple"></i></span>
+          Προμηθευτές
+        <form action="" method="get">
+          <button class="button is-small is-info" type="submit">Apply Filter</button>
+          <div class="select is-small">
+            <select name="active" id="active">
+              <option value="true">Active</option>
+              <option value="false">Inactive</option>
+            </select>
+          </div>
+        </form>
+    </header>
+  </div>
+  <!-- Supplier Search-->
+  <div class="card-content has-text-centered has-mobile">
+    <form class="field is-grouped is-horizontal-mobile">
+      <div class="control">
+        <button class="button is-info"><span>Search</span><span class="icon has-text-light is-large">
+                <i class="mdi mdi-account-search "></i>
+              </span></button>
+      </div>
+      <div class="control is-expanded">
+        <input class="input" type="text" placeholder="Search...">
+      </div>
+
+      <div class="control">
+        <div class="select">
+          <select>
+            <option>Search by</option>
+            <option>Company</option>
+            <option>Phone</option>
+            <option>City</option>
+          </select>
+        </div>
+      </div>
+    </form>
+  </div>
+  <!-- Supplier Table-->
+  <div class="card-content">
+    <div class="b-table has-pagination">
+      <div class="table-wrapper has-mobile-cards">
+        <table class="table is-fullwidth is-striped is-hoverable is-sortable is-fullwidth">
+          <thead>
+          <tr>
+            <th>Supplier</th>
+            <th>SKU_num</th>
+            <th>Active</th>
+            <th>Created</th>
+            <th>Actions</th>
+          </tr>
+          </thead>
+          <tbody>
+            {% for supplier in suppliers %}
+              <tr>
+                <td data-label="Company">{{supplier.company}}</td>
+                <td data-label="SKU_num">{{supplier.sku_num}}</td>
+                <td data-label="Active">
+                  {% if supplier.is_active %}
+                  <span class="icon has-text-success "><i
+                  class="mdi mdi-check-decagram "></i></span>
+                  {% else %}
+                      <span class="icon has-text-danger "><i
+                  class="mdi mdi-cancel "></i></span>
+                  {% endif %}
+                </td>
+                <td data-label="Created">
+                  <small class="has-text-grey is-abbr-like" title="Oct 25, 2020">{{supplier.created_at}}</small>
+                </td>
+                <td class="is-actions-cell">
+                  <div class="buttons is-right">
+                    <a href="{{ supplier.get_absolute_url }}" class="button is-small is-primary" type="button">
+                      <span class="icon"><i class="mdi mdi-eye"></i></span>
+                    </a>
+
+                    <button class="button is-small is-danger jb-modal"
+                            id="modal-{{ supplier.pk }}-trigger"  type="button">
+
+                      <span class="icon"><i class="mdi mdi-trash-can"></i></span>
+
+                    </button>
+                    <!-- Modal -->
+                    <div class="modal" id="delete-modal">
+                      <div class="modal-background"></div>
+                      <div class="modal-card">
+                        <header class="modal-card-head">
+                          <p class="modal-card-title">Delete Confirmation</p>
+                          <button class="delete" aria-label="close"></button>
+                        </header>
+                        <section class="modal-card-body">
+                          Are you sure you want to delete this item?
+                        </section>
+                        <footer class="modal-card-foot">
+                          <form action="{% url 'supplier:supplier-delete' supplier.pk %}" method="post">
+                            {% csrf_token %}
+                            <input type="submit" value="Delete" class="button is-danger">
+                            <a class="button" id="cancel-button">Cancel</a>
+                          </form>
+                        </footer>
+                      </div>
+                    </div>
+
+                  </div>
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+  </div>
+  <!--Pagination-->
+  <div class="card-content">
+    <div class="b-table has-pagination">
+      <div class="notification">
+        <div class="level">
+          <div class="level-left">
+            <div class="level-item">
+              <div class="buttons has-addons">
+                {% for num in paginator.page_range %}
+                  {% if num == page_obj.number %}
+                    <a  href="?page={{ num }}" type="button" class="button is-active">{{num}}</a>
+                  {% else %}
+                    <a href="?page={{ num }}" type="button" class="button">{{ num }}</a>
+                  {% endif %}
+                {% endfor %}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      </div>
+    </div>
+  </div>
+
+{% endblock %}
+
+{% block js %}
+  {% for supplier in suppliers %}
+    document.getElementById('modal-{{ supplier.pk }}-trigger').addEventListener('click', function() {
+    var modal = document.getElementById('delete-modal');
+    document.querySelector("#delete-modal form").action = "{% url 'supplier:supplier-delete' supplier.pk %}";
+    modal.classList.add('is-active');
+    });
+  {% endfor %}
+
+  document.getElementById('cancel-button').addEventListener('click', function() {
+    var modal = document.getElementById('delete-modal');
+    modal.classList.remove('is-active');
+  });
+{% endblock %}

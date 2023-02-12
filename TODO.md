@@ -1,0 +1,3 @@
+- Add search in supplier_list
+- Add is_Active in supplier_form
+- Remove Active Manager from models [contact,tin,address]

@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+
+{% block title%}{{supplier.company}} -update {% endblock %}
+
+{% block content %}
+
+  {% include 'Component/page_title.html' with currentPage='Ανανέωση Πληροφοριών' %}
+  {% include 'supplier/components/card_header.html' with currentHeader=supplier.company %}
+
+  <div class="columns is-multiline mr-3 ml-3">
+    <div class="column is-full-desktop is-full-tablet is-full-mobile">
+      <div class="card">
+        <div class="card-content">
+            <div class="error">
+              {% for form in forms %}
+                {% if form.errors %}
+                <div class="notification is-danger">
+                  {{ form.errors }}
+                </div>
+                {% endif %}
+              {% endfor %}
+            </div>
+
+            <form method="post" class="m-3">
+              {% csrf_token %}
+              <div class="field has-text-center mt-5">
+                <div class="control">
+                  <a href="{% url 'supplier:supplier-detail' supplier.pk %}" class="button is-danger mr-6">Aκύρωση</a>
+                  <button class="button is-success ml-5" >Αποθηκευση</button>
+                </div>
+              </div>
+
+               <h2 class="title is-5">Γενικά</h2>
+              {{ supplier_form.as_table}}
+              <hr>
+              <h2 class="title is-5">Στοιχεία Επικοινωνίας</h2>
+              {{ contact_form.as_table}}
+              <hr>
+              <h2 class="title is-5">Στοιχεία Φορολογίας</h2>
+              {{ tin_form.as_table}}
+              <hr>
+              <h2 class="title is-5">Στοιχεία Διεύθυνσης</h2>
+              {{address_form.as_table}}
+
+            </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+{% endblock %}
