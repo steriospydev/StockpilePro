@@ -24,6 +24,35 @@ class SupplierListView(LoginRequiredMixin, ListView):
         else:
             return Supplier.active.all()
 
+
+class SearchSupplierListView(SupplierListView):
+    def search_construct(self,term, option):
+        if option == 'Πόλη':
+            city = Address.objects.filter(city=term)
+            return Supplier.active.filter(address__in=city)
+        elif option == 'Τηλέφωνο':
+            phone = Contact.objects.filter(phone=term)
+            return Supplier.active.filter(contact__in=phone)
+        elif option == 'ΑΦΜ':
+            tin = TIN.objects.filter(TIN_num=term)
+            return Supplier.active.filter(tin__in=tin)
+        else:
+            return Supplier.active.filter(company__icontains=term)
+
+    def get(self, request, *args, **kwargs):
+        search_term = self.request.GET.get('search_term', '')
+        search_option = self.request.GET.get('search_option')
+        if search_term is None:
+            return redirect('supplier:supplier-list')
+        self.queryset = self.search_construct(search_term, search_option)
+        paginator = Paginator(self.queryset, self.paginate_by)
+        return render(request, self.template_name, {'suppliers': self.queryset,
+                                                    'paginator':paginator,
+                                                    'term':search_term
+                                                    })
+
+
+
 class SupplierCreateView(LoginRequiredMixin, View):
     template_name = 'supplier/supplier_create.html'
     success_url = reverse_lazy('supplier:supplier-list')

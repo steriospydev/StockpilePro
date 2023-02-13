@@ -1,7 +1,7 @@
 from django.urls import path
 from .views import (SupplierListView, SupplierDetailView,
                     SupplierUpdateView, SupplierCreateView,
-                    SupplierDeleteView)
+                    SupplierDeleteView, SearchSupplierListView)
 
 app_name = 'supplier'
 
@@ -10,5 +10,7 @@ urlpatterns = [
     path('new/', SupplierCreateView.as_view(), name='supplier-create'),
     path('<str:pk>/', SupplierDetailView.as_view(), name='supplier-detail'),
     path('<str:pk>/edit/', SupplierUpdateView.as_view(), name='supplier-update'),
-    path('<str:pk>/delete', SupplierDeleteView.as_view(), name='supplier-delete')
+    path('<str:pk>/delete', SupplierDeleteView.as_view(), name='supplier-delete'),
+    path('search/<str:search_term>/', SearchSupplierListView.as_view(), name='supplier-search')
+
 ]
