@@ -33,7 +33,7 @@
                     {% endif %}
                     <li class="is-italic">Αριθμός SKU</li>
                     <li class="mb-2"> <strong>{{ supplier.sku_num }}</strong></li>
-                    <li><a class="button is-small is-success" href="{% url 'supplier:supplier-update' supplier_pk %}">Ενημέρωση</a>
+                    <li><a class="button is-small is-success" href="{% url 'supplier:supplier-update' supplier.id %}">Ενημέρωση</a>
                     </li>
                   </ul>
 

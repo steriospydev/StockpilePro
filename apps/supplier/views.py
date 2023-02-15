@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from django.urls import reverse_lazy
+from django.urls import reverse_lazy, reverse
 
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views import View
@@ -25,7 +25,11 @@ class SupplierListView(LoginRequiredMixin, ListView):
             return Supplier.active.all()
 
 # search_experiment branch
-class SearchSupplierListView(SupplierListView):
+class SearchSupplierListView(LoginRequiredMixin, ListView):
+    template_name = 'supplier/supplier_list.html'
+    context_object_name = 'suppliers'
+    login_url = '/'
+
     def search_construct(self,term, option):
         if option == 'Πόλη':
             city = Address.objects.filter(city=term)
@@ -36,22 +40,23 @@ class SearchSupplierListView(SupplierListView):
         elif option == 'ΑΦΜ':
             tin = TIN.objects.filter(TIN_num=term)
             return Supplier.active.filter(tin__in=tin)
-        else:
+        elif option == 'Επιχείρηση':
             return Supplier.active.filter(company__icontains=term)
+        else:
+            return Supplier.active.all()
 
-    def get(self, request, *args, **kwargs):
-        search_term = self.request.GET.get('search_term', '')
-        search_option = self.request.GET.get('search_option')
-        if search_term is None:
+    def get(self, request):
+        query = request.GET.get('q')
+        search_option = request.GET.get('search_option')
+        if query != '':
+            suppliers = self.search_construct(query, search_option)
+            context = {'suppliers': suppliers,
+                       'query':query,
+                       'search_option':search_option
+                       }
+            return render(self.request, self.template_name, context)
+        else:
             return redirect('supplier:supplier-list')
-        self.queryset = self.search_construct(search_term, search_option)
-        paginator = Paginator(self.queryset, self.paginate_by)
-        return render(request, self.template_name, {'suppliers': self.queryset,
-                                                    'paginator':paginator,
-                                                    'term':search_term
-                                                    })
-
-
 
 class SupplierCreateView(LoginRequiredMixin, View):
     template_name = 'supplier/supplier_create.html'
@@ -103,14 +108,12 @@ class SupplierDetailView(LoginRequiredMixin, DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['supplier_pk'] = str(self.object.pk)
         supplier = context['supplier']
         address = Address.objects.get(supplier=supplier)
         contact = Contact.objects.get(supplier=supplier)
         tin = TIN.objects.get(supplier=supplier)
         context['address'] = address
         context['contact'] = contact
-        context['address'] = address
         context['tin'] = tin
         return context
 
