@@ -1,11 +1,10 @@
 from django.shortcuts import render, redirect
-from django.urls import reverse_lazy, reverse
+from django.urls import reverse_lazy
 
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views import View
 from django.views.generic import (ListView,DetailView,
                                   UpdateView,DeleteView)
-
 from django.core.paginator import Paginator
 
 from .models import Supplier, Contact, Address, TIN
@@ -23,7 +22,6 @@ class SupplierListView(LoginRequiredMixin, ListView):
             return Supplier.objects.filter(is_active=False)
         else:
             return Supplier.active.all()
-
 # search_experiment branch
 class SearchSupplierListView(LoginRequiredMixin, ListView):
     template_name = 'supplier/supplier_list.html'
