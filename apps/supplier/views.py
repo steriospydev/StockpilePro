@@ -22,6 +22,7 @@ class SupplierListView(LoginRequiredMixin, ListView):
             return Supplier.objects.filter(is_active=False)
         else:
             return Supplier.active.all()
+
 # search_experiment branch
 class SearchSupplierListView(LoginRequiredMixin, ListView):
     template_name = 'supplier/supplier_list.html'

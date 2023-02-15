@@ -5,7 +5,6 @@ from django.urls import reverse
 
 from apps.utils import abmodels, utils
 
-
 class Supplier(abmodels.AbstractModel):
     company = models.CharField("Επιχειρηση", max_length=120, unique=True)
     sku_num = models.CharField(max_length=2, unique=True,
