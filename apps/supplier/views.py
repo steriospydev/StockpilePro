@@ -24,7 +24,7 @@ class SupplierListView(LoginRequiredMixin, ListView):
         else:
             return Supplier.active.all()
 
-
+# search_experiment branch
 class SearchSupplierListView(SupplierListView):
     def search_construct(self,term, option):
         if option == 'Πόλη':
