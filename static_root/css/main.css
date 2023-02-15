@@ -2217,7 +2217,7 @@ input,
 optgroup,
 select,
 textarea {
-  font-family: "Nunito", sans-serif;
+  font-family: "Noto Sans", sans-serif;
 }
 
 code,
@@ -11120,15 +11120,15 @@ a.has-text-danger-dark:hover, a.has-text-danger-dark:focus {
 }
 
 .is-family-primary {
-  font-family: "Nunito", sans-serif !important;
+  font-family: "Noto Sans", sans-serif !important;
 }
 
 .is-family-secondary {
-  font-family: "Nunito", sans-serif !important;
+  font-family: "Noto Sans", sans-serif !important;
 }
 
 .is-family-sans-serif {
-  font-family: "Nunito", sans-serif !important;
+  font-family: "Noto Sans", sans-serif !important;
 }
 
 .is-family-monospace {

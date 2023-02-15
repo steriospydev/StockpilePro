@@ -1,7 +1,23 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block title%}Προμηθευτές {% endblock %}
+{% block css %}
+#search_term::-webkit-input-placeholder {
+  color: black;
+}
+#search_term:-moz-placeholder {
+  color: black;
+}
 
+#search_term::-moz-placeholder {
+  color: black;
+}
+
+#search_term:-ms-input-placeholder {
+  color: red;
+}
+
+{% endblock %}
 {% block content %}
   {% include 'Component/page_title.html' with currentPage='Προμηθευτές' %}
 
@@ -81,8 +97,9 @@
           method="get"
           class="field is-grouped is-horizontal-mobile">
 
-      <div class="control is-expanded">
-        <input class="input"  id="search_term" name="search_term"  type="text" placeholder="Search...">
+      <div class="control is-expanded ">
+        <input class="input"  id="search_term" name="search_term"
+               type="text" placeholder="Search for suppliers...">
       </div>
       <div class="control">
         <button class="button is-info" type='submit'><span>Search</span><span class="icon has-text-light is-large">
