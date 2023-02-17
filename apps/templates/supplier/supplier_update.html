@@ -12,13 +12,11 @@
       <div class="card">
         <div class="card-content">
             <div class="error">
-              {% for form in forms %}
-                {% if form.errors %}
+              {% if form.errors %}
                 <div class="notification is-danger">
                   {{ form.errors }}
                 </div>
-                {% endif %}
-              {% endfor %}
+              {% endif %}
             </div>
 
             <form method="post" class="m-3">
@@ -31,16 +29,8 @@
               </div>
 
                <h2 class="title is-5">Γενικά</h2>
+                <hr>
               {{ supplier_form.as_table}}
-              <hr>
-              <h2 class="title is-5">Στοιχεία Επικοινωνίας</h2>
-              {{ contact_form.as_table}}
-              <hr>
-              <h2 class="title is-5">Στοιχεία Φορολογίας</h2>
-              {{ tin_form.as_table}}
-              <hr>
-              <h2 class="title is-5">Στοιχεία Διεύθυνσης</h2>
-              {{address_form.as_table}}
 
             </form>
         </div>

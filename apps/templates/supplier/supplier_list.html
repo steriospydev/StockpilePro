@@ -205,6 +205,14 @@
           </table>
         </div>
     </div>
+  {% else %}
+    <div style="display: flex; justify-content: center; height: 100%;">
+      <div class="notification is-success">
+       Δεν υπάρχουν ακόμα αποθηκευμένοι προμηθευτες.
+        <a href="{% url 'supplier:supplier-create' %}">Δημιουργία Νέου Προμηθευτή.
+                   </a>.
+      </div>
+    </div>
   {% endif %}
   <!--Pagination-->
   <div class="card-content">
