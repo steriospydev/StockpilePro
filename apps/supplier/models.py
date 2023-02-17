@@ -5,7 +5,6 @@ from django.urls import reverse
 
 from apps.utils import abmodels, utils
 
-
 class Supplier(abmodels.AbstractModel):
     company = models.CharField("Επιχειρηση", max_length=120, unique=True)
     sku_num = models.CharField(max_length=2, unique=True,
@@ -42,12 +41,8 @@ class Supplier(abmodels.AbstractModel):
                                         message="Zipcode must be 5 digits."
                                     )])
     TIN_agency = models.CharField("ΔΟΥ", max_length=120, blank=True, null=True)
-
     TIN_num = models.CharField("Α.Φ.Μ",
                                max_length=9,
-                               default='e',
-                               blank=True,
-                               null=True,
                                validators=[
                                    RegexValidator(
                                        regex=r"^[0-9]{9}$",
