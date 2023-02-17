@@ -2,7 +2,7 @@ from django.core.validators import RegexValidator
 from django.db import models
 from django.db.models.signals import pre_save
 from django.urls import reverse
-
+# working branch
 from apps.utils import abmodels, utils
 
 class Supplier(abmodels.AbstractModel):
