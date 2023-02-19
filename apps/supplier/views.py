@@ -89,4 +89,3 @@ class SupplierSearchView(BaseSupplierList, SearchConstructMixin):
             return render(self.request, self.template_name, context)
         else:
             return redirect('supplier:supplier-list')
-
