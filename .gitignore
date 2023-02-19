@@ -59,6 +59,7 @@ cover/
 # Django stuff:
 *.log
 .idea/
+**/migrations/
 */migrations/*
 local_settings.py
 db.sqlite3
