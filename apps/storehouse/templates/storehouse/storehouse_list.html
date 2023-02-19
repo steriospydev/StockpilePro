@@ -1,0 +1,262 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title%}Προμηθευτές {% endblock %}
+{% block css %}
+#search_term::-webkit-input-placeholder {
+  color: black;
+}
+#search_term:-moz-placeholder {
+  color: black;
+}
+
+#search_term::-moz-placeholder {
+  color: black;
+}
+
+#search_term:-ms-input-placeholder {
+  color: red;
+}
+
+{% endblock %}
+{% block content %}
+  {% include 'Component/page_title.html' with currentPage='Προμηθευτές' %}
+
+  <!-- Supplier Header-->
+  <div class="tile is-ancestor ml-3 mr-3 ">
+    <div class="tile is-parent">
+        <div class="card tile is-child has-background-dark">
+          <div class="card-content">
+            <div class="level is-mobile">
+              <div class="level-item has-widget-icon">
+                <div class="is-widget-icon">
+                  <a href="{% url 'supplier:supplier-create' %}">
+                    <span class="icon has-text-success is-large"><i
+                    class="mdi mdi-plus-thick mdi-48px"></i></span>
+                   </a>
+                </div>
+              </div>
+              <div class="level-item">
+                <div class="is-widget-label ">
+                  <h3 class="subtitle is-spaced has-text-success">
+                      Δημιουργία
+                  </h3>
+                  <h3 class="subtitle is-spaced has-text-success">
+                      Προμηθευτή
+                  </h3>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+        </div>
+    </div>
+      <div class="tile is-parent">
+        <div class="card tile is-child">
+          <div class="card-content has-background-dark ">
+            <div class="level is-mobile">
+              <div class="level-item ">
+                <div class="is-widget-label "><h3 class="subtitle is-spaced has-text-warning">
+                  Προμηθευτές
+                </h3>
+                  <h1 class="title has-text-danger">
+                    {{ suppliers.count }}
+                  </h1>
+                </div>
+              </div>
+              <div class="level-item has-widget-icon">
+                <div class="is-widget-icon"><span class="icon has-text-warning is-large"><i
+                    class="mdi mdi-account-multiple mdi-48px"></i></span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+  </div>
+  <!-- Supplier Table Header-->
+  <div class="card has-table has-mobile-sort-spaced">
+    <header class="card-header">
+      <p class="card-header-title">
+        <span class="icon"><i class="mdi mdi-account-multiple"></i></span>
+          Προμηθευτές
+        <form action="" method="get">
+          <button class="button is-small is-info" type="submit">Apply Filter</button>
+          <div class="select is-small">
+            <select name="active" id="active">
+              <option value="true">Active</option>
+              <option value="false">Inactive</option>
+            </select>
+          </div>
+        </form>
+    </header>
+  </div>
+  <!-- Supplier Search-->
+  <div class="card-content has-text-centered has-mobile">
+    <form action="{% url 'supplier:supplier-search' %}"
+          method="get"
+          class="field is-grouped is-horizontal-mobile">
+
+      <div class="control is-expanded ">
+        <input class="input"  value = "{{ query }}" name="q" id="q"
+               type="text" placeholder="Search for suppliers...">
+      </div>
+      <div class="control">
+        <button class="button is-info" type='submit'><span>Search</span><span class="icon has-text-light is-large">
+          <i class="mdi mdi-account-search "></i></span></button>
+      </div>
+      <div sku_numclass="control">
+        <div class="select">
+
+          <select name="search_option" >
+            <option value="Επιχείρηση">Επιχείρηση</option>
+            <option value="SKU">SKU</option>
+            <option value="Πόλη">Πόλη</option>
+            <option value="Τηλέφωνο">Τηλέφωνο</option>
+            <option value="ΑΦΜ">ΑΦΜ</option>
+          </select>
+        </div>
+      </div>
+    </form>
+  </div>
+  <!-- Supplier Table-->
+  {% if request.resolver_match.url_name == 'supplier-search' %}
+    <div style="display: flex; justify-content: center; height: 100%;">
+      <div class="notification is-success">
+        {% if not suppliers %}
+          Δεν βρέθηκαν αποτελέσματα προμηθευτών με {{search_option }}: {{query}}.
+        {% else %}
+          Bρέθηκαν {{suppliers|length}} προμηθευτες με {{search_option }}: {{query}}.
+        {% endif %}
+      </div>
+    </div>
+  {% endif %}
+  <div class="b-table has-pagination">
+    <div class="table-wrapper has-mobile-cards">
+      <table class="table is-fullwidth is-striped is-hoverable is-sortable is-fullwidth">
+        <thead>
+          <tr>
+            <th>Προμηθευτής</th>
+            <th>Α.Φ.Μ.</th>
+            <th>Τηλ.</th>
+            <th>Πόλη</th>
+            <th>SKU_num</th>
+            <th>Active</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for supplier in suppliers %}
+            <tr>
+              <td data-label="Προμηθευτής">{{supplier.company}}</td>
+              <td data-label="Α.Φ.Μ.">{{supplier.TIN_num}}</td>
+              <td data-label="Τηλ.">{{supplier.phone}}</td>
+              <td data-label="Πόλη">{{supplier.city}}</td>
+              <td data-label="SKU_num">{{supplier.sku_num}}</td>
+              <td data-label="Ενημέρωση">
+                {% if supplier.is_active %}
+                  <span class="icon has-text-success ">
+                    <i class="mdi mdi-check-decagram "></i>
+                  </span>
+                {% else %}
+                    <span class="icon has-text-danger ">
+                      <i class="mdi mdi-cancel "></i>
+                    </span>
+                {% endif %}
+              </td>
+
+
+              <td class="is-actions-cell">
+                <div class="buttons is-right">
+                  <a href="{{ supplier.get_absolute_url }}"
+                     class="button is-small is-primary" type="button">
+                    <span class="icon"><i class="mdi mdi-eye"></i></span>
+                  </a>
+                  <button class="button is-small is-danger jb-modal"
+                          id="modal-{{ supplier.pk }}-trigger"  type="button">
+                    <span class="icon"><i class="mdi mdi-trash-can"></i></span>
+
+                  </button>
+                  <!-- Modal -->
+                  <div class="modal" id="delete-modal">
+                    <div class="modal-background"></div>
+                    <div class="modal-card">
+                      <header class="modal-card-head">
+                        <p class="modal-card-title">Delete Confirmation</p>
+                        <button class="delete" aria-label="close"></button>
+                      </header>
+                      <section class="modal-card-body">
+                        Are you sure you want to delete this item?
+                      </section>
+                      <footer class="modal-card-foot">
+                        <form action="{% url 'supplier:supplier-delete' supplier.id %}"
+                              method="post">
+                          {% csrf_token %}
+                          <input type="submit" value="Delete" class="button is-danger">
+                          <a class="button" id="cancel-button">Cancel</a>
+                        </form>
+                      </footer>
+                    </div>
+                  </div>
+
+                </div>
+              </td>
+                </tr>
+          {% empty %}
+            {% if request.resolver_match.url_name == 'supplier-list' %}
+              <div style="display: flex; justify-content: center; height: 100%;">
+                <div class="notification is-success">
+                  Δεν υπάρχουν ακόμα αποθηκευμένοι προμηθευτες.
+                  <a href="{% url 'supplier:supplier-create' %}">
+                    Δημιουργία Νέου Προμηθευτή.
+                  </a>.
+                </div>
+              </div>
+            {% endif%}
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <!--Pagination-->
+  <div class="card-content">
+    <div class="b-table has-pagination">
+      <div class="notification">
+        <div class="level">
+          <div class="level-left">
+            <div class="level-item">
+              <div class="buttons has-addons">
+                {% if paginator %}
+                  {% for page in paginator.page_range %}
+                    {% if page == page_obj.number %}
+                      <a  href="?page={{ page }}" type="button" class="button is-active">{{page}}</a>
+                    {% else %}
+                      <a href="?page={{ page }}" type="button" class="button">{{ page }}</a>
+                    {% endif %}
+                  {% endfor %}
+                {% endif %}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      </div>
+    </div>
+  </div>
+
+{% endblock %}
+
+{% block js %}
+  {% for supplier in suppliers %}
+    document.getElementById('modal-{{ supplier.pk }}-trigger').addEventListener('click', function() {
+    var modal = document.getElementById('delete-modal');
+    document.querySelector("#delete-modal form").action = "{% url 'supplier:supplier-delete' supplier.pk %}";
+    modal.classList.add('is-active');
+    });
+  {% endfor %}
+
+  document.getElementById('cancel-button').addEventListener('click', function() {
+    var modal = document.getElementById('delete-modal');
+    modal.classList.remove('is-active');
+  });
+{% endblock %}

@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+
+{% block title%}Προμηθευτής {{}}{% endblock %}
+
+{% block content %}
+
+{% include 'Component/page_title.html' with currentPage='Πληροφορίες Προμηθευτή' %}
+{% include 'supplier/components/card_header.html' with currentHeader='' %}
+
+{% endblock %}

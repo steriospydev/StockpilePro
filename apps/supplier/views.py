@@ -10,7 +10,7 @@ from .models import Supplier
 from .forms import SupplierForm
 
 class BaseSupplierList(LoginRequiredMixin, ListView):
-    template_name = 'supplier/supplier_list.html'
+    template_name = 'supplier/storehouse_list.html'
     context_object_name = 'suppliers'
     paginate_by = 5
     login_url = '/'
@@ -63,7 +63,7 @@ class SupplierUpdateView(SupplierCreateUpdate, UpdateView):
 
 class SupplierDetailView(LoginRequiredMixin, DetailView):
     model = Supplier
-    template_name = 'supplier/supplier_detail.html'
+    template_name = 'supplier/storehouse_detail.html'
     context_object_name = 'supplier'
     login_url = '/'
 
