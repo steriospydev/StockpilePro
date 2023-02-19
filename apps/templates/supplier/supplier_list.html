@@ -136,19 +136,24 @@
       <table class="table is-fullwidth is-striped is-hoverable is-sortable is-fullwidth">
         <thead>
           <tr>
-            <th>Supplier</th>
+            <th>Προμηθευτής</th>
+            <th>Α.Φ.Μ.</th>
+            <th>Τηλ.</th>
+            <th>Πόλη</th>
             <th>SKU_num</th>
             <th>Active</th>
-            <th>Created</th>
             <th>Actions</th>
           </tr>
         </thead>
         <tbody>
           {% for supplier in suppliers %}
             <tr>
-              <td data-label="Company">{{supplier.company}}</td>
+              <td data-label="Προμηθευτής">{{supplier.company}}</td>
+              <td data-label="Α.Φ.Μ.">{{supplier.TIN_num}}</td>
+              <td data-label="Τηλ.">{{supplier.phone}}</td>
+              <td data-label="Πόλη">{{supplier.city}}</td>
               <td data-label="SKU_num">{{supplier.sku_num}}</td>
-              <td data-label="Active">
+              <td data-label="Ενημέρωση">
                 {% if supplier.is_active %}
                   <span class="icon has-text-success ">
                     <i class="mdi mdi-check-decagram "></i>
@@ -159,9 +164,7 @@
                     </span>
                 {% endif %}
               </td>
-              <td data-label="Created">
-                <small class="has-text-grey is-abbr-like" title="Oct 25, 2020">{{supplier.created_at}}</small>
-              </td>
+
 
               <td class="is-actions-cell">
                 <div class="buttons is-right">
