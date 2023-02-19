@@ -10,6 +10,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('apps.account.urls')),
     path('supplier/', include('apps.supplier.urls')),
+    path('storehouse/', include('apps.storehouse.urls')),
     path('index/', views.index, name='index')
 ]
 
