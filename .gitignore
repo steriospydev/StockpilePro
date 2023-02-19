@@ -38,7 +38,7 @@ pip-log.txt
 pip-delete-this-directory.txt
 
 # Unit test / coverage reports
-htmlcov/
+../htmlcov/
 .tox/
 .nox/
 .coverage
@@ -58,7 +58,7 @@ cover/
 
 # Django stuff:
 *.log
-.idea/
+../.idea/
 **/migrations/**
 */migrations/*
 local_settings.py
@@ -124,7 +124,7 @@ celerybeat.pid
 *.sage.py
 
 # Environments
-.env
+app/.env
 .venv
 env/
 venv/
