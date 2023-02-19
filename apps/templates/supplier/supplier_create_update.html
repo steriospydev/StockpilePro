@@ -17,7 +17,8 @@
               {% csrf_token %}
               <div class="field has-text-center mt-5">
                 <div class="control">
-                  <a href="{% url 'supplier:supplier-detail' supplier.pk %}" class="button is-danger mr-6">Aκύρωση</a>
+                  <a href="{% url 'supplier:supplier-list' %}"
+                     class="button is-danger mr-6">Aκύρωση</a>
                   <button class="button is-success ml-5" >Αποθηκευση</button>
                 </div>
               </div>

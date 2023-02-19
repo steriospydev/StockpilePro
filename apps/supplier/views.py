@@ -40,6 +40,38 @@ class SearchConstructMixin:
         else:
             return Supplier.active.all()
 
+class SupplierCreateUpdate(LoginRequiredMixin):
+    template_name = 'supplier/supplier_create_update.html'
+    model = Supplier
+    form_class = SupplierForm
+    login_url = '/'
+
+    def form_valid(self, form):
+        form.instance.created_by = self.request.user
+        return super().form_valid(form)
+
+class SupplierListView(BaseSupplierList):
+    """
+     Display list of Suppliers.
+    """
+
+class SupplierCreateView(SupplierCreateUpdate, CreateView):
+    success_url = reverse_lazy('supplier:supplier-list')
+
+class SupplierUpdateView(SupplierCreateUpdate, UpdateView):
+    context_object_name = 'supplier'
+
+class SupplierDetailView(LoginRequiredMixin, DetailView):
+    model = Supplier
+    template_name = 'supplier/supplier_detail.html'
+    context_object_name = 'supplier'
+    login_url = '/'
+
+class SupplierDeleteView(LoginRequiredMixin, DeleteView):
+    model = Supplier
+    success_url = reverse_lazy('supplier:supplier-list')
+    login_url = '/'
+
 class SearchSupplierListView(BaseSupplierList, SearchConstructMixin):
     """
     Display search results fort Supplier.
@@ -58,36 +90,3 @@ class SearchSupplierListView(BaseSupplierList, SearchConstructMixin):
         else:
             return redirect('supplier:supplier-list')
 
-class SupplierListView(BaseSupplierList):
-    """
-     Display list of Suppliers.
-    """
-
-class SupplierCreateView(LoginRequiredMixin, CreateView):
-    template_name = 'supplier/supplier_create.html'
-    model = Supplier
-    form_class = SupplierForm
-    success_url = reverse_lazy('supplier:supplier-list')
-    login_url = '/'
-
-    def form_valid(self, form):
-        form.instance.created_by = self.request.user
-        return super().form_valid(form)
-
-class SupplierDetailView(LoginRequiredMixin, DetailView):
-    model = Supplier
-    template_name = 'supplier/supplier_detail.html'
-    context_object_name = 'supplier'
-    login_url = '/'
-
-class SupplierUpdateView(LoginRequiredMixin, UpdateView):
-    template_name = 'supplier/supplier_update.html'
-    model = Supplier
-    form_class = SupplierForm
-    context_object_name = 'supplier'
-    login_url = '/'
-
-class SupplierDeleteView(LoginRequiredMixin, DeleteView):
-    model = Supplier
-    success_url = reverse_lazy('supplier:supplier-list')
-    login_url = '/'
