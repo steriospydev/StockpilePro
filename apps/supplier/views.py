@@ -72,7 +72,7 @@ class SupplierDeleteView(LoginRequiredMixin, DeleteView):
     success_url = reverse_lazy('supplier:supplier-list')
     login_url = '/'
 
-class SearchSupplierListView(BaseSupplierList, SearchConstructMixin):
+class SupplierSearchView(BaseSupplierList, SearchConstructMixin):
     """
     Display search results fort Supplier.
     """

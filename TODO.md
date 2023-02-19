@@ -1,10 +1,16 @@
 - [x] Separate settings
 - [x] Add Postgres
 - [x] Integrate Contact, Tin, Address -> Supplier
-- Add trigram search
+- [x] Create list-search interface
 - Bug:search-pagination not working correctly
-- Create list-search interface
 
+### Storage 
+- Create models
+- Create urls
+- Create views
+- Create templates
+- Create tests
+- Create forms
 #### NON - Functional Requirements
 
 - Organise storage / Manage operations
