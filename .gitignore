@@ -59,6 +59,7 @@ cover/
 # Django stuff:
 *.log
 .idea/
+**/migrations/**
 */migrations/*
 local_settings.py
 db.sqlite3
@@ -164,3 +165,4 @@ coverage
 #  option (not recommended) you can uncomment the following to ignore the entire idea folder.
 #.idea/
 
+/apps/supplier/migrations/0005_remove_contact_supplier_remove_quote_supplier_and_more.py

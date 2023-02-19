@@ -1,8 +1,13 @@
 from django.test import RequestFactory, TestCase
 from django.contrib.auth.models import User
+from django.core.paginator import Paginator
+from django.urls import reverse
+import random
+import string
+
 from apps.supplier.models import Supplier
 from apps.supplier.views import SupplierListView
-from django.urls import reverse
+from .factories import SupplierFactory
 
 
 class SupplierListViewTestCase(TestCase):
@@ -12,11 +17,25 @@ class SupplierListViewTestCase(TestCase):
             username='testuser', password='secret'
         )
         self.factory = RequestFactory()
+        self.suppliers = []
         for i in range(15):
-            Supplier.objects.create(
-                company='Supplier {}'.format(i),
-                is_active=True
+            tin = str(random.randint(100000000, 999999999))  # Generate random 9-digit string
+            sku_num = ''.join(
+                random.choices(string.ascii_uppercase + string.digits, k=2))  # Generate 2-character string
+
+            supplier = SupplierFactory(
+                company=f'Supplier {i}',
+                is_active=True,
+                TIN_num=tin,
+                sku_num=sku_num
             )
+            self.suppliers.append(supplier)
+
+    def test_supplier_list_view(self):
+        request = self.factory.get(reverse('supplier:supplier-list'))
+        request.user = self.user
+        response = SupplierListView.as_view()(request)
+        self.assertEqual(response.status_code, 200)
 
     def test_pagination(self):
         # create a request and pass it to the view

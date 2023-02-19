@@ -2,15 +2,14 @@ from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.views import View
-from django.views.generic import (ListView,DetailView,
+from django.views.generic import (ListView,DetailView, CreateView,
                                   UpdateView,DeleteView)
 from django.core.paginator import Paginator
 
-from .models import Supplier, Contact, Address, TIN
-from .forms import SupplierForm, TinForm, ContactForm, AddressForm, SupplierUpdateForm
+from .models import Supplier
+from .forms import SupplierForm
 
-class SupplierListView(LoginRequiredMixin, ListView):
+class BaseSupplierList(LoginRequiredMixin, ListView):
     template_name = 'supplier/supplier_list.html'
     context_object_name = 'suppliers'
     paginate_by = 5
@@ -23,81 +22,57 @@ class SupplierListView(LoginRequiredMixin, ListView):
         else:
             return Supplier.active.all()
 
-# search_experiment branch
-class SearchSupplierListView(LoginRequiredMixin, ListView):
-    template_name = 'supplier/supplier_list.html'
-    context_object_name = 'suppliers'
-    login_url = '/'
+class SearchConstructMixin:
+    q ='q'
+    search_option = 'search_option'
 
-    def search_construct(self,term, option):
-        if option == 'Πόλη':
-            city = Address.objects.filter(city=term)
-            return Supplier.active.filter(address__in=city)
-        elif option == 'Τηλέφωνο':
-            phone = Contact.objects.filter(phone=term)
-            return Supplier.active.filter(contact__in=phone)
-        elif option == 'ΑΦΜ':
-            tin = TIN.objects.filter(TIN_num=term)
-            return Supplier.active.filter(tin__in=tin)
-        elif option == 'Επιχείρηση':
-            return Supplier.active.filter(company__icontains=term)
+    def search_construct(self, term, option):
+        lookup = {
+            'Πόλη': 'city__icontains',
+            'Τηλέφωνο': 'phone__icontains',
+            'ΑΦΜ': 'TIN_num__icontains',
+            'Επιχείρηση': 'company__icontains',
+            'SKU':'sku_num__icontains'
+        }
+        field_lookup = lookup.get(option, None)
+        if field_lookup:
+            return Supplier.active.filter(**{field_lookup: term})
         else:
             return Supplier.active.all()
 
+class SearchSupplierListView(BaseSupplierList, SearchConstructMixin):
+    """
+    Display search results fort Supplier.
+    """
+
     def get(self, request):
-        query = request.GET.get('q')
-        search_option = request.GET.get('search_option')
+        query = request.GET.get(self.q)
+        search_option = request.GET.get(self.search_option)
         if query != '':
             suppliers = self.search_construct(query, search_option)
             context = {'suppliers': suppliers,
-                       'query':query,
-                       'search_option':search_option
+                       'query': query,
+                       'search_option': search_option,
                        }
             return render(self.request, self.template_name, context)
         else:
             return redirect('supplier:supplier-list')
 
-class SupplierCreateView(LoginRequiredMixin, View):
+class SupplierListView(BaseSupplierList):
+    """
+     Display list of Suppliers.
+    """
+
+class SupplierCreateView(LoginRequiredMixin, CreateView):
     template_name = 'supplier/supplier_create.html'
+    model = Supplier
+    form_class = SupplierForm
     success_url = reverse_lazy('supplier:supplier-list')
     login_url = '/'
 
-    def get(self, request):
-        context = {
-            'supplier_form': SupplierForm(),
-            'tin_form': TinForm(prefix='tin'),
-            'contact_form': ContactForm(prefix='con'),
-            'address_form': AddressForm(prefix='addr')
-        }
-        return render(request, self.template_name, context)
-
-    def post(self, request):
-        supplier_form = SupplierForm(request.POST)
-        tin_form = TinForm(request.POST, prefix='tin')
-        contact_form = ContactForm(request.POST, prefix='con')
-        address_form = AddressForm(request.POST, prefix='addr')
-
-        if supplier_form.is_valid() and tin_form.is_valid() and \
-                contact_form.is_valid() and address_form.is_valid():
-
-            supplier = supplier_form.save()
-
-            contact = contact_form.save(commit=False)
-            tin = tin_form.save(commit=False)
-            address = address_form.save(commit=False)
-
-            contact.supplier = supplier
-            tin.supplier = supplier
-            address.supplier = supplier
-
-            contact.save()
-            tin.save()
-            address.save()
-            return redirect(self.success_url)
-        else:
-            context = {'supplier_form': supplier_form, 'tin_form': tin_form,
-                       'contact_form': contact_form, 'address_form': address_form}
-        return render(request, self.template_name, context)
+    def form_valid(self, form):
+        form.instance.created_by = self.request.user
+        return super().form_valid(form)
 
 class SupplierDetailView(LoginRequiredMixin, DetailView):
     model = Supplier
@@ -105,59 +80,12 @@ class SupplierDetailView(LoginRequiredMixin, DetailView):
     context_object_name = 'supplier'
     login_url = '/'
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        supplier = context['supplier']
-        address = Address.objects.get(supplier=supplier)
-        contact = Contact.objects.get(supplier=supplier)
-        tin = TIN.objects.get(supplier=supplier)
-        context['address'] = address
-        context['contact'] = contact
-        context['tin'] = tin
-        return context
-
 class SupplierUpdateView(LoginRequiredMixin, UpdateView):
     template_name = 'supplier/supplier_update.html'
     model = Supplier
     form_class = SupplierForm
     context_object_name = 'supplier'
     login_url = '/'
-
-    def get_object(self, queryset=None):
-        self.object = super().get_object(queryset=queryset)
-        self.tin = TIN.objects.get(supplier=self.object)
-        self.contact = Contact.objects.get(supplier=self.object)
-        self.address = Address.objects.get(supplier=self.object)
-        return self.object
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['supplier_form'] = self.form_class(instance=self.object)
-        context['contact_form'] = ContactForm(instance=self.contact)
-        context['address_form'] = AddressForm(instance=self.address)
-        context['tin_form'] = TinForm(instance=self.tin)
-        context['supplier'] = self.get_object()
-        return context
-
-    def post(self, request, *args, **kwargs):
-        self.object = self.get_object()
-        supplier_form = self.form_class(request.POST, instance=self.object)
-        contact_form = ContactForm(request.POST, instance=self.contact)
-        address_form = AddressForm(request.POST, instance=self.address)
-        tin_form = TinForm(request.POST, instance=self.tin)
-        forms = [supplier_form, contact_form, address_form, tin_form]
-        for form in forms:
-            if form.is_valid():
-                form.save()
-            else:
-                return self.render_to_response(self.get_context_data(forms=[
-                    supplier_form, contact_form, address_form, tin_form],
-                    object=object,
-                    supplier_form=supplier_form,
-                    contact_form=contact_form,
-                    address_form=address_form,
-                    tin_form=tin_form))
-        return redirect(self.object)
 
 class SupplierDeleteView(LoginRequiredMixin, DeleteView):
     model = Supplier
