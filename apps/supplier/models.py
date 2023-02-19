@@ -63,9 +63,6 @@ class Supplier(abmodels.AbstractModel):
     def get_absolute_url(self):
         return reverse('supplier:supplier-detail', args=[str(self.id)])
 
-    def get_field_value(self, field_name):
-        return getattr(self, field_name, None)
-
 
 pre_save.connect(lambda sender, instance, **kwargs:
                  utils.generate_sku_num(sender, instance, k=2),
