@@ -10,7 +10,7 @@ from .models import Supplier
 from .forms import SupplierForm
 
 class BaseSupplierList(LoginRequiredMixin, ListView):
-    template_name = 'supplier/storehouse_list.html'
+    template_name = 'supplier/supplier_list.html'
     context_object_name = 'suppliers'
     paginate_by = 5
     login_url = '/'
@@ -23,7 +23,7 @@ class BaseSupplierList(LoginRequiredMixin, ListView):
             return Supplier.active.all()
 
 class SearchConstructMixin:
-    q ='q'
+    q = 'q'
     search_option = 'search_option'
 
     def search_construct(self, term, option):
@@ -63,7 +63,7 @@ class SupplierUpdateView(SupplierCreateUpdate, UpdateView):
 
 class SupplierDetailView(LoginRequiredMixin, DetailView):
     model = Supplier
-    template_name = 'supplier/storehouse_detail.html'
+    template_name = 'supplier/supplier_detail.html'
     context_object_name = 'supplier'
     login_url = '/'
 
@@ -77,7 +77,7 @@ class SupplierSearchView(BaseSupplierList, SearchConstructMixin):
     Display search results fort Supplier.
     """
 
-    def get(self, request):
+    def get(self, request, **kwargs):
         query = request.GET.get(self.q)
         search_option = request.GET.get(self.search_option)
         if query != '':
