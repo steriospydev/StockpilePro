@@ -51,8 +51,8 @@ coverage.xml
 .hypothesis/
 .pytest_cache/
 cover/
-app/.env
-.env
+
+
 # Translations
 *.mo
 *.pot
@@ -66,6 +66,7 @@ app/.env
 local_settings.py
 db.sqlite3
 db.sqlite3-journal
+
 
 # Flask stuff:
 instance/
@@ -127,6 +128,7 @@ celerybeat.pid
 
 # Environments
 app/.env
+.env
 .venv
 env/
 venv/
@@ -134,7 +136,8 @@ ENV/
 env.bak/
 venv.bak/
 
-# migrations
+# excel
+*.xlsx
 
 # Rope project settings
 .ropeproject

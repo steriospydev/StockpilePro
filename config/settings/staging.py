@@ -17,4 +17,4 @@ PASSWORD_HASHERS = [
 ]
 
 # Set the new settings module path
-DJANGO_SETTINGS_MODULE = 'settings.test_settings'
+DJANGO_SETTINGS_MODULE = 'settings.staging'
