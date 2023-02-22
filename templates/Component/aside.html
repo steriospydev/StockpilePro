@@ -30,7 +30,8 @@
       <p class="menu-label">Γενικα</p>
       <ul class="menu-list">
         <li>
-          <a href="{% url 'index' %}" class="{% if request.resolver_match.url_name == 'index' %}is-active{% endif %} router-link-active has-icon">
+          <a href="{% url 'index' %}"
+             class="{% if request.resolver_match.url_name == 'index' %}is-active{% endif %} router-link-active has-icon">
             <span class="icon"><i class="mdi mdi-desktop-mac"></i></span>
             <span class="menu-item-label">Dashboard</span>
           </a>
@@ -62,16 +63,15 @@
           </ul>
         </li>
         <li>
-
            <a href="{% url 'supplier:supplier-list' %}"
               class="{% if request.resolver_match.url_name == 'supplier-list' %}is-active{% endif %} router-link-active has-icon">
-            <span class="icon"><i class="mdi mdi-desktop-mac"></i></span>
+            <span class="icon"><i class="mdi mdi-account-multiple"></i></span>
             <span class="menu-item-label">Προμηθευτές</span>
           </a>
         </li>
       </ul>
 
-      <p class="menu-label">Διαχειριση Αποθηκης</p>
+      <p class="menu-label">ΑΠΟΘΗΚΗ</p>
       <ul class="menu-list">
         <li>
           <a href="#" class="has-icon">
@@ -97,9 +97,16 @@
             <span class="menu-item-label">Στόκ</span>
           </a>
         </li>
+        <li>
+          <a href="{% url 'storehouse:storehouse-main' %}"
+             class="has-icon {% if request.resolver_match.url_name == 'storehouse-main' %}is-active{% endif %}">
+            <span class="icon has-mark"><i class="mdi mdi-store"></i></span>
+            <span class="menu-item-label">Αποθήκες</span>
+          </a>
+        </li>
       </ul>
 
-      <p class="menu-label">Προιοντα</p>
+      <p class="menu-label">ΠΡΟΙΟΝΤΑ</p>
       <ul class="menu-list">
         <!--Προιόντα-->
         <li>
@@ -159,53 +166,6 @@
         </li>
         <li>
       </ul>
-
-      <p class="menu-label">Αποθηκη</p>
-      <ul class="menu-list">
-        <li>
-          <a class="has-icon has-dropdown-icon">
-            <span class="icon"><i class="mdi mdi-store"></i></span>
-            <span class="menu-item-label">Αποθήκη</span>
-            <div class="dropdown-icon">
-              <span class="icon"><i class="mdi mdi-plus"></i></span>
-            </div>
-          </a>
-          <ul>
-            <li>
-              <a href="#void">
-                <span>Νέα Αποθήκη</span>
-              </a>
-            </li>
-            <li>
-              <a href="#void">
-                <span>Αποθήκες</span>
-              </a>
-            </li>
-          </ul>
-        </li>
-        <li>
-          <a class="has-icon has-dropdown-icon">
-            <span class="icon"><i class="mdi  mdi-border-outside"></i></span>
-            <span class="menu-item-label">Θεσεις</span>
-            <div class="dropdown-icon">
-              <span class="icon"><i class="mdi mdi-plus"></i></span>
-            </div>
-          </a>
-          <ul>
-            <li>
-              <a href="#void">
-                <span>Νέα Θέση</span>
-              </a>
-            </li>
-            <li>
-              <a href="#void">
-                <span>Θέσεις</span>
-              </a>
-            </li>
-          </ul>
-        </li>
-      </ul>
-
       <p class="menu-label">About</p>
       <ul class="menu-list">
         <li>

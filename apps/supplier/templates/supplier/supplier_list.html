@@ -2,20 +2,20 @@
 {% load static %}
 {% block title%}Προμηθευτές {% endblock %}
 {% block css %}
-#search_term::-webkit-input-placeholder {
-  color: black;
-}
-#search_term:-moz-placeholder {
-  color: black;
-}
+    #search_term::-webkit-input-placeholder {
+      color: black;
+    }
+    #search_term:-moz-placeholder {
+      color: black;
+    }
 
-#search_term::-moz-placeholder {
-  color: black;
-}
+    #search_term::-moz-placeholder {
+      color: black;
+    }
 
-#search_term:-ms-input-placeholder {
-  color: red;
-}
+    #search_term:-ms-input-placeholder {
+      color: red;
+    }
 
 {% endblock %}
 {% block content %}
@@ -105,7 +105,7 @@
         <button class="button is-info" type='submit'><span>Search</span><span class="icon has-text-light is-large">
           <i class="mdi mdi-account-search "></i></span></button>
       </div>
-      <div sku_numclass="control">
+      <div  class="control">
         <div class="select">
 
           <select name="search_option" >
@@ -131,6 +131,8 @@
       </div>
     </div>
   {% endif %}
+<!--Table-->
+
   <div class="b-table has-pagination">
     <div class="table-wrapper has-mobile-cards">
       <table class="table is-fullwidth is-striped is-hoverable is-sortable is-fullwidth">
@@ -217,6 +219,7 @@
         </tbody>
       </table>
     </div>
+
   </div>
   <!--Pagination-->
   <div class="card-content">
@@ -239,7 +242,6 @@
             </div>
           </div>
         </div>
-      </div>
       </div>
     </div>
   </div>

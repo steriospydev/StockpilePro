@@ -85,7 +85,7 @@ class Bin(abmodels.AbstractModel, BinType):
         verbose_name = 'Θεση αποθηκευσης'
         verbose_name_plural = 'Θεσεις αποθηκευσης'
         constraints = [
-            models.UniqueConstraint(fields=['storage', 'section', 'spot'],
+            models.UniqueConstraint(fields=['storage', 'section', 'spot', 'bin_type'],
                                     name='unique_bin')]
         ordering = ['storage']
 

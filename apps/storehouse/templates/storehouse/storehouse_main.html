@@ -1,0 +1,177 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title%}Προμηθευτές {% endblock %}
+{% block css %}
+{% endblock %}
+
+{% block content %}
+    {% include 'Component/page_title.html' with currentPage='Αποθήκες' %}
+    <!-- Storage Header-->
+    <div class="tile is-ancestor ml-3 mr-3 ">
+        <div class="tile is-parent">
+            <div class="card tile is-child has-background-dark">
+              <div class="card-content">
+                <div class="level is-mobile">
+                  <div class="level-item has-widget-icon">
+                    <div class="is-widget-icon">
+                      <a href="#">
+                        <span class="icon has-text-success is-large"><i
+                        class="mdi mdi-plus-thick mdi-48px"></i></span>
+                       </a>
+                    </div>
+                  </div>
+                  <div class="level-item">
+                    <div class="is-widget-label ">
+                      <h3 class="subtitle is-spaced has-text-success">
+                          Δημιουργία
+                      </h3>
+                      <h3 class="subtitle is-spaced has-text-success">
+                          Αποθήκης
+                      </h3>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+        </div>
+        <div class="tile is-parent">
+            <div class="card tile is-child">
+              <div class="card-content has-background-dark ">
+                <div class="level is-mobile">
+                  <div class="level-item ">
+                    <div class="is-widget-label "><h3 class="subtitle is-spaced has-text-warning">
+                      Αποθήκες
+                    </h3>
+                      <h1 class="title has-text-white">
+                       6
+                      </h1>
+                    </div>
+                  </div>
+                  <div class="level-item has-widget-icon">
+                    <div class="is-widget-icon"><span class="icon has-text-warning is-large"><i
+                        class="mdi mdi-store mdi-48px"></i></span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+    </div>
+
+    <!-- BIns-->
+     <div class="tile is-ancestor ml-3 mr-3 ">
+         <div class="tile is-parent">
+            <div class="card tile is-child">
+              <div class="card-content has-background-dark ">
+                <div class="level is-mobile">
+                  <div class="level-item ">
+                    <div class="is-widget-label "><h3 class="subtitle is-spaced has-text-danger">
+                        Σε Xρήση
+                    </h3>
+                      <h1 class="title has-text-white">
+                       190
+                      </h1>
+                    </div>
+                  </div>
+                  <div class="level-item has-widget-icon">
+                    <div class="is-widget-icon"><span class="icon has-text-danger is-large"><i
+                        class="mdi mdi-arrow-down-box mdi-48px"></i></span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="tile is-parent">
+            <div class="card tile is-child">
+              <div class="card-content has-background-dark ">
+                <div class="level is-mobile">
+                  <div class="level-item ">
+                    <div class="is-widget-label "><h3 class="subtitle is-spaced has-text-info">
+                      Ελεύθερες
+                    </h3>
+                      <h1 class="title has-text-white">
+                       30
+                      </h1>
+                    </div>
+                  </div>
+                  <div class="level-item has-widget-icon">
+                    <div class="is-widget-icon"><span class="icon has-text-info is-large"><i
+                        class="mdi mdi-arrow-up-box mdi-48px"></i></span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+         </div>
+         <div class="tile is-parent">
+            <div class="card tile is-child">
+              <div class="card-content has-background-dark ">
+                <div class="level is-mobile">
+                  <div class="level-item ">
+                    <div class="is-widget-label "><h3 class="subtitle is-spaced has-text-warning">
+                      Θέσεις
+                    </h3>
+                      <h1 class="title has-text-white">
+                       220
+                      </h1>
+                    </div>
+                  </div>
+                  <div class="level-item has-widget-icon">
+                    <div class="is-widget-icon"><span class="icon has-text-warning is-large"><i
+                        class="mdi mdi-map-marker mdi-48px"></i></span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+      </div>
+
+    <!--Storage header-->
+    <div class="card has-table has-mobile-sort-spaced">
+        <header class="card-header">
+          <p class="card-header-title">
+          <span class="icon"><i class="mdi mdi-account-multiple"></i></span>
+              Αποθήκες
+        </header>
+    </div>
+    <!-- Storage Table-->
+    <div class="table-wrapper has-mobile-cards has-text-centered">
+      <table class="table is-fullwidth is-striped is-hoverable is-sortable is-fullwidth">
+        <thead>
+          <tr>
+            <th class="has-text-centered">ΑΠΟΘΗΚΗ</th>
+            <th class="has-text-centered">ΔΙΑΔΡΟΜΟΙ</th>
+            <th class="has-text-centered">ΘΕΣΕΙΣ</th>
+            <th class="has-text-centered">ΣΕ ΧΡΗΣΗ</th>
+            <th class="has-text-centered">ΕΛΕΥΘΕΡΕΣ</th>
+            <th class="has-text-centered"></th>
+          </tr>
+        </thead>
+        <tbody class="has-text-centered">
+            <tr>
+              <td  data-label="ΑΠΟΘΗΚΗ">Α</td>
+              <td data-label="ΔΙΑΔΡΟΜΟΙ">10</td>
+              <td data-label="ΘΕΣΕΙΣ">87</td>
+              <td data-label="ΣΕ ΧΡΗΣΗ">55</td>
+              <td data-label="ΕΛΕΥΘΕΡΕΣ">32</td>
+              <td class="is-actions-cell">
+                <div class="buttons is-left">
+                  <a href="#"
+                     class="button is-small is-primary" type="button">
+                    <span class="icon"><i class="mdi mdi-eye"></i></span>
+                  </a>
+                </div>
+              </td>
+            </tr>
+        </tbody>
+      </table>
+    </div>
+{% endblock %}
+
+
+{% block js %}
+{% endblock %}
