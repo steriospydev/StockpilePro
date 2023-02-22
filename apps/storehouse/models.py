@@ -4,7 +4,7 @@ from django.core.validators import RegexValidator
 # Create your models here.
 from apps.utils import abmodels
 
-class Storage(abmodels.AbstractModel):
+class Storage(abmodels.TimeStamp):
     storage_name = models.CharField("Ονομασία",
                                     unique=True,
                                     max_length=1,
@@ -25,7 +25,7 @@ class Storage(abmodels.AbstractModel):
     def __str__(self):
         return f'{self.storage_name}'
 
-class Section(abmodels.AbstractModel):
+class Section(abmodels.TimeStamp):
     section_name = models.CharField('Μπλόκ', unique=True,
                                     max_length=1,
                                     validators=[RegexValidator(
@@ -36,13 +36,13 @@ class Section(abmodels.AbstractModel):
                                         code='invalid_storage_name')])
 
     class Meta:
-        verbose_name = 'Μπλοκ'
-        verbose_name_plural = 'Μπλοκς'
+        verbose_name = 'Διαδρομος'
+        verbose_name_plural = 'Διαδρομοι'
 
     def __str__(self):
         return f'{self.section_name}'
 
-class Spot(abmodels.AbstractModel):
+class Spot(abmodels.TimeStamp):
     spot_name = models.CharField('Θεση', unique=True,
                                  max_length=3,
                                  default='000',
@@ -75,7 +75,7 @@ class BinType(models.Model):
     class Meta:
         abstract = True
 
-class Bin(abmodels.AbstractModel, BinType):
+class Bin(abmodels.TimeStamp, BinType):
     storage = models.ForeignKey(Storage, on_delete=models.CASCADE)
     section = models.ForeignKey(Section, on_delete=models.CASCADE)
     spot = models.ForeignKey(Spot, on_delete=models.CASCADE)
@@ -87,7 +87,7 @@ class Bin(abmodels.AbstractModel, BinType):
         constraints = [
             models.UniqueConstraint(fields=['storage', 'section', 'spot', 'bin_type'],
                                     name='unique_bin')]
-        ordering = ['storage']
+        ordering = ['storage', 'section','bin_type', 'spot']
 
     def __str__(self):
         return f'{self.section}-{self.spot}{self.bin_type}'

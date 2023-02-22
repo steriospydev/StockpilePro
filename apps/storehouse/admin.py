@@ -8,7 +8,7 @@ admin.site.register(Spot)
 class StorageAdmin(admin.ModelAdmin):
     model = Storage
     list_display = ('storage_name', 'capacity', 'summary',
-                    'location', 'is_active')
+                    'location',)
 
 class BinAdmin(admin.ModelAdmin):
     model = Bin

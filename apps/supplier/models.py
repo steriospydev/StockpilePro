@@ -5,7 +5,12 @@ from django.urls import reverse
 # working branch
 from apps.utils import abmodels, utils
 
-class Supplier(abmodels.AbstractModel):
+class ActiveManager(models.Manager):
+    def get_queryset(self):
+        return super().get_queryset().filter(is_active=True)
+
+
+class Supplier(abmodels.TimeStamp):
     company = models.CharField("Επιχειρηση", max_length=120, unique=True)
     sku_num = models.CharField(max_length=2, unique=True,
                                blank=True, null=True, editable=False)
@@ -51,8 +56,11 @@ class Supplier(abmodels.AbstractModel):
                                        message="Invalid Greek TIN number. It must contain 9 digits."
                                    )],
                                unique=True)
+    is_active = models.BooleanField("Active", default=True)
     summary = models.TextField(blank=True,
                                null=True,)
+    objects = models.Manager()
+    active = ActiveManager()
 
     class Meta:
         verbose_name = 'Προμηθευτης'
