@@ -17,7 +17,8 @@ class Supplier(abmodels.AbstractModel):
                              validators=[
                                 RegexValidator(
                                     regex=r'^\d{10}$',
-                                    message="Phone number must be entered as 10 digits.No other punctuation required."
+                                    message="Phone number must be entered as 10"
+                                            " digits.No other punctuation required."
                                 )])
     email = models.CharField('Email',
                              max_length=200,
@@ -25,7 +26,8 @@ class Supplier(abmodels.AbstractModel):
                              null=True,
                              validators=[
                                     RegexValidator(
-                                        regex=r'([A-Za-z0-9]+[.-_])*[A-Za-z0-9]+@[A-Za-z0-9-]+(\.[A-Z|a-z]{2,})+',
+                                        regex=r'([A-Za-z0-9]+[.-_])*[A-Za-z0-9]+'
+                                              r'@[A-Za-z0-9-]+(\.[A-Z|a-z]{2,})+',
                                         message="Wrong email Format."
                                     )])
     city = models.CharField('Πολη', max_length=200, blank=True, null=True)
@@ -53,8 +55,8 @@ class Supplier(abmodels.AbstractModel):
                                null=True,)
 
     class Meta:
-        verbose_name = 'Supplier'
-        verbose_name_plural = 'Suppliers'
+        verbose_name = 'Προμηθευτης'
+        verbose_name_plural = 'Προμηθευτες'
         ordering = ['-created_at']
 
     def __str__(self):
