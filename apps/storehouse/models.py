@@ -75,11 +75,19 @@ class BinType(models.Model):
     class Meta:
         abstract = True
 
+class UseManager(models.Manager):
+    def get_queryset(self):
+        return super().get_queryset().filter(in_use=True)
+
+
 class Bin(abmodels.TimeStamp, BinType):
     storage = models.ForeignKey(Storage, on_delete=models.CASCADE)
     section = models.ForeignKey(Section, on_delete=models.CASCADE)
     spot = models.ForeignKey(Spot, on_delete=models.CASCADE)
     in_use = models.BooleanField('Σε χρηση', default=False)
+
+    objects = models.Manager()
+    occupied = UseManager()
 
     class Meta:
         verbose_name = 'Θεση αποθηκευσης'
@@ -87,7 +95,7 @@ class Bin(abmodels.TimeStamp, BinType):
         constraints = [
             models.UniqueConstraint(fields=['storage', 'section', 'spot', 'bin_type'],
                                     name='unique_bin')]
-        ordering = ['storage', 'section','bin_type', 'spot']
+        ordering = ['storage', 'section', 'bin_type', 'spot']
 
     def __str__(self):
         return f'{self.section}-{self.spot}{self.bin_type}'
