@@ -23,7 +23,8 @@ INSTALLED_APPS = [
     # own
     'apps.account.apps.AccountConfig',
     'apps.supplier.apps.SupplierConfig',
-    'apps.storehouse.apps.StorehouseConfig'
+    'apps.storehouse.apps.StorehouseConfig',
+    'apps.product.apps.ProductConfig'
 ]
 
 MIDDLEWARE = [
