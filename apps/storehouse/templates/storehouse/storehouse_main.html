@@ -154,14 +154,14 @@
         <tbody class="has-text-centered">
         {% for item in storage_count %}
             <tr>
-              <td  data-label="ΑΠΟΘΗΚΗ">{{item.storage}}</td>
+              <td  data-label="ΑΠΟΘΗΚΗ">{{item.storage_name}}</td>
               <td data-label="ΔΙΑΔΡΟΜΟΙ">{{item.total_sections}}</td>
               <td data-label="ΘΕΣΕΙΣ">{{item.total_bins}}</td>
               <td data-label="ΣΕ ΧΡΗΣΗ">{{item.storage_bins_in_use}}</td>
               <td data-label="ΕΛΕΥΘΕΡΕΣ">{{item.free_bins}}</td>
               <td class="is-actions-cell">
                 <div class="buttons is-left">
-                  <a href="#"
+                  <a href="{% url 'storehouse:storage-detail' pk=item.id %}"
                      class="button is-small is-primary" type="button">
                     <span class="icon"><i class="mdi mdi-eye"></i></span>
                   </a>

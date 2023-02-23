@@ -1,10 +1,176 @@
 {% extends 'base.html' %}
 
-{% block title%}Προμηθευτής {{}}{% endblock %}
+{% block title%}Αποθήκη {{storage.storage_name}}{% endblock %}
 
 {% block content %}
 
-{% include 'Component/page_title.html' with currentPage='Πληροφορίες Προμηθευτή' %}
-{% include 'supplier/components/card_header.html' with currentHeader='' %}
+{% include 'Component/page_title.html' with currentPage='Πληροφορίες Αποθήκης' %}
 
+<!--Breadcrumb-->
+<div class="card has-table has-mobile-sort-spaced">
+  <header class="card-header">
+    <p class="card-header-title">
+      <span class="icon"><i class="mdi mdi-floor-plan"></i></span>
+       {{storage.storage_name}}-{{storage.id}}
+    </p>
+      <div class="control ml-5">
+        <a href="#" class="button is-info mr-6">
+            <span class="icon mr-4"><i class="mdi mdi-information-outline mdi-24px"></i></span>
+                 Αποθήκη
+        </a>
+    </div>
+    <div class="control ml-5">
+        <a href="{% url 'storehouse:storehouse-main' %}" class="button is-danger mr-6">Πίσω</a>
+    </div>
+
+  </header>
+</div>
+
+<!-- Bin details -->
+<div class="tile is-ancestor ml-3 mr-3 ">
+    <div class="tile is-parent">
+        <div class="card tile is-child">
+          <div class="card-content has-background-dark ">
+            <div class="level is-mobile">
+              <div class="level-item ">
+                <div class="is-widget-label "><h3 class="subtitle is-spaced has-text-danger">
+                    Σε Xρήση
+                </h3>
+                  <h1 class="title has-text-white">
+                      {{in_use_bins}}
+                  </h1>
+                </div>
+              </div>
+              <div class="level-item has-widget-icon">
+                <div class="is-widget-icon"><span class="icon has-text-danger is-large"><i
+                    class="mdi mdi-arrow-down-box mdi-48px"></i></span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="tile is-parent">
+        <div class="card tile is-child">
+          <div class="card-content has-background-dark ">
+            <div class="level is-mobile">
+              <div class="level-item ">
+                <div class="is-widget-label "><h3 class="subtitle is-spaced has-text-info">
+                  Ελεύθερες
+                </h3>
+                  <h1 class="title has-text-white">
+                      {{free_bins}}
+                  </h1>
+                </div>
+              </div>
+              <div class="level-item has-widget-icon">
+                <div class="is-widget-icon"><span class="icon has-text-info is-large"><i
+                    class="mdi mdi-arrow-up-box mdi-48px"></i></span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+     </div>
+     <div class="tile is-parent">
+        <div class="card tile is-child">
+          <div class="card-content has-background-dark ">
+            <div class="level is-mobile">
+              <div class="level-item ">
+                <div class="is-widget-label "><h3 class="subtitle is-spaced has-text-warning">
+                  Θέσεις
+                </h3>
+                  <h1 class="title has-text-white">
+                      {{all_bins}}
+                  </h1>
+                </div>
+              </div>
+              <div class="level-item has-widget-icon">
+                <div class="is-widget-icon"><span class="icon has-text-warning is-large"><i
+                    class="mdi mdi-map-marker mdi-48px"></i></span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+  </div>
+
+
+<!-- Storage Details -->
+<div class="card has-mobile-sort-spaced ">
+    <div class="content-wrapper is-flex is-justify-content-center">
+        <header class="card-header">
+            <div class="notification is-dark">
+                <span class="mr-5">
+                    Διαθέσιμες Παλέτες: {{free_floor}}
+                    <span class="icon has-text-danger">
+                        <i class="mdi mdi-alpha-f-box-outline mdi-24px"></i>
+                    </span>
+                </span>
+                <span>
+                    Διαθέσιμα Ράφια: {{free_shelves}}
+                    <span class="icon has-text-link">
+                         <i class="mdi mdi-alpha-s-box-outline mdi-24px"></i>
+                    </span>
+                </span>
+            </div>
+        </header>
+    </div>
+</div>
+
+
+
+<!-- Bin Information-->
+<div class="table-wrapper has-mobile-cards has-text-centered m-6">
+      <table class="table is-fullwidth is-striped is-hoverable is-sortable is-fullwidth">
+        <thead>
+          <tr>
+            <th class="has-text-centered">ΔΙΑΔΡΟΜΟΣ</th>
+            <th class="has-text-centered">ΘΕΣΗ</th>
+            <th class="has-text-centered">ΤΥΠΟΣ</th>
+            <th class="has-text-centered">ΣΕ ΧΡΗΣΗ</th>
+            <th class="has-text-centered"></th>
+          </tr>
+        </thead>
+        <tbody class="has-text-centered">
+        {% for bin in bins %}
+            <tr>
+              <td data-label="ΔΙΑΔΡΟΜΟΣ">{{bin.section}}</td>
+              <td  data-label="ΘΕΣΗ">{{bin.spot}}</td>
+              <td data-label="ΤΥΠΟΣ">
+                  {% if bin.bin_type == 'F' %}
+                      <span class="icon has-text-danger">
+                        <i class="mdi mdi-alpha-f-box-outline mdi-24px"></i>
+                      </span>
+                  {% else %}
+                    <span class="icon has-text-link">
+                 <i class="mdi mdi-alpha-s-box-outline mdi-24px"></i>
+             </span>
+                  {% endif %}
+              </td>
+              <td data-label="ΣΕ ΧΡΗΣΗ">
+                {% if bin.in_use %}
+                  <span class="icon has-text-success ">
+                    <i class="mdi mdi-check-decagram "></i>
+                  </span>
+                {% else %}
+                    <span class="icon has-text-danger ">
+                      <i class="mdi mdi-cancel "></i>
+                    </span>
+                {% endif %}
+              </td>
+              <td class="is-actions-cell">
+                <div class="buttons is-left">
+                  <a href="#"
+                     class="button is-small is-link" type="button">
+                    <span class="icon"><i class="mdi mdi-eye"></i></span>
+                  </a>
+                </div>
+              </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+      </table>
+    </div>
 {% endblock %}

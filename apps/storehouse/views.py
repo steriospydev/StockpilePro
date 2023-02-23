@@ -1,10 +1,12 @@
 from django.shortcuts import render
 from django.db.models import Count, Q
 from .models import Storage, Section, Spot, Bin
+
+from django.shortcuts import get_object_or_404
 # Create your views here.
 
-def storehouse_home(request):
 
+def storehouse_home(request):
     storages = Storage.objects.annotate(total_sections=Count('bin__section', distinct=True))
     bins_agg = Bin.objects.aggregate(
         total_bins=Count('id'),
@@ -34,3 +36,22 @@ def storehouse_home(request):
         'storage_count': storage_count
     }
     return render(request, 'storehouse/storehouse_main.html', context)
+
+
+def storage_bins_page(request, pk):
+    storage = Storage.objects.get(id=pk)
+    bins = Bin.objects.filter(storage=storage)
+    all_bins = bins.count()
+    free_bins = bins.filter(in_use=False).count()
+    in_use_bins = all_bins - free_bins
+    shelves_available = bins.filter(bin_type='S', in_use=False).count()
+    floor_available = bins.filter(bin_type='F', in_use=False).count()
+
+    context = {'bins': bins,
+               'storage': storage,
+               'all_bins': all_bins,
+               'free_bins': free_bins,
+               'in_use_bins': in_use_bins,
+               'free_shelves': shelves_available,
+               'free_floor': floor_available}
+    return render(request, 'storehouse/storehouse_detail.html', context)
