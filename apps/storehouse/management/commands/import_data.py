@@ -1,6 +1,6 @@
 import pandas as pd
 from django.core.management.base import BaseCommand
-from apps.storehouse.models import Storage, Section, Spot
+from apps.storehouse.models import Storage, Section, Spot, Bin
 
 class Command(BaseCommand):
     help = 'Import data from Excel file'
@@ -14,12 +14,24 @@ class Command(BaseCommand):
         df = pd.read_excel(filename, dtype={'spot_name': str})
 
         for index, row in df.iterrows():
+            storage = Storage.objects.get(storage_name=row['storage'])
+            section = Section.objects.get(section_name=row['section'])
+            item = f"0{row['spot']}"
+            spot = Spot.objects.get(spot_name=item)
+            Bin.objects.create(
+                storage=storage,
+                section=section,
+                spot=spot,
+                in_use=row['in_use']
+
+            )
             # Storage.objects.create(
-            #     storage_name=row['storage_name'],
+            #     storage_name=row['name'],
             # )
             # Section.objects.create(
-            #     section_name=row['storage_name'],
+            #     section_name=row['name'],
             # )
-            Spot.objects.create(spot_name=row['spot_name'])
+            # item = f"0{row['spot_name']}"
+            # Spot.objects.create(spot_name=item)
 
         self.stdout.write(self.style.SUCCESS('Data imported successfully.'))
