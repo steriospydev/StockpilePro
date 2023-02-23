@@ -22,7 +22,8 @@ class Command(BaseCommand):
                 storage=storage,
                 section=section,
                 spot=spot,
-                in_use=row['in_use']
+                in_use=row['in_use'],
+                bin_type=row['type']
 
             )
             # Storage.objects.create(

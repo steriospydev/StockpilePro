@@ -119,58 +119,81 @@
     </div>
 </div>
 
-
-
 <!-- Bin Information-->
-<div class="table-wrapper has-mobile-cards has-text-centered m-6">
-      <table class="table is-fullwidth is-striped is-hoverable is-sortable is-fullwidth">
-        <thead>
-          <tr>
-            <th class="has-text-centered">ΔΙΑΔΡΟΜΟΣ</th>
-            <th class="has-text-centered">ΘΕΣΗ</th>
-            <th class="has-text-centered">ΤΥΠΟΣ</th>
-            <th class="has-text-centered">ΣΕ ΧΡΗΣΗ</th>
-            <th class="has-text-centered"></th>
-          </tr>
-        </thead>
-        <tbody class="has-text-centered">
-        {% for bin in bins %}
-            <tr>
-              <td data-label="ΔΙΑΔΡΟΜΟΣ">{{bin.section}}</td>
-              <td  data-label="ΘΕΣΗ">{{bin.spot}}</td>
-              <td data-label="ΤΥΠΟΣ">
-                  {% if bin.bin_type == 'F' %}
-                      <span class="icon has-text-danger">
-                        <i class="mdi mdi-alpha-f-box-outline mdi-24px"></i>
+<div class="b-table has-pagination">
+    <div class="table-wrapper has-mobile-cards has-text-centered m-6">
+        <table class="table is-fullwidth is-striped is-hoverable is-sortable is-fullwidth">
+            <thead>
+              <tr>
+                <th class="has-text-centered">ΔΙΑΔΡΟΜΟΣ</th>
+                <th class="has-text-centered">ΘΕΣΗ</th>
+                <th class="has-text-centered">ΤΥΠΟΣ</th>
+                <th class="has-text-centered">ΣΕ ΧΡΗΣΗ</th>
+                <th class="has-text-centered"></th>
+              </tr>
+            </thead>
+            <tbody class="has-text-centered">
+            {% for bin in bins %}
+                <tr>
+                  <td data-label="ΔΙΑΔΡΟΜΟΣ">{{bin.section}}</td>
+                  <td  data-label="ΘΕΣΗ">{{bin.spot}}</td>
+                  <td data-label="ΤΥΠΟΣ">
+                      {% if bin.bin_type == 'F' %}
+                          <span class="icon has-text-danger">
+                            <i class="mdi mdi-alpha-f-box-outline mdi-24px"></i>
+                          </span>
+                      {% else %}
+                        <span class="icon has-text-link">
+                     <i class="mdi mdi-alpha-s-box-outline mdi-24px"></i>
+                 </span>
+                      {% endif %}
+                  </td>
+                  <td data-label="ΣΕ ΧΡΗΣΗ">
+                    {% if bin.in_use %}
+                      <span class="icon has-text-success ">
+                        <i class="mdi mdi-check-decagram "></i>
                       </span>
-                  {% else %}
-                    <span class="icon has-text-link">
-                 <i class="mdi mdi-alpha-s-box-outline mdi-24px"></i>
-             </span>
-                  {% endif %}
-              </td>
-              <td data-label="ΣΕ ΧΡΗΣΗ">
-                {% if bin.in_use %}
-                  <span class="icon has-text-success ">
-                    <i class="mdi mdi-check-decagram "></i>
-                  </span>
-                {% else %}
-                    <span class="icon has-text-danger ">
-                      <i class="mdi mdi-cancel "></i>
-                    </span>
-                {% endif %}
-              </td>
-              <td class="is-actions-cell">
-                <div class="buttons is-left">
-                  <a href="#"
-                     class="button is-small is-link" type="button">
-                    <span class="icon"><i class="mdi mdi-eye"></i></span>
-                  </a>
-                </div>
-              </td>
-            </tr>
-        {% endfor %}
-        </tbody>
-      </table>
+                    {% else %}
+                        <span class="icon has-text-danger ">
+                          <i class="mdi mdi-cancel "></i>
+                        </span>
+                    {% endif %}
+                  </td>
+                  <td class="is-actions-cell">
+                    <div class="buttons is-left">
+                      <a href="#"
+                         class="button is-small is-link" type="button">
+                        <span class="icon"><i class="mdi mdi-eye"></i></span>
+                      </a>
+                    </div>
+                  </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+          </table>
     </div>
+</div>
+
+<!--&lt;!&ndash;Pagination&ndash;&gt;-->
+<!--<div class="card-content">-->
+<!--    <div class="b-table has-pagination">-->
+<!--      <div class="notification">-->
+<!--        <div class="level">-->
+<!--          <div class="level-left">-->
+<!--            <div class="level-item">-->
+<!--              <div class="buttons has-addons">-->
+<!--                  {% for p in bins.paginator.page_range %}-->
+<!--                    {% if p == bins.number %}-->
+<!--                      <a  href="?page={{ p }}" type="button" class="button is-active">{{p}}</a>-->
+<!--                    {% else %}-->
+<!--                      <a href="?page={{ p }}" type="button" class="button">{{ p }}</a>-->
+<!--                    {% endif %}-->
+<!--                  {% endfor %}-->
+<!--              </div>-->
+<!--            </div>-->
+<!--          </div>-->
+<!--        </div>-->
+<!--      </div>-->
+<!--    </div>-->
+<!--</div>-->
 {% endblock %}
