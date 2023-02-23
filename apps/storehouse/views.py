@@ -1,9 +1,13 @@
 from django.shortcuts import render
-from django.db.models import Count, Q
+from django.db.models import Count, Q, Case, When, BooleanField
+from django.core.cache import cache
+
 from .models import Storage, Section, Spot, Bin
 
 def storehouse_home(request):
-    storages = Storage.objects.annotate(total_sections=Count('bin__section', distinct=True))
+    storages = Storage.objects.prefetch_related('bins').annotate(
+        total_sections=Count('bins__section', distinct=True))
+
     bins_agg = Bin.objects.aggregate(
         total_bins=Count('id'),
         bins_in_use=Count('id', filter=Q(in_use=True))
@@ -11,8 +15,8 @@ def storehouse_home(request):
     bins_occupied = bins_agg['total_bins'] - bins_agg['bins_in_use']
 
     storage_count = storages.annotate(
-        total_bins=Count('bin'),
-        storage_bins_in_use=Count('bin', filter=Q(bin__in_use=True))
+        total_bins=Count('bins'),
+        storage_bins_in_use=Count('bins', filter=Q(bins__in_use=True))
     ).values(
         'id',
         'storage_name',
@@ -33,20 +37,32 @@ def storehouse_home(request):
     }
     return render(request, 'storehouse/storehouse_main.html', context)
 
-def storage_bins_page(request, pk):
-    storage = Storage.objects.get(id=pk)
-    bins = Bin.objects.filter(storage=storage)
-    all_bins = bins.count()
-    free_bins = bins.filter(in_use=False).count()
-    in_use_bins = all_bins - free_bins
-    shelves_available = bins.filter(bin_type='S', in_use=False).count()
-    floor_available = bins.filter(bin_type='F', in_use=False).count()
 
-    context = {'bins': bins,
-               'storage': storage,
-               'all_bins': all_bins,
-               'free_bins': free_bins,
-               'in_use_bins': in_use_bins,
-               'free_shelves': shelves_available,
-               'free_floor': floor_available}
+def storage_bins_page(request, pk):
+    storage = Storage.objects.prefetch_related(
+        'bins', 'bins__section').get(id=pk)
+
+    bins = storage.bins.select_related('section', 'spot').annotate(
+        is_free=Case(
+            When(in_use=False, then=True),
+            default=False,
+            output_field=BooleanField()
+        )
+    )
+
+    all_bins = storage.bins.count()
+    free_bins = storage.bins.filter(in_use=False).count()
+    in_use_bins = all_bins - free_bins
+    shelves_available = storage.bins.filter(bin_type='S', in_use=False).count()
+    floor_available = storage.bins.filter(bin_type='F', in_use=False).count()
+
+    context = {
+        'bins': bins,
+        'storage': storage,
+        'all_bins': all_bins,
+        'free_bins': free_bins,
+        'in_use_bins': in_use_bins,
+        'free_shelves': shelves_available,
+        'free_floor': floor_available
+    }
     return render(request, 'storehouse/storehouse_detail.html', context)

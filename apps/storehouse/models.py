@@ -81,7 +81,7 @@ class UseManager(models.Manager):
 
 
 class Bin(abmodels.TimeStamp, BinType):
-    storage = models.ForeignKey(Storage, on_delete=models.CASCADE)
+    storage = models.ForeignKey(Storage, on_delete=models.CASCADE, related_name='bins')
     section = models.ForeignKey(Section, on_delete=models.CASCADE)
     spot = models.ForeignKey(Spot, on_delete=models.CASCADE)
     in_use = models.BooleanField('Σε χρηση', default=False)
