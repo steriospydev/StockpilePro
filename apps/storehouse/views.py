@@ -1,9 +1,6 @@
 from django.shortcuts import render
 from django.db.models import Count, Q
-from django.core.paginator import Paginator
-
 from .models import Storage, Section, Spot, Bin
-
 
 def storehouse_home(request):
     storages = Storage.objects.annotate(total_sections=Count('bin__section', distinct=True))
@@ -36,7 +33,6 @@ def storehouse_home(request):
     }
     return render(request, 'storehouse/storehouse_main.html', context)
 
-
 def storage_bins_page(request, pk):
     storage = Storage.objects.get(id=pk)
     bins = Bin.objects.filter(storage=storage)
@@ -45,10 +41,6 @@ def storage_bins_page(request, pk):
     in_use_bins = all_bins - free_bins
     shelves_available = bins.filter(bin_type='S', in_use=False).count()
     floor_available = bins.filter(bin_type='F', in_use=False).count()
-
-    page_number = request.GET.get('page')
-    paginator = Paginator(bins, 10)  # 10 items per page
-    page_obj = paginator.get_page(page_number)
 
     context = {'bins': bins,
                'storage': storage,
