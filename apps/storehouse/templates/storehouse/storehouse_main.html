@@ -152,12 +152,13 @@
           </tr>
         </thead>
         <tbody class="has-text-centered">
+        {% for item in storage_count %}
             <tr>
-              <td  data-label="ΑΠΟΘΗΚΗ">Α</td>
-              <td data-label="ΔΙΑΔΡΟΜΟΙ">10</td>
-              <td data-label="ΘΕΣΕΙΣ">87</td>
-              <td data-label="ΣΕ ΧΡΗΣΗ">55</td>
-              <td data-label="ΕΛΕΥΘΕΡΕΣ">32</td>
+              <td  data-label="ΑΠΟΘΗΚΗ">{{item.storage}}</td>
+              <td data-label="ΔΙΑΔΡΟΜΟΙ">{{item.total_sections}}</td>
+              <td data-label="ΘΕΣΕΙΣ">{{item.total_bins}}</td>
+              <td data-label="ΣΕ ΧΡΗΣΗ">{{item.storage_bins_in_use}}</td>
+              <td data-label="ΕΛΕΥΘΕΡΕΣ">{{item.free_bins}}</td>
               <td class="is-actions-cell">
                 <div class="buttons is-left">
                   <a href="#"
@@ -167,6 +168,7 @@
                 </div>
               </td>
             </tr>
+        {% endfor %}
         </tbody>
       </table>
     </div>
