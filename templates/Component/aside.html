@@ -130,7 +130,8 @@
         </li>
 
         <li>
-          <a href="#" class="router-link-active has-icon">
+          <a href="{% url 'product:category-list'%}"
+             class="{% if request.resolver_match.url_name == 'category-list' %}is-active{% endif %}router-link-active has-icon">
             <span class="icon"><i class="mdi mdi-label"></i></span>
             <span class="menu-item-label">Κατηγορίες</span>
           </a>

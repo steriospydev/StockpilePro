@@ -18,7 +18,6 @@ PACKAGE_UNITS_CHOICES = [
     (UNIT, 'Τεμαχιο'),
 ]
 
-
 class Category(models.Model):
     category_name = models.CharField("Ονομα", unique=True, max_length=120)
 
