@@ -1,20 +1,21 @@
 from django.db import models
+from django.db.models.signals import pre_save
 
-from apps.utils import abmodels
+from apps.utils import abmodels, utils
 
 KILO = 'kg'
 GRAMMS = 'gr'
 OTHER = 'oo'
 LITRES = 'lt'
 MILLILITRES = 'ml'
-UNIT = 'un'
+UNIT = 'τx'
 
 PACKAGE_UNITS_CHOICES = [
     (KILO, 'Kilo'),
     (GRAMMS, 'Gramms'),
     (LITRES, 'Litre'),
     (MILLILITRES, 'Millilitre'),
-    (UNIT, 'Unit'),
+    (UNIT, 'Τεμαχιο'),
 ]
 
 
@@ -38,12 +39,6 @@ class Material(models.Model):
     def __str__(self):
         return f'{self.material_name}'
 
-class Brand(models.Model):
-    brand_name = models.CharField("Ονομα", unique=True, max_length=120)
-
-    def __str__(self):
-        return f'{self.brand_name}'
-
 class SubCategory(models.Model):
     subcategory_name = models.CharField("Ονομασια", max_length=120)
     category = models.ForeignKey(Category, on_delete=models.CASCADE,
@@ -58,7 +53,7 @@ class SubCategory(models.Model):
         ]
 
     def __str__(self):
-        return f'{self.subcategory_name}'
+        return f'{self.subcategory_name} - {self.category}'
 
 class Package(models.Model):
     material = models.ForeignKey(Material, on_delete=models.CASCADE,
@@ -79,5 +74,29 @@ class Package(models.Model):
     def __str__(self):
         return f'{self.package_quantity}{self.package_unit} {self.material}'
 
-class Product(models.Model):
-    pass
+class Product(abmodels.TimeStamp):
+    product_name = models.CharField("Ονομασια", max_length=120)
+    subcategory = models.ForeignKey(SubCategory, on_delete=models.CASCADE,
+                                    related_name='sub_products')
+    package = models.ForeignKey(Package, on_delete=models.CASCADE,
+                                related_name='package_products')
+    summary = models.TextField("Περιγραφη", null=True, blank=True)
+    sku_num = models.CharField(max_length=3, unique=True,
+                               blank=True, null=True, editable=False)
+    image = models.ImageField("Φωτογραφια", upload_to='product_images', null=True, blank=True)
+
+    class Meta:
+        verbose_name = 'Προιον'
+        verbose_name_plural = 'Προιοντα'
+        constraints = [
+            models.UniqueConstraint(fields=['product_name', 'package'],
+                                    name='unique_product')
+        ]
+
+    def __str__(self):
+        return f'{self.product_name} - {self.package}'
+
+
+pre_save.connect(lambda sender, instance, **kwargs:
+                 utils.generate_sku_num(sender, instance, k=3),
+                 sender=Product)
