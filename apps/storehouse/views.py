@@ -1,6 +1,5 @@
 from django.shortcuts import render
 from django.db.models import Count, Q, Case, When, BooleanField
-from django.core.cache import cache
 
 from .models import Storage, Section, Spot, Bin
 
@@ -39,6 +38,7 @@ def storehouse_home(request):
 
 
 def storage_bins_page(request, pk):
+    #
     storage = Storage.objects.prefetch_related(
         'bins', 'bins__section').get(id=pk)
 
@@ -46,13 +46,14 @@ def storage_bins_page(request, pk):
         is_free=Case(
             When(in_use=False, then=True),
             default=False,
-            output_field=BooleanField()
-        )
-    )
+            output_field=BooleanField()))
 
+    # Count available bins
     all_bins = storage.bins.count()
     free_bins = storage.bins.filter(in_use=False).count()
     in_use_bins = all_bins - free_bins
+
+    # Available bin depending on type
     shelves_available = storage.bins.filter(bin_type='S', in_use=False).count()
     floor_available = storage.bins.filter(bin_type='F', in_use=False).count()
 
