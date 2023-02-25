@@ -2,8 +2,9 @@ from django.core.validators import RegexValidator
 from django.db import models
 from django.db.models.signals import pre_save
 from django.urls import reverse
+
 # working branch
-from apps.utils import abmodels, utils
+from apps.utils import abmodels, signals
 
 class ActiveManager(models.Manager):
     def get_queryset(self):
@@ -75,5 +76,5 @@ class Supplier(abmodels.TimeStamp):
 
 
 pre_save.connect(lambda sender, instance, **kwargs:
-                 utils.generate_sku_num(sender, instance, k=2),
+                 signals.generate_sku_num(sender, instance, k=2),
                  sender=Supplier)
