@@ -39,7 +39,6 @@ class CategoryTempValues(models.Model):
     class Meta:
         abstract = True
 
-
 class Category(CategoryTempValues):
     category_name = models.CharField("Ονομα", unique=True, max_length=120)
 
@@ -55,7 +54,6 @@ class Category(CategoryTempValues):
         subcategories = self.subs.all()
         return sum(subcategory.get_num_products() for subcategory in subcategories)
 
-
 class Material(models.Model):
     material_name = models.CharField("Ονομα", unique=True, max_length=120)
 
@@ -65,7 +63,6 @@ class Material(models.Model):
 
     def __str__(self):
         return f'{self.material_name}'
-
 
 class SubCategory(models.Model):
     subcategory_name = models.CharField("Ονομασια", max_length=120)
@@ -77,8 +74,7 @@ class SubCategory(models.Model):
         verbose_name_plural = 'Υποκατηγοριες'
         constraints = [
             models.UniqueConstraint(fields=['subcategory_name', 'category'],
-                                    name='unique_category')
-        ]
+                                    name='unique_category')]
 
     def __str__(self):
         return f'{self.subcategory_name} - {self.category}'
