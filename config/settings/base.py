@@ -37,6 +37,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
+ALLOW_UNICODE_SLUGS = True
 
 ROOT_URLCONF = 'config.urls'
 

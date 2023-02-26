@@ -1,5 +1,8 @@
 from django.db import models
 from django.db.models.signals import pre_save
+from django.urls import reverse
+from django.utils.text import slugify
+from unidecode import unidecode
 
 from apps.utils import abmodels, signals
 
@@ -54,15 +57,9 @@ class Category(CategoryTempValues):
         subcategories = self.subs.all()
         return sum(subcategory.get_num_products() for subcategory in subcategories)
 
-class Material(models.Model):
-    material_name = models.CharField("Ονομα", unique=True, max_length=120)
+    def get_absolute_url(self):
+        return reverse('product:category-detail', args=[self.id])
 
-    class Meta:
-        verbose_name = 'Υλικο'
-        verbose_name_plural = 'Υλικα'
-
-    def __str__(self):
-        return f'{self.material_name}'
 
 class SubCategory(models.Model):
     subcategory_name = models.CharField("Ονομασια", max_length=120)
@@ -77,11 +74,23 @@ class SubCategory(models.Model):
                                     name='unique_category')]
 
     def __str__(self):
-        return f'{self.subcategory_name} - {self.category}'
+        return f'{self.subcategory_name}'
 
     def get_num_products(self):
         products = self.sub_products.all()
         return len(products)
+
+
+class Material(models.Model):
+    material_name = models.CharField("Ονομα", unique=True, max_length=120)
+
+    class Meta:
+        verbose_name = 'Υλικο'
+        verbose_name_plural = 'Υλικα'
+
+    def __str__(self):
+        return f'{self.material_name}'
+
 
 class Package(models.Model):
     material = models.ForeignKey(Material, on_delete=models.CASCADE,
