@@ -1,11 +1,15 @@
 from django.shortcuts import render
-from django.views.generic import ListView, DetailView
+from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.db.models import Sum, Count, Prefetch
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.urls import reverse_lazy
+
 from .models import Category, SubCategory, Product
+from .forms import CategoryForm
 # Create your views here.
 
 
-class CategoryListView(ListView):
+class CategoryListView(LoginRequiredMixin, ListView):
     model = Category
     template_name = 'category_list.html'
 
@@ -21,7 +25,7 @@ class CategoryListView(ListView):
         context['num_products'] = sum(category.num_products for category in categories)
         return context
 
-class CategoryDetailView(DetailView):
+class CategoryDetailView(LoginRequiredMixin, DetailView):
     model = Category
     template_name = 'product/category_detail.html'
 
@@ -37,7 +41,7 @@ class CategoryDetailView(DetailView):
         context['num_products'] = sum(subcategory.num_products for subcategory in subcategories)
         return context
 
-class SubProductListView(ListView):
+class SubProductListView(LoginRequiredMixin, ListView):
     model = Product
     template_name = 'product/sub_products.html'
 
@@ -58,3 +62,26 @@ class SubProductListView(ListView):
         context['num_products'] = context['object_list'].aggregate(num_products=Count('id'))['num_products']
         context['category'] = subcategory.category
         return context
+
+
+class CategoryCreateUpdate(LoginRequiredMixin):
+    template_name = 'product/category_create_update.html'
+    model = Category
+    form_class = CategoryForm
+    success_url = reverse_lazy('product:category-list')
+    login_url = '/'
+
+    def form_valid(self, form):
+        form.instance.created_by = self.request.user
+        return super().form_valid(form)
+
+class CategoryCreateView(CategoryCreateUpdate, CreateView):
+    pass
+
+class CategoryUpdateView(CategoryCreateUpdate, UpdateView):
+    context_object_name = 'category'
+
+class CategoryDeleteView(LoginRequiredMixin, DeleteView):
+    model = Category
+    success_url = reverse_lazy('product:category-list')
+    login_url = '/'

@@ -14,8 +14,8 @@
 {% block content %}
     {% include 'Component/page_title.html' with tab1='Κατηγορίες' %}
 
-    <div class="columns mt-5 mr-6 ml-6 has-background-dark has-text-centered">
-      <div class="column is-3 has-text-danger has-text-weight-semibold">Φαγωσιμα</div>
+    <div class="columns mt-5 mr-6 ml-6 has-background-dark has-text-centered ">
+      <div class="column is-3 has-text-danger has-text-weight-semibold ">Φαγωσιμα</div>
       <div class="column is-3 has-text-link has-text-weight-semibold">Ποτα</div>
       <div class="column is-3 has-text-success has-text-weight-semibold">Αναλώσιμα</div>
       <div class="column is-3 has-text-warning has-text-weight-semibold">Υπολοιπα</div>
@@ -23,7 +23,7 @@
     <div class="card has-table has-mobile-sort-spaced">
           <header class="card-header ml-6">
               <div class="control">
-                <a href="#" class="button is-info">Δημιουργία Kατηγορίας</a>
+                <a href="{% url 'product:category-create' %}" class="button is-info">Δημιουργία Kατηγορίας</a>
               </div>
           </header>
         </div>
@@ -38,26 +38,34 @@
               <div class="card tile is-child has-background-dark">
                 <div class="card-content">
                   <div class="level is-mobile">
-                    <div class="level-item">
-                      <div class="is-widget-label ">
-                        <h3 class="subtitle is-spaced {{c.primary_colour}} custom-width">
-                          {{ c.category_name|truncatechars:25 }}
-                        </h3>
-                      </div>
-                    </div>
-                    <div class="level-item has-widget-icon">
-                        <div class="is-widget-icon">
-                            <a href="{{ c.get_absolute_url }}">
-                              <span class="icon {{c.primary_colour}} is-large">
-                                  <i class="mdi {{c.icon}} mdi-48px"></i>
-                              </span>
-                            </a>
+                     <div class="level-left">
+                        <div class="level-item has-text-left" style="width: 75%;">
+                          <div class="is-widget-label">
+                            <h3 class="subtitle is-spaced {{c.primary_colour}} custom-width">
+                                   <a href="{% url 'product:category-update' c.id %}"
+                                      class="{{c.primary_colour}}">
+                                  <span class="icon {{c.primary_colour}} is-large">
+                                      <i class="mdi {{c.icon}} mdi-36px"></i>
+                                  </span>
+                                    {{ c.category_name|truncatechars:25 }}
+                                </a>
 
-                      </div>
-                        <h1 class="title has-text-white">
-                            {{ c.num_products }}
-                        </h1>
-                    </div>
+
+                            </h3>
+                          </div>
+                        </div>
+                     </div>
+                     <div class="level-right">
+                        <div class="level-item has-widget-icon has-text-centered" style="width: 25%;">
+                            <div class="is-widget-label">
+                                <a href="{{ c.get_absolute_url }}" class="button is-info is-medium is-rounded  has-text-weight-bold">
+                                        <span class="icon mr-4"><i class="mdi mdi-subtitles mdi-24px"></i></span>
+
+                                {{ c.num_products }}
+                                   </a>
+                            </div>
+                        </div>
+                     </div>
                   </div>
                 </div>
               </div>
