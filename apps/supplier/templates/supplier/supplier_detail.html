@@ -4,7 +4,7 @@
 
 {% block content %}
 
-{% include 'Component/page_title.html' with currentPage='Πληροφορίες Προμηθευτή' %}
+{% include 'Component/page_title.html' with tab1='Πληροφορίες Προμηθευτή' tab2=supplier.company %}
 {% include 'supplier/components/card_header.html' with currentHeader=supplier.company %}
 
 <div class="tile is-ancestor">

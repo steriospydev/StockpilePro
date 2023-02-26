@@ -12,47 +12,35 @@
 {% endblock%}
 
 {% block content %}
-    {% include 'Component/page_title.html' with currentPage='Κατηγορίες' %}
-    <div class="columns mt-5 mr-6 ml-6 has-background-dark has-text-centered">
-      <div class="column is-3 has-text-danger has-text-weight-semibold">Φαγωσιμα</div>
-      <div class="column is-3 has-text-link has-text-weight-semibold">Ποτα</div>
-      <div class="column is-3 has-text-success has-text-weight-semibold">Αναλώσιμα</div>
-      <div class="column is-3 has-text-warning has-text-weight-semibold">Υπολοιπα</div>
-    </div>
+    {% include 'Component/page_title.html' with currentPage='Κατηγορια' tab2=category.category_name %}
+    {% include 'product/components/card_header.html' %}
 
-    <div class="tile is-ancestor m-3">
-        {% for c in categories %}
-            {% if forloop.counter0|divisibleby:2 %}
-                </div>
-                <div class="tile is-ancestor m-3">
-            {% endif %}
-
+    {% for s in subcategories %}
+        <div class="tile is-ancestor m-3">
             <div class="tile is-parent">
               <div class="card tile is-child has-background-dark">
                 <div class="card-content">
                   <div class="level is-mobile">
                     <div class="level-item">
                       <div class="is-widget-label ">
-                        <h3 class="subtitle is-spaced {{c.primary_colour}} custom-width">
-                          {{ c.category_name|truncatechars:25 }}
+                        <h3 class="subtitle is-spaced has-text-white custom-width">
+                          {{ s.subcategory_name|truncatechars:25 }}
                         </h3>
                       </div>
                     </div>
                     <div class="level-item has-widget-icon">
-                        <div class="is-widget-icon">
-                              <span class="icon {{c.primary_colour}} is-large"><i
-                          class="mdi {{c.icon}} mdi-48px"></i></span>
-                      </div>
                         <h1 class="title has-text-white">
-                            {{ c.num_products }}
+                            {{ s.num_products }}
                         </h1>
+                        <div class="is-widget-icon">
+                              <span class="icon {{category.primary_colour}} is-large"><i
+                          class="mdi {{category.icon}} mdi-48px"></i></span>
+                        </div>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
-            {% if forloop.last and not forloop.counter0|divisibleby:3 %}
-                </div>
-            {% endif %}
-        {%endfor%}
+        </div>
+{%endfor%}
 {% endblock %}

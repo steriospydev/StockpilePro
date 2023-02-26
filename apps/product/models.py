@@ -69,6 +69,7 @@ class SubCategory(models.Model):
     class Meta:
         verbose_name = 'Υποκατηγορια'
         verbose_name_plural = 'Υποκατηγοριες'
+        ordering = ['subcategory_name']
         constraints = [
             models.UniqueConstraint(fields=['subcategory_name', 'category'],
                                     name='unique_category')]
@@ -97,7 +98,8 @@ class Package(models.Model):
                                  related_name='packages')
     package_unit = models.CharField("M.M.", max_length=2,
                                     choices=PACKAGE_UNITS_CHOICES, default=OTHER)
-    package_quantity = models.BigIntegerField("Ποσοτητα", default=0)
+    package_quantity = models.DecimalField("Ποσοτητα", default=00.00,
+                                           max_digits=5, decimal_places=1)
 
     class Meta:
         verbose_name = 'Συσκευασια'

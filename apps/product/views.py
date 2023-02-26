@@ -24,7 +24,7 @@ class CategoryListView(ListView):
 
 class CategoryDetailView(DetailView):
     model = Category
-    template_name = 'category_detail.html'
+    template_name = 'product/category_detail.html'
 
     def get_queryset(self):
         return Category.objects.prefetch_related('subs__sub_products')

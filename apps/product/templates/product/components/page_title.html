@@ -4,8 +4,12 @@
         <div class="level-item">
             <ul>
                 <li>StockOps</li>
-                <li>{{tab1}}</li>
-                <li>{{tab2}}</li>
+                {% if tab1 %}
+                    <li>{{tab1}}</li>
+                {% endif %}
+                {% if tab2 %}
+                    <li>{{tab2}}</li>
+                {% endif%}
             </ul>
         </div>
         </div>

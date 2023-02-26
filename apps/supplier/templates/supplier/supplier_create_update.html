@@ -4,8 +4,8 @@
 
 {% block content %}
 
-  {% include 'Component/page_title.html' with currentPage='Ανανέωση Πληροφοριών' %}
-  {% include 'supplier/components/card_header.html' with currentHeader=supplier.company %}
+  {% include 'Component/page_title.html' with tab1='Προμηθευτές' tab2='Δημιουργία-Ανανέωση' %}
+    {% include 'supplier/components/card_header.html' with currentHeader=supplier.company %}
 
   <div class="columns is-multiline mr-3 ml-3">
     <div class="column is-full-desktop is-full-tablet is-full-mobile">
