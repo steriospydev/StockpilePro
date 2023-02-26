@@ -1,10 +1,14 @@
 from django.db import models
 from django.db.models.signals import pre_save
 from django.urls import reverse
-from django.utils.text import slugify
-from unidecode import unidecode
+from django.core.files.base import ContentFile
+
+import os
+from PIL import Image
+from io import BytesIO
 
 from apps.utils import abmodels, signals
+
 
 KILO = 'kg'
 GRAMMS = 'gr'
@@ -42,6 +46,7 @@ class CategoryTempValues(models.Model):
     class Meta:
         abstract = True
 
+
 class Category(CategoryTempValues):
     category_name = models.CharField("Ονομα", unique=True, max_length=120)
 
@@ -76,6 +81,9 @@ class SubCategory(models.Model):
 
     def __str__(self):
         return f'{self.subcategory_name}'
+
+    def get_absolute_url(self):
+        return reverse('product:product-sublist', kwargs={'pk': self.pk})
 
     def get_num_products(self):
         products = self.sub_products.all()
@@ -113,6 +121,7 @@ class Package(models.Model):
     def __str__(self):
         return f'{self.package_quantity}{self.package_unit} {self.material}'
 
+
 class Product(abmodels.TimeStamp):
     product_name = models.CharField("Ονομασια", max_length=120)
     subcategory = models.ForeignKey(SubCategory, on_delete=models.CASCADE,
@@ -122,7 +131,11 @@ class Product(abmodels.TimeStamp):
     summary = models.TextField("Περιγραφη", null=True, blank=True)
     sku_num = models.CharField(max_length=3, unique=True,
                                blank=True, null=True, editable=False)
-    image = models.ImageField("Φωτογραφια", upload_to='product_images', null=True, blank=True)
+    product_image = models.ImageField("Φωτογραφια", upload_to='products/%Y/%m/%d',
+                                      null=True, blank=True)
+    is_active = models.BooleanField('Ενεργο', default=True)
+    available = models.BooleanField('Διαθέσιμο', default=False)
+    online_sell = models.BooleanField('Online', default=False)
 
     class Meta:
         verbose_name = 'Προιον'

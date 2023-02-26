@@ -23,7 +23,7 @@
       </header>
     </div>
 
-    {% for s in subcategories %}
+    {% for sub in subcategories %}
         <div class="tile is-ancestor my-1 px-5 mx-6">
             <div class="tile is-parent">
               <div class="card tile p-0  is-child has-background-dark">
@@ -32,13 +32,14 @@
                     <div class="level-item">
                       <div class="is-widget-label ">
                         <h3 class="subtitle is-spaced has-text-white custom-width">
-                          {{ s.subcategory_name|truncatechars:25 }}
+                         <a href="{{ sub.get_absolute_url }}" class="has-text-info">
+                             {{sub.subcategory_name|truncatechars:25}}</a>
                         </h3>
                       </div>
                     </div>
                     <div class="level-item has-widget-icon">
                         <h1 class="title has-text-white">
-                            {{ s.num_products }}
+                            {{ sub.num_products }}
                         </h1>
                         <div class="is-widget-icon">
                               <span class="icon {{category.primary_colour}} is-large"><i

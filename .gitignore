@@ -171,3 +171,16 @@ coverage
 #.idea/
 
 /apps/supplier/migrations/0005_remove_contact_supplier_remove_quote_supplier_and_more.py
+/.coverage
+/media/products/2023/02/26/1_0clXds1.jpg
+/media/products/2023/02/26/thumbnails/1_0clXds1.jpg_thumb.jpg
+/media/products/2023/02/26/1_er9hiNK.jpg
+/media/products/2023/02/26/thumbnails/1_er9hiNK.jpg_thumb.jpg
+/media/products/2023/02/26/1_pwKIAXH.jpg
+/media/products/2023/02/26/thumbnails/1_pwKIAXH.jpg_thumb.jpg
+/media/products/2023/02/26/aurabig.jpeg
+/media/products/2023/02/26/mango.jpg
+/media/products/2023/02/26/thumbnails/mango.jpg_thumb.jpg
+/static/img/no_image.png
+/media/products/2023/02/26/ripper.jpg
+/media/products/2023/02/26/thumbnails/ripper.jpg_thumb.jpg
