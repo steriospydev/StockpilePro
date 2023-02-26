@@ -20,14 +20,10 @@ class SupplierListViewTestCase(TestCase):
         self.suppliers = []
         for i in range(15):
             tin = str(random.randint(100000000, 999999999))  # Generate random 9-digit string
-            sku_num = ''.join(
-                random.choices(string.ascii_uppercase + string.digits, k=2))  # Generate 2-character string
-
             supplier = SupplierFactory(
                 company=f'Supplier {i}',
                 is_active=True,
                 TIN_num=tin,
-                sku_num=sku_num
             )
             self.suppliers.append(supplier)
 
