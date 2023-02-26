@@ -8,17 +8,25 @@
 .custom-width {
     min-width:150px;
 }
-
 {% endblock%}
 
 {% block content %}
-    {% include 'Component/page_title.html' with currentPage='Κατηγορια' tab2=category.category_name %}
-    {% include 'product/components/card_header.html' %}
+    {% include 'Component/page_title.html' with tab1='Κατηγορια' tab2=category.category_name %}
+    <div class="card has-table has-mobile-sort-spaced ml-6">
+      <header class="card-header ml-6">
+        <div class="control">
+            <a href="{% url 'product:category-list' %}" class="button is-danger mr-2">Πίσω</a>
+          </div>
+          <div class="control">
+            <a href="#" class="button is-link">Δημιουργία Υποκατηγορίας</a>
+          </div>
+      </header>
+    </div>
 
     {% for s in subcategories %}
-        <div class="tile is-ancestor m-3">
+        <div class="tile is-ancestor my-1 px-5 mx-6">
             <div class="tile is-parent">
-              <div class="card tile is-child has-background-dark">
+              <div class="card tile p-0  is-child has-background-dark">
                 <div class="card-content">
                   <div class="level is-mobile">
                     <div class="level-item">
@@ -42,5 +50,7 @@
               </div>
             </div>
         </div>
+
+
 {%endfor%}
 {% endblock %}

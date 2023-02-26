@@ -32,7 +32,8 @@ class CategoryDetailView(DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         category = self.object
-        subcategories = category.subs.annotate(num_products=Count('sub_products'))
+        subcategories = category.subs.annotate(num_products=Count('sub_products')).order_by('subcategory_name')
+
         context['subcategories'] = subcategories
         context['num_products'] = sum(subcategory.num_products for subcategory in subcategories)
         return context
