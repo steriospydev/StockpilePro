@@ -20,31 +20,6 @@
                   <a href="{% url 'product:category-list' %}"
                      class="button is-info mr-6">Aκύρωση</a>
                   <button class="button is-success ml-5" >Αποθηκευση</button>
-                  {% if request.resolver_match.url_name == 'category-update' %}
-                    <button class="button is-small is-danger jb-modal" data-target="sample-modal" type="button">
-                        <span class="icon"><i class="mdi mdi-trash-can"></i></span>
-                    </button>
-                    <div id="sample-modal" class="modal">
-                        <div class="modal-background jb-modal-close"></div>
-                        <div class="modal-card">
-                          <header class="modal-card-head">
-                            <p class="modal-card-title">Confirm action</p>
-                            <button class="delete jb-modal-close" aria-label="close"></button>
-                          </header>
-                          <section class="modal-card-body">
-                            <p>This will permanently delete <b>Some Object</b></p>
-                            <p>This is sample modal</p>
-                          </section>
-                          <footer class="modal-card-foot">
-                            <a href="{% url 'product:category-update' pk=category.pk %}" class="button jb-modal-close">
-                                Cancel</a>
-                            <a href="{% url 'product:category-delete' pk=category.pk %}"
-                               class="button is-danger jb-modal-close">Delete</a>
-                          </footer>
-                        </div>
-                        <button class="modal-close is-large jb-modal-close" aria-label="close"></button>
-                    </div>
-                  {% endif %}
                 </div>
               </div>
 

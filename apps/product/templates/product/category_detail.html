@@ -15,10 +15,13 @@
     <div class="card has-table has-mobile-sort-spaced ml-6">
       <header class="card-header ml-6">
         <div class="control">
-            <a href="{% url 'product:category-list' %}" class="button is-danger mr-2">Πίσω</a>
+            <a href="{% url 'product:category-list' %}" class="button is-info mr-2">Πίσω</a>
           </div>
           <div class="control">
-            <a href="#" class="button is-link">Δημιουργία Υποκατηγορίας</a>
+            <a href="#" class="button is-success mr-2">Δημιουργία Υποκατηγορίας</a>
+          </div>
+          <div class="control">
+            <a href="{% url 'product:category-delete' category.pk%}" class="button is-danger">Διαγραφή</a>
           </div>
       </header>
     </div>

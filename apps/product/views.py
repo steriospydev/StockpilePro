@@ -83,5 +83,6 @@ class CategoryUpdateView(CategoryCreateUpdate, UpdateView):
 
 class CategoryDeleteView(LoginRequiredMixin, DeleteView):
     model = Category
+    template_name = 'product/category_confirm_delete.html'
     success_url = reverse_lazy('product:category-list')
     login_url = '/'
