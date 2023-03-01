@@ -18,7 +18,7 @@
                 - Προιόντα: {{num_products}}
           </p>
           <div class="control pt-1">
-            <a href="{{ category.get_absolute_url }}" class="button is-danger mr-2">Πίσω</a>
+            <a href="{{ category.get_absolute_url }}" class="button is-info mr-2">Πίσω</a>
 
             <a href="#" class="button is-warning">
                 <span class="icon mr-4"><i class="mdi mdi-cogs mdi-24px"></i></span>
@@ -79,7 +79,7 @@
 <!--  {% endif %}-->
 
 <div class="b-table has-pagination">
-    <a href="#" class="button is-success ml-5">
+    <a href="{% url 'product:product-create' %}" class="button is-success ml-5">
                 <span class="icon mr-4"><i class="mdi mdi-package-variant-closed mdi-24px"></i></span>
                 Νέο Προιόν
             </a>

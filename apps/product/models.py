@@ -131,8 +131,6 @@ class Product(abmodels.TimeStamp):
     summary = models.TextField("Περιγραφη", null=True, blank=True)
     sku_num = models.CharField(max_length=3, unique=True,
                                blank=True, null=True, editable=False)
-    product_image = models.ImageField("Φωτογραφια", upload_to='products/%Y/%m/%d',
-                                      null=True, blank=True)
     is_active = models.BooleanField('Ενεργο', default=True)
     available = models.BooleanField('Διαθέσιμο', default=False)
     online_sell = models.BooleanField('Online', default=False)

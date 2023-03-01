@@ -1,17 +1,19 @@
-from django.shortcuts import render
+from django.shortcuts import render, reverse
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.db.models import Sum, Count, Prefetch
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
+from django.http import HttpResponseRedirect
 
+from django.core.files.uploadedfile import SimpleUploadedFile
 from .models import Category, SubCategory, Product
-from .forms import CategoryForm
+from .forms import CategoryForm, ProductForm
 # Create your views here.
 
 
 class CategoryListView(LoginRequiredMixin, ListView):
     model = Category
-    template_name = 'category_list.html'
+    template_name = 'product/category/category_list.html'
 
     def get_queryset(self):
         return Category.objects.prefetch_related('subs__sub_products')
@@ -27,7 +29,7 @@ class CategoryListView(LoginRequiredMixin, ListView):
 
 class CategoryDetailView(LoginRequiredMixin, DetailView):
     model = Category
-    template_name = 'product/category_detail.html'
+    template_name = 'product/category/category_detail.html'
 
     def get_queryset(self):
         return Category.objects.prefetch_related('subs__sub_products')
@@ -43,7 +45,7 @@ class CategoryDetailView(LoginRequiredMixin, DetailView):
 
 class SubProductListView(LoginRequiredMixin, ListView):
     model = Product
-    template_name = 'product/sub_products.html'
+    template_name = 'product/category/sub_products.html'
 
     def get_queryset(self):
         # Fetch the SubCategory object and
@@ -65,7 +67,7 @@ class SubProductListView(LoginRequiredMixin, ListView):
 
 
 class CategoryCreateUpdate(LoginRequiredMixin):
-    template_name = 'product/category_create_update.html'
+    template_name = 'product/category/category_create_update.html'
     model = Category
     form_class = CategoryForm
     success_url = reverse_lazy('product:category-list')
@@ -83,6 +85,19 @@ class CategoryUpdateView(CategoryCreateUpdate, UpdateView):
 
 class CategoryDeleteView(LoginRequiredMixin, DeleteView):
     model = Category
-    template_name = 'product/category_confirm_delete.html'
+    template_name = 'product/category/category_confirm_delete.html'
     success_url = reverse_lazy('product:category-list')
     login_url = '/'
+
+
+class ProductCreateView(LoginRequiredMixin, CreateView):
+    model = Product
+    form_class = ProductForm
+    template_name = 'product/product_create_update.html'
+
+    def form_valid(self, form):
+        self.object = form.save(commit=False)
+        subcategory_id = form.cleaned_data['subcategory'].id
+        self.object.save()
+        success_url = reverse('product:product-sublist', args=[subcategory_id])
+        return HttpResponseRedirect(success_url)

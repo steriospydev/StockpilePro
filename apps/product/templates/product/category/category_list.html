@@ -8,25 +8,27 @@
 .custom-width {
     min-width:150px;
 }
-
+.columns {
+  border-radius: 10px;
+}
 {% endblock%}
 
 {% block content %}
     {% include 'Component/page_title.html' with tab1='Κατηγορίες' %}
-
-    <div class="columns mt-5 mr-6 ml-6 has-background-dark has-text-centered ">
+<div class="card has-table has-mobile-sort-spaced">
+          <header class="card-header ml-6">
+              <div class="control">
+                <a href="{% url 'product:category-create' %}" class="button is-success">Δημιουργία Kατηγορίας</a>
+              </div>
+          </header>
+        </div>
+    <div class="columns  mr-5 ml-5 has-background-dark is-rounded has-text-centered ">
       <div class="column is-3 has-text-danger has-text-weight-semibold ">Φαγωσιμα</div>
       <div class="column is-3 has-text-link has-text-weight-semibold">Ποτα</div>
       <div class="column is-3 has-text-success has-text-weight-semibold">Αναλώσιμα</div>
       <div class="column is-3 has-text-warning has-text-weight-semibold">Υπολοιπα</div>
     </div>
-    <div class="card has-table has-mobile-sort-spaced">
-          <header class="card-header ml-6">
-              <div class="control">
-                <a href="{% url 'product:category-create' %}" class="button is-info">Δημιουργία Kατηγορίας</a>
-              </div>
-          </header>
-        </div>
+
     <div class="tile is-ancestor mx-3">
         {% for c in categories %}
             {% if forloop.counter0|divisibleby:2 %}
