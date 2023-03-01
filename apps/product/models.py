@@ -146,6 +146,9 @@ class Product(abmodels.TimeStamp):
     def __str__(self):
         return f'{self.product_name} - {self.package}'
 
+    def get_absolute_url(self):
+        return reverse('product:product-detail', args=[str(self.id)])
+
 
 pre_save.connect(lambda sender, instance, **kwargs:
                  signals.generate_sku_num(sender, instance, k=3),

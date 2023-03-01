@@ -1,23 +1,29 @@
 from django.urls import path
 
-from .views import (CategoryListView, CategoryDetailView, SubProductListView,
-                    CategoryCreateView, CategoryUpdateView, CategoryDeleteView,
-                    ProductCreateView)
+from . import views
 
 app_name = 'product'
 
 urlpatterns = [
-    path('categories/', CategoryListView.as_view(),
+    path('categories/', views.CategoryListView.as_view(),
          name='category-list'),
-    path('categories/<int:pk>/subcategories', CategoryDetailView.as_view(),
+    path('categories/<int:pk>/subcategories', views.CategoryDetailView.as_view(),
          name='category-detail'),
-    path('subcategories/<int:pk>/', SubProductListView.as_view(),
+    path('subcategories/<int:pk>/', views.SubProductListView.as_view(),
          name='product-sublist'),
-    path('subcategories/new_product/', ProductCreateView.as_view(),
+    path('subcategories/new_product/', views.ProductCreateView.as_view(),
          name='product-create'),
-    path('categories/new/', CategoryCreateView.as_view(), name='category-create'),
-    path('categories/<int:pk>/edit/', CategoryUpdateView.as_view(), name='category-update'),
-    path('categories/<int:pk>/delete/', CategoryDeleteView.as_view(), name='category-delete'),
-
-
+    path('categories/new/', views.CategoryCreateView.as_view(), name='category-create'),
+    path('categories/<int:pk>/edit/', views.CategoryUpdateView.as_view(), name='category-update'),
+    path('categories/<int:pk>/delete/', views.CategoryDeleteView.as_view(), name='category-delete'),
+    # product-list
+    # product-update
+    # product-delete
+    # product-detail
+    path('all/', views.ProductList.as_view(), name='product-list'),
+    path('new/', views.ProductCreateView.as_view(), name='product-create'),
+    path('<int:pk>/', views.ProductDetailView.as_view(), name='product-detail'),
+    path('<int:pk>/edit/', views.ProductUpdateView.as_view(), name='product-update'),
+    path('<int:pk>/delete', views.ProductDeleteView.as_view(), name='product-delete'),
+    path('search/', views.ProductSearchView.as_view(), name='product-search')
 ]

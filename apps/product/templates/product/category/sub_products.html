@@ -87,7 +87,6 @@
       <table class="table is-fullwidth is-striped is-hoverable is-sortable is-fullwidth">
         <thead>
           <tr>
-              <th></th>
             <th>Προιoν</th>
             <th>SKU_num</th>
             <th>Συσκευασiα</th>
@@ -100,13 +99,6 @@
         <tbody>
           {% for product in product_list %}
             <tr>
-              <td class="is-image-cell">
-                <div class="image">
-                    <img
-                        src="{% if product.product_image %}{{ product.product_image.url }} {%else %}
-                        {% static 'img/no_image.png' %}{% endif %}" class="is-rounded">
-                </div>
-              </td>
               <td data-label="Προιόν">{{product.product_name}}</td>
               <td data-label="SKU_num">{{product.sku_num}}</td>
               <td data-label="Συσκευασiα">{{product.package}}</td>

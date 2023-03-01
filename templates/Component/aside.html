@@ -61,26 +61,13 @@
       <p class="menu-label">ΠΡΟΙΟΝΤΑ</p>
       <ul class="menu-list">
         <!--Προιόντα-->
-        <li>
-          <a class="has-icon has-dropdown-icon">
+
+          <li>
+          <a href="{% url 'product:product-list' %}"
+             class="{% if request.resolver_match.url_name == 'product-list' %}is-active{% endif %}router-link-active has-icon">
             <span class="icon"><i class="mdi mdi-table"></i></span>
             <span class="menu-item-label">Προιόντα</span>
-            <div class="dropdown-icon">
-              <span class="icon"><i class="mdi mdi-plus"></i></span>
-            </div>
           </a>
-          <ul>
-            <li>
-              <a href="{% url 'product:product-create' %}">
-                <span>Νέο Προιόν</span>
-              </a>
-            </li>
-            <li>
-              <a href="#void">
-                <span>Λίστα Προιόντων</span>
-              </a>
-            </li>
-          </ul>
         </li>
 
         <li>
