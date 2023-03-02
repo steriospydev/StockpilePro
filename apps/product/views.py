@@ -1,12 +1,14 @@
-from django.shortcuts import render, reverse, redirect
-from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
-from django.db.models import Sum, Count, Prefetch
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.shortcuts import reverse
 from django.urls import reverse_lazy
 from django.http import HttpResponseRedirect
 
-import django_filters
-from django.core.files.uploadedfile import SimpleUploadedFile
+from django.views.generic import (ListView, DetailView,
+                                  CreateView, UpdateView, DeleteView)
+
+from django.db.models import Count, Prefetch
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.postgres.search import TrigramSimilarity
+
 from .models import Category, SubCategory, Product
 from .forms import CategoryForm, ProductForm
 
@@ -128,38 +130,13 @@ class BaseProductList(ListView):
         context['total_products'] = self.queryset.count()
         return context
 
-class ProductList(BaseProductList):
-    """
-    Display all products
-    """
-    paginate_by = 10
-
 class SearchConstructMixin:
     q = 'q'
-    search_option = 'search_option'
 
-    def search_construct(self, term, option, search_checkboxes):
-        lookup = {
-            'Ονομα': 'product_name__icontains',
-            'Υλικο': 'package__material__material_name__icontains',
-            'Υποκατηγορια': 'subcategory__subcategory_name__icontains',
-            'SKU': 'sku_num__icontains'
-        }
-        field_lookup = lookup.get(option, None)
-        if field_lookup:
-            products = Product.objects.select_related('package__material', 'subcategory').filter(**{field_lookup: term})
-        else:
-            products = Product.objects.select_related('package__material', 'subcategory').all()
-
-        if 'Available' in search_checkboxes:
-            products = products.filter(available=True)
-
-        if 'Online' in search_checkboxes:
-            products = products.filter(online_sell=True)
-
-        if 'Active' in search_checkboxes:
-            products = products.filter(is_active=True)
-
+    def search_construct(self, term):
+        products = Product.objects.select_related('package__material', 'subcategory').annotate(
+            similarity=TrigramSimilarity('product_name', term)
+        ).filter(similarity__gt=0.1).order_by('-similarity')
         return products
 
 class ProductSearchView(BaseProductList, SearchConstructMixin):
@@ -172,17 +149,29 @@ class ProductSearchView(BaseProductList, SearchConstructMixin):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         query = self.request.GET.get(self.q)
-        search_option = self.request.GET.get(self.search_option)
-        search_checkboxes = self.request.GET.getlist('search-check')
+        available = self.request.GET.get('available')
+        active = self.request.GET.get('active')
+        online = self.request.GET.get('online')
+        filters = {}
+        if available:
+            filters['available'] = True
+        if active:
+            filters['is_active'] = True
+        if online:
+            filters['online_sell'] = True
         if query:
-            products = self.search_construct(query, search_option, search_checkboxes)
+            products = self.search_construct(query).filter(**filters)
             context.update({
                 'products': products,
-                'query': query,
-                'search_option': search_option,
-                'search_checkboxes': search_checkboxes,
+                'query': query
             })
         return context
+
+class ProductList(BaseProductList):
+    """
+    Display all products
+    """
+    paginate_by = 10
 
 class ProductDeleteView(LoginRequiredMixin, DeleteView):
     model = Product

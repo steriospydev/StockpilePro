@@ -94,38 +94,33 @@
                 <span class="icon has-text-light is-large"><i class="mdi mdi-account-search"></i></span>
             </button>
         </div>
-        <div  class="control">
-            <div class="select">
-                <select name="search_option">
-                    <option value="Ονομα" class='{% if search_option == "Ονομα" %}selected{% endif %}'>Ονομα</option>
-                    <option value="SKU" class='{% if search_option == "SKU" %}selected{% endif %}'>SKU</option>
-                    <option value="Υλικο" class='{% if search_option == "Υλικο" %}selected{% endif %}'>Υλικο</option>
-                    <option value="Υποκατηγορια" class='{% if search_option == "Υποκατηγορια" %}selected{% endif %}'>
-                        Υποκατηγορία</option>
-                </select>
-            </div>
-        </div>
-        <div class="control">
-            <label class="checkbox">
-                <input type="checkbox" name="is_available" value="1"
-                       class='{% if "is_available" in search_checkboxes %}checked{% endif %}'>
+        <div class="field is-flex-direction-column">
+          <div class="control">
+            <div class="is-flex is-align-items-center">
+              <label class="checkbox">
+                <input type="checkbox" name="available" {% if request.GET.available %}checked{% endif %}>
                 Available
-            </label>
-        </div>
-        <div class="control">
-            <label class="checkbox">
-                <input type="checkbox" name="is_online" value="1"
-                       class='{% if "is_online" in search_checkboxes %}checked{% endif %}'>
-                Online
-            </label>
-        </div>
-        <div class="control">
-            <label class="checkbox">
-                <input type="checkbox" name="is_active" value="1"
-                class='{% if "is_active" in search_checkboxes %}checked{% endif %}'>
+              </label>
+            </div>
+          </div>
+          <div class="control">
+            <div class="is-flex is-align-items-center">
+              <label class="checkbox">
+                <input type="checkbox" name="active" {% if request.GET.active %}checked{% endif %}>
                 Active
-            </label>
+              </label>
+            </div>
+          </div>
+          <div class="control">
+            <div class="is-flex is-align-items-center">
+              <label class="checkbox">
+                <input type="checkbox" name="online" {% if request.GET.online %}checked{% endif %}>
+                Online
+              </label>
+            </div>
+          </div>
         </div>
+
     </form>
 
   </div>

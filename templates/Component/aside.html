@@ -35,8 +35,8 @@
           </a>
         </li>
           <li>
-          <a href="{% url 'index' %}"
-             class="{% if request.resolver_match.url_name == 'index' %}is-active{% endif %} router-link-active has-icon">
+          <a href="#"
+             class=" router-link-active has-icon">
             <span class="icon"><i class="mdi mdi-briefcase-check"></i></span>
             <span class="menu-item-label">Τιμολόγια</span>
           </a>
@@ -64,7 +64,7 @@
 
           <li>
           <a href="{% url 'product:product-list' %}"
-             class="{% if request.resolver_match.url_name == 'product-list' %}is-active{% endif %}router-link-active has-icon">
+             class="{% if request.resolver_match.url_name == 'product-list' %}is-active{% endif %}">
             <span class="icon"><i class="mdi mdi-table"></i></span>
             <span class="menu-item-label">Προιόντα</span>
           </a>
@@ -72,7 +72,7 @@
 
         <li>
           <a href="{% url 'product:category-list'%}"
-             class="{% if request.resolver_match.url_name == 'category-list' %}is-active{% endif %}router-link-active has-icon">
+             class="{% if request.resolver_match.url_name == 'category-list' %}is-active{% endif %}">
             <span class="icon"><i class="mdi mdi-label"></i></span>
             <span class="menu-item-label">Κατηγορίες</span>
           </a>

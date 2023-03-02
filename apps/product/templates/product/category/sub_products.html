@@ -28,56 +28,6 @@
         </header>
       </div>
 
-    <!--Product Search-->
-    <div class="card-content has-text-centered has-mobile">
-        <form action="#"
-              method="get"
-              class="field is-grouped is-horizontal-mobile">
-
-          <div class="control is-expanded ">
-            <input class="input"  value = "{{ query }}" name="q" id="q"
-                   type="text" placeholder="Search for products..">
-          </div>
-          <div class="control">
-            <button class="button is-info" type='submit'><span>Search</span><span class="icon has-text-light is-large">
-              <i class="mdi mdi-account-search "></i></span></button>
-          </div>
-
-          <div  class="control">
-            <div class="select">
-              <select name="search_option" >
-                <option value="Επιχείρηση">Ονομα</option>
-                <option value="SKU">SKU</option>
-                <option value="Πόλη">Συσκευασια</option>
-              </select>
-            </div>
-          </div>
-
-          <div  class="control">
-            <div class="select">
-              <select name="search_filter" >
-                <option value="Επιχείρηση">Διαθεσιμα</option>
-                <option value="SKU">Ενεργα</option>
-                <option value="Πόλη">Online</option>
-              </select>
-            </div>
-          </div>
-
-        </form>
-    </div>
-
-<!--    {% if request.resolver_match.url_name == 'supplier-search' %}-->
-<!--    <div style="display: flex; justify-content: center; height: 100%;">-->
-<!--      <div class="notification is-success">-->
-<!--        {% if not products %}-->
-<!--          Δεν βρέθηκαν αποτελέσματα προμηθευτών με {{search_option }}: {{query}}.-->
-<!--        {% else %}-->
-<!--          Bρέθηκαν {{suppliers|length}} προμηθευτες με {{search_option }}: {{query}}.-->
-<!--        {% endif %}-->
-<!--      </div>-->
-<!--    </div>-->
-<!--  {% endif %}-->
-
 <div class="b-table has-pagination">
     <a href="{% url 'product:product-create' %}" class="button is-success ml-5">
                 <span class="icon mr-4"><i class="mdi mdi-package-variant-closed mdi-24px"></i></span>
