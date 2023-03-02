@@ -131,6 +131,9 @@ class BaseProductList(ListView):
         return context
 
 class SearchConstructMixin:
+    """
+    Class that provides search functionality for products
+    """
     q = 'q'
 
     def search_construct(self, term):
