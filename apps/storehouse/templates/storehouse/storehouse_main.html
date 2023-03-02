@@ -62,6 +62,28 @@
 
     <!-- BIns-->
      <div class="tile is-ancestor ml-3 mr-3 ">
+          <div class="tile is-parent">
+            <div class="card tile is-child">
+              <div class="card-content has-background-dark ">
+                <div class="level is-mobile">
+                  <div class="level-item ">
+                    <div class="is-widget-label "><h3 class="subtitle is-spaced has-text-warning">
+                      Θέσεις
+                    </h3>
+                      <h1 class="title has-text-white">
+                          {{total_bins}}
+                      </h1>
+                    </div>
+                  </div>
+                  <div class="level-item has-widget-icon">
+                    <div class="is-widget-icon"><span class="icon has-text-warning is-large"><i
+                        class="mdi mdi-map-marker mdi-48px"></i></span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
          <div class="tile is-parent">
             <div class="card tile is-child">
               <div class="card-content has-background-dark ">
@@ -106,28 +128,7 @@
               </div>
             </div>
          </div>
-         <div class="tile is-parent">
-            <div class="card tile is-child">
-              <div class="card-content has-background-dark ">
-                <div class="level is-mobile">
-                  <div class="level-item ">
-                    <div class="is-widget-label "><h3 class="subtitle is-spaced has-text-warning">
-                      Θέσεις
-                    </h3>
-                      <h1 class="title has-text-white">
-                          {{total_bins}}
-                      </h1>
-                    </div>
-                  </div>
-                  <div class="level-item has-widget-icon">
-                    <div class="is-widget-icon"><span class="icon has-text-warning is-large"><i
-                        class="mdi mdi-map-marker mdi-48px"></i></span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+
       </div>
 
     <!--Storage header-->
@@ -139,6 +140,7 @@
         </header>
     </div>
     <!-- Storage Table-->
+  <div class="b-table has-pagination mx-5">
     <div class="table-wrapper has-mobile-cards has-text-centered">
       <table class="table is-fullwidth is-striped is-hoverable is-sortable is-fullwidth">
         <thead>
@@ -172,6 +174,7 @@
         </tbody>
       </table>
     </div>
+  </div>
 {% endblock %}
 
 
