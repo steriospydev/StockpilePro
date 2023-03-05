@@ -2,3 +2,4 @@ coverage==7.1.0
 factory-boy==3.2.1
 Faker==16.7.0
 mixer
+django-extensions

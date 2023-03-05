@@ -6,8 +6,16 @@ DEBUG = os.environ.get('DEBUG')
 ALLOWED_HOSTS = ['localhost', '127.0.0.1']
 
 INSTALLED_APPS += [
-    'debug_toolbar'
+    'debug_toolbar',
+    'django_extensions',
 ]
+
+GRAPH_MODELS = {
+    'all_applications': True,
+    'group_models': True,
+    'app_labels': ["apps.product", "apps.storehouse",
+                   'apps.supplier', 'apps.invoice', "auth"],
+}
 
 DATABASES = {
     'default': {

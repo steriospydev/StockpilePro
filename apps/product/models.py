@@ -7,7 +7,14 @@ import os
 from PIL import Image
 from io import BytesIO
 
-from apps.utils import abmodels, signals
+from apps.utils import signals
+
+class TimeStamp(models.Model):
+    created_at = models.DateTimeField('Δημιουργηθηκε', auto_now_add=True)
+    updated_at = models.DateTimeField('Ανανεωθηκε', auto_now=True)
+
+    class Meta:
+        abstract = True
 
 
 KILO = 'kg'
@@ -132,7 +139,7 @@ class Tax(models.Model):
     def __str__(self):
         return f'{self.value}'
 
-class Product(abmodels.TimeStamp):
+class Product(TimeStamp):
     product_name = models.CharField("Ονομασια", max_length=120)
     subcategory = models.ForeignKey(SubCategory, on_delete=models.CASCADE,
                                     related_name='sub_products')

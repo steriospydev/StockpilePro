@@ -4,14 +4,20 @@ from django.db.models.signals import pre_save
 from django.urls import reverse
 
 # working branch
-from apps.utils import abmodels, signals
+from apps.utils import signals
+
+class TimeStamp(models.Model):
+    created_at = models.DateTimeField('Δημιουργηθηκε', auto_now_add=True)
+    updated_at = models.DateTimeField('Ανανεωθηκε', auto_now=True)
+
+    class Meta:
+        abstract = True
 
 class ActiveManager(models.Manager):
     def get_queryset(self):
         return super().get_queryset().filter(is_active=True)
 
-
-class Supplier(abmodels.TimeStamp):
+class Supplier(TimeStamp):
     company = models.CharField("Επιχειρηση", max_length=120, unique=True)
     sku_num = models.CharField(max_length=2, unique=True,
                                blank=True, null=True, editable=False)

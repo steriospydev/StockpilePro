@@ -2,9 +2,14 @@ from django.db import models
 from django.urls import reverse
 from django.core.validators import RegexValidator
 # Create your models here.
-from apps.utils import abmodels
+class TimeStamp(models.Model):
+    created_at = models.DateTimeField('Δημιουργηθηκε', auto_now_add=True)
+    updated_at = models.DateTimeField('Ανανεωθηκε', auto_now=True)
 
-class Storage(abmodels.TimeStamp):
+    class Meta:
+        abstract = True
+
+class Storage(TimeStamp):
     storage_name = models.CharField("Ονομασία",
                                     unique=True,
                                     max_length=1,
@@ -25,7 +30,7 @@ class Storage(abmodels.TimeStamp):
     def __str__(self):
         return f'{self.storage_name}'
 
-class Section(abmodels.TimeStamp):
+class Section(TimeStamp):
     section_name = models.CharField('Μπλόκ', unique=True,
                                     max_length=1,
                                     validators=[RegexValidator(
@@ -42,7 +47,7 @@ class Section(abmodels.TimeStamp):
     def __str__(self):
         return f'{self.section_name}'
 
-class Spot(abmodels.TimeStamp):
+class Spot(TimeStamp):
     spot_name = models.CharField('Θεση', unique=True,
                                  max_length=3,
                                  default='000',
@@ -79,8 +84,7 @@ class UseManager(models.Manager):
     def get_queryset(self):
         return super().get_queryset().filter(in_use=True)
 
-
-class Bin(abmodels.TimeStamp, BinType):
+class Bin(TimeStamp, BinType):
     storage = models.ForeignKey(Storage, on_delete=models.CASCADE, related_name='bins')
     section = models.ForeignKey(Section, on_delete=models.CASCADE)
     spot = models.ForeignKey(Spot, on_delete=models.CASCADE)
