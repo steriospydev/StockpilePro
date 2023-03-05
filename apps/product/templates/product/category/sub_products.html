@@ -103,18 +103,3 @@
 
   </div>
 {% endblock %}
-
-{% block js %}
-  {% for product in product_list %}
-    document.getElementById('modal-{{ product.pk }}-trigger').addEventListener('click', function() {
-    var modal = document.getElementById('delete-modal');
-    document.querySelector("#delete-modal form").action = "#";
-    modal.classList.add('is-active');
-    });
-  {% endfor %}
-
-  document.getElementById('cancel-button').addEventListener('click', function() {
-    var modal = document.getElementById('delete-modal');
-    modal.classList.remove('is-active');
-  });
-{% endblock %}
