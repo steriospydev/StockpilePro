@@ -5,9 +5,9 @@
 
 {% block content %}
 
-  {% include 'Component/page_title.html' with tab1='Δημιουργία-Ανανέωση Προιόντος' %}
+  {% include 'Component/page_title.html' with tab1='Υποκατηγορία' tab2='Δημιουργία-Ανανέωση' %}
 
-<div class="columns is-multiline mr-3 ml-3 ">
+  <div class="columns is-multiline mr-3 ml-3 ">
     <div class="column is-full-desktop  is-full-tablet is-full-mobile">
       <div class="card">
         <div class="card-content has-background-dark">
@@ -17,22 +17,24 @@
               {% csrf_token %}
               <div class="field has-text-center mt-5">
                 <div class="control">
-                  <a href="{% url 'product:product-list' %}"
-                     class="button is-danger mr-6">Aκύρωση</a>
-                    <button class="button is-success ml-5" type="Submit" >Αποθηκευση</button>
+                  <a href="{% url 'product:category-detail' category.id %}"
+                     class="button is-danger mr-6">Ακύρωση</a>
+                  <button class="button is-success ml-5" >Αποθηκευση</button>
                 </div>
               </div>
 
                 <hr>
+                 <h3 class="has-text-white"> Δημιουργία υποκατηγορίας σε {{category}}</h3>
+                <br>
                   <div class="error">
                     {% if form.errors %}
-                      <div class="notification is-danger">
-                          <ul>
-                            {% for field, errors in form.errors.items  %}
-                              <li>{{ errors }}</li>
-                            {% endfor %}
-                          </ul>
-                      </div>
+                      {% for field in form %}
+                        {% for error in field.errors %}
+                          <div class="notification is-danger">
+                            {{ error }}
+                          </div>
+                        {% endfor %}
+                      {% endfor %}
                     {% endif %}
                   </div>
                 <div class="columns is-multiline">
@@ -40,14 +42,13 @@
                   <div class="column is-half">
                     <div class="field">
                       <label class="label has-text-white">{{ field.label }}</label>
-                      <div class="control">
+                      <div class="control ">
                         {{ field }}
                       </div>
                     </div>
                   </div>
                 {% endfor %}
               </div>
-
 
             </form>
         </div>

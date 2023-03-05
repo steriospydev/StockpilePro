@@ -18,7 +18,7 @@
             <a href="{% url 'product:category-list' %}" class="button is-info mr-2">Πίσω</a>
           </div>
           <div class="control">
-            <a href="#" class="button is-success mr-2">Δημιουργία Υποκατηγορίας</a>
+            <a href="{% url 'product:subcategory-create' category_id=category.id %}" class="button is-success mr-2">Δημιουργία Υποκατηγορίας</a>
           </div>
           <div class="control">
             <a href="{% url 'product:category-delete' category.pk%}" class="button is-danger">Διαγραφή</a>
@@ -27,9 +27,9 @@
     </div>
 
     {% for sub in subcategories %}
-        <div class="tile is-ancestor my-1 px-5 mx-6">
-            <div class="tile is-parent">
-              <div class="card tile p-0  is-child has-background-dark">
+        <div class="tile is-ancestor my-1 px-5 mx-4">
+            <div class="tile is-parent  ">
+              <div class="card tile   is-child has-background-dark">
                 <div class="card-content">
                   <div class="level is-mobile">
                     <div class="level-item">

@@ -2,7 +2,7 @@ from django import forms
 from django.forms import Select, FileInput
 from django.core.exceptions import ValidationError
 
-from .models import Category, Product
+from .models import Category, Product, SubCategory
 
 class CategoryForm(forms.ModelForm):
     class Meta:
@@ -13,6 +13,14 @@ class CategoryForm(forms.ModelForm):
             'primary_colour': forms.TextInput(attrs={'class': 'input', 'id': 'primary_colour'}),
             'icon': forms.TextInput(attrs={'class': 'input', 'id': 'icon'}),
             'icon_size': forms.TextInput(attrs={'class': 'input', 'id': 'icon_size'}),
+        }
+
+class SubCategoryForm(forms.ModelForm):
+    class Meta:
+        model = SubCategory
+        fields = ['subcategory_name']
+        widgets = {
+            'category_name': forms.TextInput(attrs={'class': 'input', 'id': 'company'}),
         }
 
 class ProductForm(forms.ModelForm):

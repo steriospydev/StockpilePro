@@ -99,7 +99,7 @@
             <div class="is-flex is-align-items-center">
               <label class="checkbox">
                 <input type="checkbox" name="available" {% if request.GET.available %}checked{% endif %}>
-                Available
+                Not available
               </label>
             </div>
           </div>
@@ -107,7 +107,7 @@
             <div class="is-flex is-align-items-center">
               <label class="checkbox">
                 <input type="checkbox" name="active" {% if request.GET.active %}checked{% endif %}>
-                Active
+                Inactive
               </label>
             </div>
           </div>
@@ -143,9 +143,7 @@
       <table class="table is-fullwidth is-striped is-hoverable is-sortable is-fullwidth">
         <thead>
           <tr>
-            <th>Ονομα</th>
-            <th>Συσκευασία</th>
-            <th>Κατηγορία</th>
+            <th>Προιoν</th>
             <th>SKU_num</th>
             <th>Διαθέσιμο</th>
             <th>Online</th>
@@ -156,9 +154,7 @@
         <tbody>
           {% for product in products %}
             <tr>
-              <td data-label="Προιόν">{{product.product_name}}</td>
-              <td data-label="Συσκευασια">{{product.package}}</td>
-              <td data-label="Κατηγορία">{{product.subcategory}}</td>
+              <td data-label="Προιόν">{{product.product_name}} - {{product.package}}</td>
               <td data-label="SKU_num">{{product.sku_num}}</td>
                 <td data-label="Διαθέσιμο">
                 {% if product.available %}
@@ -197,8 +193,12 @@
 
               <td class="is-actions-cell">
                 <div class="buttons is-right">
+                    <a href="#"
+                     class="button is-small is-success" type="button">
+                    <span class="icon"><i class="mdi mdi-plus"></i></span>
+                  </a>
                   <a href="{{ product.get_absolute_url }}"
-                     class="button is-small is-primary" type="button">
+                     class="button is-small is-info" type="button">
                     <span class="icon"><i class="mdi mdi-eye"></i></span>
                   </a>
                   <button class="button is-small is-danger jb-modal"

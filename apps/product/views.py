@@ -10,7 +10,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.postgres.search import TrigramSimilarity
 
 from .models import Category, SubCategory, Product
-from .forms import CategoryForm, ProductForm
+from .forms import CategoryForm, ProductForm, SubCategoryForm
 
 # Category based views
 class CategoryListView(LoginRequiredMixin, ListView):
@@ -67,6 +67,32 @@ class CategoryDeleteView(LoginRequiredMixin, DeleteView):
     template_name = 'product/category/category_confirm_delete.html'
     success_url = reverse_lazy('product:category-list')
     login_url = '/'
+
+class SubCategoryCreateUpdate(LoginRequiredMixin):
+    template_name = 'product/category/subcategory_create.html'
+    model = SubCategory
+    form_class = SubCategoryForm
+    login_url = '/'
+
+    def get_success_url(self):
+        return reverse_lazy('product:category-detail', kwargs={'pk': self.kwargs['category_id']})
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        category = Category.objects.get(id=self.kwargs['category_id'])
+        context['category'] = category
+        return context
+
+    def form_valid(self, form):
+        form.instance.category_id = self.kwargs['category_id']
+        return super().form_valid(form)
+
+
+class SubCategoryCreateView(SubCategoryCreateUpdate, CreateView):
+    pass
+
+class SubCategoryUpdateView(SubCategoryCreateUpdate, UpdateView):
+    pass
 
 class SubProductListView(LoginRequiredMixin, ListView):
     model = Product
@@ -157,9 +183,9 @@ class ProductSearchView(BaseProductList, SearchConstructMixin):
         online = self.request.GET.get('online')
         filters = {}
         if available:
-            filters['available'] = True
+            filters['available'] = False
         if active:
-            filters['is_active'] = True
+            filters['is_active'] = False
         if online:
             filters['online_sell'] = True
         if query:
@@ -168,6 +194,12 @@ class ProductSearchView(BaseProductList, SearchConstructMixin):
                 'products': products,
                 'query': query
             })
+        else:
+            products = Product.objects.filter(**filters)
+            context.update({
+                'products': products,
+            })
+
         return context
 
 class ProductList(BaseProductList):

@@ -20,7 +20,8 @@
           <div class="control pt-1">
             <a href="{{ category.get_absolute_url }}" class="button is-info mr-2">Πίσω</a>
 
-            <a href="#" class="button is-warning">
+            <a href="{% url 'product:subcategory-update' category_id=subcategory.category.id pk=subcategory.pk  %}"
+               class="button is-warning">
                 <span class="icon mr-4"><i class="mdi mdi-cogs mdi-24px"></i></span>
                 Τροποποίηση
             </a>
@@ -28,31 +29,26 @@
         </header>
       </div>
 
-<div class="b-table has-pagination">
-    <a href="{% url 'product:product-create' %}" class="button is-success ml-5">
-                <span class="icon mr-4"><i class="mdi mdi-package-variant-closed mdi-24px"></i></span>
-                Νέο Προιόν
-            </a>
+<div class="b-table has-pagination mx-3">
+
     <div class="table-wrapper has-mobile-cards">
       <table class="table is-fullwidth is-striped is-hoverable is-sortable is-fullwidth">
         <thead>
           <tr>
             <th>Προιoν</th>
             <th>SKU_num</th>
-            <th>Συσκευασiα</th>
             <th>Διαθέσιμο</th>
             <th>Online</th>
-            <th>Active</th>
+            <th>Ενεργό</th>
             <th>Actions</th>
           </tr>
         </thead>
         <tbody>
           {% for product in product_list %}
-            <tr>
-              <td data-label="Προιόν">{{product.product_name}}</td>
+             <tr>
+              <td data-label="Προιόν">{{product.product_name}} - {{product.package}}</td>
               <td data-label="SKU_num">{{product.sku_num}}</td>
-              <td data-label="Συσκευασiα">{{product.package}}</td>
-              <td data-label="Διαθέσιμο">
+                <td data-label="Διαθέσιμο">
                 {% if product.available %}
                   <span class="icon has-text-success ">
                     <i class="mdi mdi-check-decagram "></i>
@@ -63,7 +59,7 @@
                     </span>
                 {% endif %}
               </td>
-              <td data-label="Online">
+                <td data-label="Online">
                 {% if product.online_sell %}
                   <span class="icon has-text-success ">
                     <i class="mdi mdi-check-decagram "></i>
@@ -74,7 +70,7 @@
                     </span>
                 {% endif %}
               </td>
-              <td data-label="Active">
+              <td data-label="Ενεργό">
                 {% if product.is_active %}
                   <span class="icon has-text-success ">
                     <i class="mdi mdi-check-decagram "></i>
@@ -85,42 +81,21 @@
                     </span>
                 {% endif %}
               </td>
+
+
               <td class="is-actions-cell">
                 <div class="buttons is-right">
-                  <a href="#"
-                     class="button is-small is-primary" type="button">
+                    <a href="#"
+                     class="button is-small is-success" type="button">
+                    <span class="icon"><i class="mdi mdi-plus"></i></span>
+                  </a>
+                  <a href="{{ product.get_absolute_url }}"
+                     class="button is-small is-info" type="button">
                     <span class="icon"><i class="mdi mdi-eye"></i></span>
                   </a>
-                  <button class="button is-small is-danger jb-modal"
-                          id="modal-{{ product.pk }}-trigger"  type="button">
-                    <span class="icon"><i class="mdi mdi-trash-can"></i></span>
-
-                  </button>
-                  <!-- Modal -->
-                  <div class="modal" id="delete-modal">
-                    <div class="modal-background"></div>
-                    <div class="modal-card">
-                      <header class="modal-card-head">
-                        <p class="modal-card-title">Delete Confirmation</p>
-                        <button class="delete" aria-label="close"></button>
-                      </header>
-                      <section class="modal-card-body">
-                        Are you sure you want to delete this item?
-                      </section>
-                      <footer class="modal-card-foot">
-                        <form action="#"
-                              method="post">
-                          {% csrf_token %}
-                          <input type="submit" value="Delete" class="button is-danger">
-                          <a class="button" id="cancel-button">Cancel</a>
-                        </form>
-                      </footer>
-                    </div>
-                  </div>
-
                 </div>
               </td>
-                </tr>
+             </tr>
           {% endfor %}
         </tbody>
       </table>
