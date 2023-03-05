@@ -122,15 +122,28 @@ class Package(models.Model):
         return f'{self.package_quantity}{self.package_unit} {self.material}'
 
 
+class Tax(models.Model):
+    value = models.IntegerField('Τιμη Φορου %', default=0)
+
+    class Meta:
+        verbose_name = 'Φορος'
+        verbose_name_plural = 'Φοροι'
+
+    def __str__(self):
+        return f'{self.value}'
+
 class Product(abmodels.TimeStamp):
     product_name = models.CharField("Ονομασια", max_length=120)
     subcategory = models.ForeignKey(SubCategory, on_delete=models.CASCADE,
                                     related_name='sub_products')
     package = models.ForeignKey(Package, on_delete=models.CASCADE,
                                 related_name='package_products')
+    tax_rate = models.ForeignKey(Tax, on_delete=models.CASCADE, null=True,
+                                 blank=True)
     summary = models.TextField("Περιγραφη", null=True, blank=True)
     sku_num = models.CharField(max_length=3, unique=True,
                                blank=True, null=True, editable=False)
+
     is_active = models.BooleanField('Ενεργο', default=True)
     available = models.BooleanField('Διαθέσιμο', default=False)
     online_sell = models.BooleanField('Online', default=False)

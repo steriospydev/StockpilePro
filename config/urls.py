@@ -8,11 +8,13 @@ from . import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('index/', views.index, name='index'),
     path('', include('apps.account.urls')),
     path('supplier/', include('apps.supplier.urls')),
     path('storehouse/', include('apps.storehouse.urls')),
     path('product/', include('apps.product.urls')),
-    path('index/', views.index, name='index')
+    path('invoice/', include('apps.invoice.urls'))
+
 ]
 
 if settings.DEBUG:

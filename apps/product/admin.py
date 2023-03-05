@@ -1,14 +1,15 @@
 from django.contrib import admin
 
-from .models import Category, SubCategory, Material, Package, Product
+from .models import Category, SubCategory, Material, Package, Product, Tax
 
 
 admin.site.register(Material)
 admin.site.register(Package)
+admin.site.register(Tax)
 
 class ProductAdmin(admin.ModelAdmin):
     model = Product
-    list_display = ('product_name', 'package', 'subcategory', 'sku_num')
+    list_display = ('product_name', 'package', 'subcategory', 'tax_rate', 'sku_num')
 
 class CategoryAdmin(admin.ModelAdmin):
     list_display = ('category_name', 'primary_colour', 'icon', 'icon_size')
