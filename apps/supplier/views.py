@@ -2,8 +2,8 @@ from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.views.generic import (ListView,DetailView, CreateView,
-                                  UpdateView,DeleteView)
+from django.views.generic import (ListView, DetailView, CreateView,
+                                  UpdateView, DeleteView)
 from django.core.paginator import Paginator
 
 from .models import Supplier
@@ -32,7 +32,7 @@ class SearchConstructMixin:
             'Τηλέφωνο': 'phone__icontains',
             'ΑΦΜ': 'TIN_num__icontains',
             'Επιχείρηση': 'company__icontains',
-            'SKU':'sku_num__icontains'
+            'SKU': 'sku_num__icontains'
         }
         field_lookup = lookup.get(option, None)
         if field_lookup:
