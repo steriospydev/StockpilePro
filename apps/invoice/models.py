@@ -1,5 +1,6 @@
 from django.core.validators import MinValueValidator
 from django.db import models
+from decimal import Decimal
 
 from ..product.models import Product
 from ..supplier.models import Supplier
@@ -13,7 +14,7 @@ class TimeStamp(models.Model):
         abstract = True
 
 class Invoice(TimeStamp):
-    invoice_no = models.BigIntegerField('Invoice No', unique=True)
+    invoice_no = models.BigIntegerField('Invoice No')
     supplier = models.ForeignKey(Supplier, on_delete=models.CASCADE)
     date_of_issuance = models.DateTimeField('Ημερομηνία')
     subtotal = models.DecimalField('Μερικό Σύνολο', max_digits=12, decimal_places=2, blank=True, default=0)
@@ -21,31 +22,43 @@ class Invoice(TimeStamp):
     total = models.DecimalField('Συνολο', max_digits=12, decimal_places=2, blank=True, default=0)
 
     class Meta:
+        verbose_name = "Τιμολογιο"
+        verbose_name_plural = "Τιμολογια"
         ordering = ('-created_at',)
         unique_together = ('invoice_no', 'supplier')
 
     def __str__(self):
-        return f'{self.vendor} - {self.invoice_no}'
+        return f'{self.supplier} - {self.invoice_no}'
+
+    def calculate_total_taxes(self):
+        self.total_taxes = sum([item.get_tax_total() for item in self.invoice_items.all()])
+        return self.total_taxes
+
+    def calculate_subtotal(self):
+        self.subtotal = sum([item.get_line_total() - item.get_tax_total() for item in self.invoice_items.all()])
+        return self.subtotal
+
+    def calculate_total(self):
+        self.total = sum([item.get_line_total() for item in self.invoice_items.all()])
+        return self.total
 
     def save(self, *args, **kwargs):
-        self.subtotal = Decimal(0)
-        self.total_taxes = Decimal(0)
-        for item in self.invoice_items.all():
-            item.save()
-            self.subtotal += item.line_total
-            self.total_taxes += item.total_tax
-        self.total = self.subtotal + self.total_taxes
         super().save(*args, **kwargs)
+        self.subtotal = self.calculate_subtotal()
+        self.total_taxes = self.calculate_total_taxes()
+        self.total = self.calculate_total()
+        super().save(*args, **kwargs)
+
 
 
 class InvoiceItem(models.Model):
     invoice = models.ForeignKey(Invoice, related_name='invoice_items', on_delete=models.CASCADE)
     product = models.ForeignKey(Product, related_name='product_items', on_delete=models.CASCADE)
-    quantity = models.BigIntegerField('Ποσότητα', default=0, validators=[MinValueValidator(0)])
-    tax_rate = models.DecimalField('ΦΠΑ %', max_digits=8, decimal_places=2, default=0, validators=[MinValueValidator(0)])
-    total_tax = models.DecimalField('Φορος', max_digits=8, decimal_places=2, default=0)
-    unit_price = models.DecimalField('Τιμή Μονάδας', max_digits=8, decimal_places=2, validators=[MinValueValidator(0)])
-    line_total = models.DecimalField('Price', max_digits=12, decimal_places=2, blank=True)
+    quantity = models.FloatField('Ποσότητα', default=00.00, validators=[MinValueValidator(0)])
+    tax_rate = models.FloatField('ΦΠΑ %', default=00.00, validators=[MinValueValidator(0)])
+    total_tax = models.FloatField('Φορος', default=00.00)
+    unit_price = models.FloatField('Τιμή Μονάδας', default=00.00, validators=[MinValueValidator(0)])
+    line_total = models.FloatField('Τιμη', default=00.00, blank=True)
 
     class Meta:
         unique_together = ('invoice', 'product')
@@ -54,23 +67,18 @@ class InvoiceItem(models.Model):
         return f'{self.product}'
 
     def get_tax_rate(self):
-        # Retrieve tax_rate from product.tax and store to tax_rate
-        return self.product.tax
+        return self.product.tax_rate.value
 
     def get_tax_total(self):
-        # Calculate total_tax = quantity * ((tax_rate/100) * unit_price)
-        tax_rate_decimal = Decimal(self.tax_rate) / Decimal(100)
-        return self.quantity * (tax_rate_decimal * self.unit_price)
+        self.total_tax = self.quantity * ((self.tax_rate/100) * self.unit_price)
+        return self.total_tax
 
     def get_line_total(self):
-        # Calculate line_total = (quantity * unit_price) + tax_total
-        self.tax_rate = self.get_tax_rate()
-        self.total_tax = self.get_tax_total()
-        self.line_total = (self.quantity * self.unit_price) + self.total_tax
-        self.save()
+        self.line_total = (self.quantity * self.unit_price) + self.get_tax_total()
         return self.line_total
 
     def save(self, *args, **kwargs):
+        self.tax_rate = self.get_tax_rate()
+        self.total_tax = self.get_tax_total()
         self.line_total = self.get_line_total()
         super().save(*args, **kwargs)
-        self.invoice.save()

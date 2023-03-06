@@ -53,7 +53,6 @@ class CategoryTempValues(models.Model):
     class Meta:
         abstract = True
 
-
 class Category(CategoryTempValues):
     category_name = models.CharField("Ονομα", unique=True, max_length=120)
 
@@ -71,7 +70,6 @@ class Category(CategoryTempValues):
 
     def get_absolute_url(self):
         return reverse('product:category-detail', args=[self.id])
-
 
 class SubCategory(models.Model):
     subcategory_name = models.CharField("Ονομασια", max_length=120)
@@ -96,7 +94,6 @@ class SubCategory(models.Model):
         products = self.sub_products.all()
         return len(products)
 
-
 class Material(models.Model):
     material_name = models.CharField("Ονομα", unique=True, max_length=120)
 
@@ -106,7 +103,6 @@ class Material(models.Model):
 
     def __str__(self):
         return f'{self.material_name}'
-
 
 class Package(models.Model):
     material = models.ForeignKey(Material, on_delete=models.CASCADE,
@@ -128,9 +124,8 @@ class Package(models.Model):
     def __str__(self):
         return f'{self.package_quantity}{self.package_unit} {self.material}'
 
-
 class Tax(models.Model):
-    value = models.IntegerField('Τιμη Φορου %', default=0)
+    value = models.FloatField('Τιμη Φορου %',  default=00.00)
 
     class Meta:
         verbose_name = 'Φορος'
@@ -158,6 +153,7 @@ class Product(TimeStamp):
     class Meta:
         verbose_name = 'Προιον'
         verbose_name_plural = 'Προιοντα'
+        ordering = ['product_name']
         constraints = [
             models.UniqueConstraint(fields=['product_name', 'package'],
                                     name='unique_product')

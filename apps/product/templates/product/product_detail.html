@@ -1,0 +1,130 @@
+{% extends 'base.html' %}
+
+{% block title%}Προιόν {{product.product_name}}{% endblock %}
+
+{% block content %}
+
+{% include 'Component/page_title.html' with tab1='Πληροφορίες Προιόντος' tab2=product.product_name %}
+
+<div class="tile is-ancestor">
+
+    <!-- General Info-->
+    <div class="tile is-parent">
+      <div class="card tile is-child">
+        <div class="card-content">
+          <div class="level is-mobile">
+            <div class="level-item">
+              <div class="is-widget-label"><h3 class="subtitle is-spaced mb-2">
+                  Γενικά
+                  </h3>
+                  <ul>
+                    <li class="is-italic">Προιόν</li>
+                    <li class="mb-2"><strong> {{ product.product_name}}</strong></li>
+                    <li class="is-italic">Ενεργό/Διαθέσιμο/Online</li>
+                    <li class="mb-2">
+                        {% if product.is_active %}
+                            <span class="icon has-text-success "><i class="mdi mdi-check-decagram "></i></span>
+                        {% else %}
+                            <span class="icon has-text-danger "><i class="mdi mdi-cancel "></i></span>
+                        {% endif %}
+                        {% if product.available %}
+                            <span class="icon has-text-success "><i class="mdi mdi-check-decagram "></i></span>
+                        {% else %}
+                            <span class="icon has-text-danger "><i class="mdi mdi-cancel "></i></span>
+                        {% endif %}
+                        {% if product.online_sell %}
+                            <span class="icon has-text-success "><i class="mdi mdi-check-decagram "></i></span>
+                        {% else %}
+                            <span class="icon has-text-danger "><i class="mdi mdi-cancel "></i></span>
+                        {% endif %}
+                    </li>
+                    <li class="is-italic">Αριθμός SKU</li>
+                    <li class="mb-2"> <strong>{{ product.sku_num }}</strong></li>
+                    <li><a class="button is-small is-success" href="{% url 'product:product-update' product.id %}">
+                        Ενημέρωση</a>
+                    </li>
+                  </ul>
+
+              </div>
+            </div>
+            <div class="level-item has-widget-icon">
+                <div class="is-widget-icon">
+                  <span class="icon has-text-danger is-large"><i
+                  class="mdi mdi-account-circle mdi-48px"></i></span>
+                  <ul>
+                    <li><small>Ανανεώθηκε</small></li>
+                    <li class="mb-2 is-italic"> <small>{{ product.updated_at }}</small></li>
+                  </ul>
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- More Info-->
+    <div class="tile is-parent">
+      <div class="card tile is-child">
+        <div class="card-content">
+          <div class="level is-mobile">
+            <div class="level-item">
+              <div class="is-widget-label "><h3 class="subtitle is-spaced mb-2">
+                Στοιχεία Αναγνώρισης
+              </h3>
+                  <ul>
+                    <li class="is-italic">Κατηγορία</li>
+                    <li class="mb-2"><strong> {{product.subcategory.category }}</strong></li>
+                    <li class="is-italic">Υποκατηγορία</li>
+                    <li class="mb-2"> <strong>{{ product.subcategory }}</strong></li>
+                      <li class="is-italic">Συσκευασία</li>
+                    <li class="mb-2"><strong> {{ product.package }}</strong></li>
+
+                    <li class="is-italic">Φ.Π.Α</li>
+                    <li class="mb-2"> <strong>{{ product.tax_rate }} %</strong></li>
+                  </ul>
+              </div>
+            </div>
+            <div class="level-item has-widget-icon">
+              <div class="is-widget-icon"><span class="icon has-text-danger is-large"><i
+                  class="mdi mdi-wallet-outline mdi-48px"></i></span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+</div>
+
+<div class="tile is-ancestor">
+
+  <!-- rest Info-->
+  <div class="tile is-parent">
+    <div class="card tile is-child">
+      <div class="card-content">
+        <div class="level is-mobile">
+          <div class="level-item">
+            <div class="is-widget-label"><h3 class="subtitle is-spaced mb-2">
+              Λοιπές Πληροφορίες
+            </h3>
+                <ul>
+                  <li class="is-italic">Σε Στοκ</li>
+                  <li class="mb-2"><strong> 43</strong></li>
+                  <li class="is-italic"></li>
+                  <li class="is-italic">Τελευταία Είσοδος</li>
+                  <li class="mb-2"> <strong>March 2, 2023, 7:55 p.m.</strong></li>
+                  <li class="is-italic">Τελευτάια Έξοδος</li>
+                  <li class="mb-2"> <strong>March 7, 2023, 11:55 p.m.</strong></li>
+                </ul>
+            </div>
+          </div>
+          <div class="level-item has-widget-icon">
+            <div class="is-widget-icon"><span class="icon has-text-danger is-large"><i
+                class="mdi mdi-home-map-marker mdi-48px"></i></span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

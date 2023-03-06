@@ -11,7 +11,6 @@ from django.contrib.postgres.search import TrigramSimilarity
 
 from .models import Category, SubCategory, Product
 from .forms import CategoryForm, ProductForm, SubCategoryForm
-
 # Category based views
 class CategoryListView(LoginRequiredMixin, ListView):
     model = Category
@@ -87,7 +86,6 @@ class SubCategoryCreateUpdate(LoginRequiredMixin):
         form.instance.category_id = self.kwargs['category_id']
         return super().form_valid(form)
 
-
 class SubCategoryCreateView(SubCategoryCreateUpdate, CreateView):
     pass
 
@@ -127,8 +125,12 @@ class ProductCreateUpdate(LoginRequiredMixin):
         self.object = form.save(commit=False)
         subcategory_id = form.cleaned_data['subcategory'].id
         self.object.save()
-        success_url = reverse('product:product-sublist', args=[subcategory_id])
+        success_url = reverse('product:product-detail', args=[self.object.pk])
         return HttpResponseRedirect(success_url)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        return context
 
 class ProductCreateView(ProductCreateUpdate, CreateView):
     pass
@@ -136,7 +138,7 @@ class ProductCreateView(ProductCreateUpdate, CreateView):
 class ProductUpdateView(ProductCreateUpdate, UpdateView):
     context_object_name = 'product'
 
-class BaseProductList(ListView):
+class BaseProductList(LoginRequiredMixin, ListView):
     """
     Base view for displaying a list of products.
     """
@@ -144,7 +146,7 @@ class BaseProductList(ListView):
     model = Product
     template_name = 'product/product_list.html'
     context_object_name = 'products'
-
+    paginate_by = 10
     queryset = Product.objects.all()
 
     def get_queryset(self):

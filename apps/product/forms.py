@@ -27,7 +27,7 @@ class ProductForm(forms.ModelForm):
     class Meta:
         model = Product
         fields = ['product_name', 'subcategory', 'package', 'summary',
-                  'is_active', 'available', 'online_sell']
+                  'tax_rate', 'is_active', 'available', 'online_sell']
         labels = {
             'product_name': 'Ονομασία',
             'subcategory': 'Υποκατηγορία',
@@ -45,4 +45,5 @@ class ProductForm(forms.ModelForm):
             'is_active': forms.CheckboxInput(attrs={'class': 'checkbox'}),
             'available': forms.CheckboxInput(attrs={'class': 'checkbox'}),
             'online_sell': forms.CheckboxInput(attrs={'class': 'checkbox'}),
+            'tax_rate': forms.Select(attrs={'class': 'select'}),
         }
