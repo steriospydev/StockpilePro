@@ -49,8 +49,6 @@ class Invoice(TimeStamp):
         self.total = self.calculate_total()
         super().save(*args, **kwargs)
 
-
-
 class InvoiceItem(models.Model):
     invoice = models.ForeignKey(Invoice, related_name='invoice_items', on_delete=models.CASCADE)
     product = models.ForeignKey(Product, related_name='product_items', on_delete=models.CASCADE)
