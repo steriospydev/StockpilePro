@@ -35,10 +35,10 @@
           </a>
         </li>
           <li>
-          <a href="#"
-             class=" router-link-active has-icon">
+          <a href="{% url 'invoice:invoice-list' %}"
+             class="{% if request.resolver_match.url_name == 'invoice-list' %}is-active{% endif %} router-link-active has-icon">
             <span class="icon"><i class="mdi mdi-briefcase-check"></i></span>
-            <span class="menu-item-label">Τιμολόγια</span>
+            <span class="menu-item-label">Τιμολογια</span>
           </a>
         </li>
            <li>

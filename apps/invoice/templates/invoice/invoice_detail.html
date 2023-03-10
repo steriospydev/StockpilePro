@@ -1,0 +1,125 @@
+{% extends 'base.html' %}
+
+{% block title%}Τιμολόγιο {{invoice.supplier.company}}-{{invoice.invoice_no}}{% endblock %}
+
+{% block content %}
+
+{% include 'Component/page_title.html' with tab1='Πληροφορίες Τιμολογίου' tab2=invoice %}
+{% include 'invoice/components/card_header.html' %}
+<div class="tile is-ancestor mx-5">
+    <!-- General Info-->
+    <div class="tile is-parent">
+      <div class="card tile is-child">
+        <div class="card-content">
+          <div class="level is-mobile">
+            <div class="level-item">
+              <div class="is-widget-label"><h3 class="subtitle is-spaced mb-2">
+                  Γενικά
+                  </h3>
+                  <ul>
+                    <li class="is-italic">Αριθμός</li>
+                    <li class="mb-2"><strong> {{ invoice.invoice_no}}</strong></li>
+                    <li class="is-italic">Προμηθευτής</li>
+                    <li class="mb-2"> <strong>{{ invoice.supplier.company }}</strong></li>
+                    <li class="is-italic">Ημ.Έκδοσης</li>
+                    <li class="mb-2"> <strong>{{ invoice.date_of_issuance.date }}</strong></li>
+
+                  </ul>
+
+              </div>
+            </div>
+            <div class="level-item has-widget-icon">
+
+                <div class="is-widget-icon">
+                    <ul>
+                        <li class="mb-4"><a class="button is-small is-success"
+                           href="#">
+                            Προσθήκη Προιόντος</a>
+                        </li>
+                        <li class="mb-4">
+                            <a class="button is-small is-danger"
+                           href="#">
+                        Διαγραφή Τιμολογίου</a>
+                        </li>
+                        <li><small>Ανανεώθηκε</small></li>
+                        <li class="mb-2 is-italic"> <small>{{ invoice.updated_at }}</small></li>
+                    </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Payment Info-->
+    <div class="tile is-parent">
+      <div class="card tile is-child">
+        <div class="card-content">
+          <div class="level is-mobile">
+            <div class="level-item">
+              <div class="is-widget-label "><h3 class="subtitle is-spaced mb-2">
+                Στοιχεία Πληρωμής
+              </h3>
+                  <ul>
+                    <li class="is-italic">Μερικό Σύνολο</li>
+                    <li class="mb-2"><strong> {{invoice.subtotal }} &#x20AC;</strong></li>
+                    <li class="is-italic">Φόροι Τιμολογίου</li>
+                    <li class="mb-2"> <strong>{{ invoice.total_taxes }} &#x20AC;</strong></li>
+                      <li class="is-italic">Σύνολο</li>
+                    <li class="mb-2"><strong> {{ invoice.total }} &#x20AC;</strong></li>
+                  </ul>
+              </div>
+            </div>
+            <div class="level-item has-widget-icon">
+              <div class="is-widget-icon"><span class="icon has-text-danger is-large"><i
+                  class="mdi mdi-wallet-outline mdi-48px"></i></span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+</div>
+
+  <div class="b-table has-pagination mx-6">
+    <div class="table-wrapper has-mobile-cards">
+      <table class="table is-fullwidth is-striped is-hoverable is-sortable is-fullwidth">
+        <thead>
+          <tr>
+            <th>Προιον</th>
+            <th>Ποσοτητα</th>
+            <th>Τ.Μ. &#x20AC;</th>
+            <th>Φορος &#x20AC;</th>
+            <th>Κόστος &#x20AC;</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for item in invoice_items %}
+            <tr>
+              <td data-label="Προιον">{{item.product}}</td>
+              <td data-label="Ποσοτητα">{{item.quantity}}</td>
+              <td data-label="Τ.Μ."> {{item.unit_price}}&#x20AC;</td>
+              <td data-label="Φορος">{{item.total_tax}}</td>
+              <td data-label="Κόστος"> {{item.line_total}} &#x20AC;</td>
+              <td class="is-actions-cell">
+                <div class="buttons is-right">
+                  <a href="#"
+                     class="button is-small is-info" type="button">
+                    <span class="icon"><i class="mdi mdi-eye"></i></span>
+                  </a>
+                </div>
+              </td>
+            </tr>
+          {% empty %}
+              <div style="display: flex; justify-content: center; height: 100%;">
+                <div class="notification is-success">
+                  Δεν υπάρχουν ακόμα αποθηκευμένα Προιοντα.
+                </div>
+              </div>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+{% endblock %}

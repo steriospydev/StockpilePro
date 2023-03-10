@@ -5,6 +5,7 @@
 {% block content %}
 
 {% include 'Component/page_title.html' with tab1='Πληροφορίες Προιόντος' tab2=product.product_name %}
+{% include 'product/components/card_header.html' %}
 
 <div class="tile is-ancestor">
 
@@ -96,7 +97,6 @@
 </div>
 
 <div class="tile is-ancestor">
-
   <!-- rest Info-->
   <div class="tile is-parent">
     <div class="card tile is-child">

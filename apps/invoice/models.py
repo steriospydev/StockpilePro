@@ -1,6 +1,7 @@
 from django.core.validators import MinValueValidator
 from django.db import models
 from decimal import Decimal
+from django.urls import reverse
 
 from ..product.models import Product
 from ..supplier.models import Supplier
@@ -17,6 +18,7 @@ class Invoice(TimeStamp):
     invoice_no = models.BigIntegerField('Invoice No')
     supplier = models.ForeignKey(Supplier, on_delete=models.CASCADE)
     date_of_issuance = models.DateTimeField('Ημερομηνία')
+
     subtotal = models.DecimalField('Μερικό Σύνολο', max_digits=12, decimal_places=2, blank=True, default=0)
     total_taxes = models.DecimalField('ΦΠΑ', max_digits=12, decimal_places=2, blank=True, default=0)
     total = models.DecimalField('Συνολο', max_digits=12, decimal_places=2, blank=True, default=0)
@@ -41,6 +43,9 @@ class Invoice(TimeStamp):
     def calculate_total(self):
         self.total = sum([item.get_line_total() for item in self.invoice_items.all()])
         return self.total
+
+    def get_absolute_url(self):
+        return reverse('invoice:invoice-detail', args=[str(self.id)])
 
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)

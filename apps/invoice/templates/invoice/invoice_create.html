@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title%}Νέο Τιμολόγιο {% endblock %}
+
+{% block content %}
+
+  {% include 'Component/page_title.html' with tab1='Δημιουργία Τιμολογίου' %}
+
+<div class="columns is-multiline mr-3 ml-3 ">
+    <div class="column is-full-desktop  is-full-tablet is-full-mobile">
+      <div class="card">
+        <div class="card-content has-background-dark">
+
+
+            <form method="post" class="m-3 ">
+              {% csrf_token %}
+              <div class="field has-text-center mt-5">
+                <div class="control">
+                  <a href="{% url 'index' %}"
+                     class="button is-danger mr-6">Aκύρωση</a>
+                    <button class="button is-success ml-5" type="Submit" >Αποθηκευση</button>
+                </div>
+              </div>
+
+                <hr>
+                  <div class="error">
+                    {% if form.errors %}
+                      <div class="notification is-danger">
+                          <ul>
+                            {% for field, errors in form.errors.items  %}
+                              <li>{{ errors }}</li>
+                            {% endfor %}
+                          </ul>
+                      </div>
+                    {% endif %}
+                  </div>
+                <div class="columns is-multiline">
+                {% for field in form %}
+                  <div class="column is-half">
+                    <div class="field">
+                      <label class="label has-text-white">{{ field.label }}</label>
+                      <div class="control">
+                        {{ field }}
+                      </div>
+                    </div>
+                  </div>
+                {% endfor %}
+              </div>
+
+
+            </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+{% endblock %}
+{% block js %}
+
+{% endblock %}
