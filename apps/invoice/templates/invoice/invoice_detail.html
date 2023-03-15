@@ -32,9 +32,10 @@
 
                 <div class="is-widget-icon">
                     <ul>
-                        <li class="mb-4"><a class="button is-small is-success"
-                           href="#">
-                            Προσθήκη Προιόντος</a>
+                        <li class="mb-4">
+                            <a class="button is-small is-success is-outlined"
+                           href="{% url 'invoice:invoice-item-create' invoice.id %}">
+                        <strong>Προσθήκη Προιόντος</strong></a>
                         </li>
                         <li class="mb-4">
                             <a class="button is-small is-danger"
@@ -88,7 +89,7 @@
             <th>Προιον</th>
             <th>Ποσοτητα</th>
             <th>Τ.Μ. &#x20AC;</th>
-            <th>Φορος &#x20AC;</th>
+            <th>ΦΠΑ &#x20AC;</th>
             <th>Κόστος &#x20AC;</th>
             <th>Actions</th>
           </tr>
@@ -98,12 +99,12 @@
             <tr>
               <td data-label="Προιον">{{item.product}}</td>
               <td data-label="Ποσοτητα">{{item.quantity}}</td>
-              <td data-label="Τ.Μ."> {{item.unit_price}}&#x20AC;</td>
+              <td data-label="Τ.Μ."> {{item.unit_price}}</td>
               <td data-label="Φορος">{{item.total_tax}}</td>
-              <td data-label="Κόστος"> {{item.line_total}} &#x20AC;</td>
+              <td data-label="Κόστος"> {{item.line_total}}</td>
               <td class="is-actions-cell">
                 <div class="buttons is-right">
-                  <a href="#"
+                  <a href="{{ item.get_absolute_url }}"
                      class="button is-small is-info" type="button">
                     <span class="icon"><i class="mdi mdi-eye"></i></span>
                   </a>

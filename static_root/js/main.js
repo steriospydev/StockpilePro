@@ -55,3 +55,21 @@ Array.from(document.getElementsByClassName('jb-notification-dismiss')).forEach(f
     e.currentTarget.closest('.notification').classList.add('is-hidden');
   });
 });
+
+function storeProductId(productId) {
+        // send an AJAX request to store the product ID in the session
+        $.ajax({
+            type: 'POST',
+            url: '{% url "invoice:store_product_id" %}',
+            data: {
+                'product_id': productId,
+                'csrfmiddlewaretoken': '{{ csrf_token }}',
+            },
+            success: function(response) {
+                console.log('Product ID stored in session!');
+            },
+            error: function(response) {
+                console.error('Failed to store product ID in session.');
+            },
+        });
+    }

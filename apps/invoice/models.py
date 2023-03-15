@@ -3,6 +3,7 @@ from django.db import models
 from decimal import Decimal
 from django.urls import reverse
 
+
 from ..product.models import Product
 from ..supplier.models import Supplier
 
@@ -13,6 +14,7 @@ class TimeStamp(models.Model):
 
     class Meta:
         abstract = True
+
 
 class Invoice(TimeStamp):
     invoice_no = models.BigIntegerField('Invoice No')
@@ -33,11 +35,11 @@ class Invoice(TimeStamp):
         return f'{self.supplier} - {self.invoice_no}'
 
     def calculate_total_taxes(self):
-        self.total_taxes = sum([item.get_tax_total() for item in self.invoice_items.all()])
+        self.total_taxes = sum([item.get_tax_total for item in self.invoice_items.all()])
         return self.total_taxes
 
     def calculate_subtotal(self):
-        self.subtotal = sum([item.get_line_total() - item.get_tax_total() for item in self.invoice_items.all()])
+        self.subtotal = sum([item.get_line_total() - item.get_tax_total for item in self.invoice_items.all()])
         return self.subtotal
 
     def calculate_total(self):
@@ -54,14 +56,29 @@ class Invoice(TimeStamp):
         self.total = self.calculate_total()
         super().save(*args, **kwargs)
 
+
 class InvoiceItem(models.Model):
     invoice = models.ForeignKey(Invoice, related_name='invoice_items', on_delete=models.CASCADE)
     product = models.ForeignKey(Product, related_name='product_items', on_delete=models.CASCADE)
-    quantity = models.FloatField('Ποσότητα', default=00.00, validators=[MinValueValidator(0)])
-    tax_rate = models.FloatField('ΦΠΑ %', default=00.00, validators=[MinValueValidator(0)])
-    total_tax = models.FloatField('Φορος', default=00.00)
-    unit_price = models.FloatField('Τιμή Μονάδας', default=00.00, validators=[MinValueValidator(0)])
-    line_total = models.FloatField('Τιμη', default=00.00, blank=True)
+    quantity = models.DecimalField('Ποσότητα', default=00.00,
+                                   max_digits=5, decimal_places=1,
+                                   validators=[MinValueValidator(0)])
+    tax_rate = models.DecimalField('ΦΠΑ %', default=00.00,
+                                   blank=True,
+                                   max_digits=4, decimal_places=1,
+                                   validators=[MinValueValidator(0)])
+    total_tax = models.DecimalField('Φορος', max_digits=5, decimal_places=2,
+                                    blank=True,
+                                    default=00.00)
+    unit_price = models.DecimalField('Τιμή Μονάδας', blank=True,
+                                     max_digits=8, decimal_places=2,
+                                     default=00.00, validators=[MinValueValidator(0)])
+    line_total = models.DecimalField('Τιμη', default=00.00,
+                                     max_digits=8, decimal_places=2,
+                                     blank=True)
+
+    def get_absolute_url(self):
+        return reverse('invoice:invoice-item-update', args=[self.invoice.id, self.id])
 
     class Meta:
         unique_together = ('invoice', 'product')
@@ -72,16 +89,17 @@ class InvoiceItem(models.Model):
     def get_tax_rate(self):
         return self.product.tax_rate.value
 
+    @property
     def get_tax_total(self):
-        self.total_tax = self.quantity * ((self.tax_rate/100) * self.unit_price)
+        self.total_tax = (self.quantity * (self.tax_rate / Decimal(100)) * self.unit_price).quantize(Decimal('0.00'))
         return self.total_tax
 
     def get_line_total(self):
-        self.line_total = (self.quantity * self.unit_price) + self.get_tax_total()
+        self.line_total = (self.quantity * self.unit_price)
         return self.line_total
 
     def save(self, *args, **kwargs):
         self.tax_rate = self.get_tax_rate()
-        self.total_tax = self.get_tax_total()
+        self.total_tax = self.get_tax_total
         self.line_total = self.get_line_total()
         super().save(*args, **kwargs)

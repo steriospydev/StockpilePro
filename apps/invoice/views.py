@@ -1,11 +1,16 @@
-from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
+from django.shortcuts import HttpResponse, get_object_or_404
+from django.urls import reverse
+
 from django.views.generic import ListView, DetailView, CreateView, UpdateView
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.decorators import login_required
+
 from django.db.models import Count
 
 from .models import Invoice, InvoiceItem
 from .forms import InvoiceForm, InvoiceItemForm
+from ..product.models import Product
 
 class BaseInvoiceList(LoginRequiredMixin, ListView):
     """
@@ -27,7 +32,7 @@ class InvoiceList(BaseInvoiceList):
     """
     Display all products
     """
-    paginate_by = 10
+    paginate_by = 5
 
 class InvoiceDetailView(LoginRequiredMixin, DetailView):
     model = Invoice
@@ -37,11 +42,41 @@ class InvoiceDetailView(LoginRequiredMixin, DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        invoice = self.object # the current invoice object
+        invoice = self.object  # the current invoice object
         invoice_items = invoice.invoice_items.select_related('product').select_related(
             'product__package').select_related('product__package__material')
         context['invoice_items'] = invoice_items
         return context
+
+class InvoiceItemCreateUpdate(LoginRequiredMixin):
+    model = InvoiceItem
+    form_class = InvoiceItemForm
+    template_name = 'invoice/item_create.html'
+    login_url = '/'
+
+    def get_initial(self):
+        initial = super().get_initial()
+        initial['invoice'] = get_object_or_404(Invoice, id=self.kwargs['invoice_id'])
+        return initial
+
+    def form_valid(self, form):
+        response = super().form_valid(form)
+        self.object.invoice.save()  # call save method on the associated invoice object
+        return response
+
+    def get_success_url(self):
+        return reverse('invoice:invoice-detail', args=[self.object.invoice.pk])
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['invoice'] = get_object_or_404(Invoice, id=self.kwargs['invoice_id'])
+        return context
+
+class InvoiceItemCreateView(InvoiceItemCreateUpdate, CreateView):
+    pass
+
+class InvoiceItemUpdateView(InvoiceItemCreateUpdate, UpdateView):
+    context_object_name = 'item'
 
 
 @login_required(login_url='/')
@@ -56,8 +91,3 @@ def invoice_create(request):
     else:
         form = InvoiceForm()
     return render(request, 'invoice/invoice_create.html', {'form': form})
-
-@login_required(login_url='/')
-def invoice_list(request):
-    invoices = Invoice.objects.all()
-    return render(request, 'invoice/invoice_list.html', {'invoices': invoices})

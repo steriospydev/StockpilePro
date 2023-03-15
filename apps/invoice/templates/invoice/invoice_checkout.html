@@ -1,0 +1,72 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title%}Νέο Τιμολόγιο {% endblock %}
+
+{% block css%}
+.box1-shadow {
+  box-shadow: 5px 15px 15px -10px #fff;
+}
+{% endblock %}
+{% block content %}
+
+  {% include 'Component/page_title.html' with tab1='Δημιουργία Τιμολογίου' %}
+
+<div class="columns is-multiline is-mobile mr-3 ml-3">
+  <div class="column is-full-desktop is-full-tablet is-full-mobile">
+    <div class="card">
+      <div class="card-content has-background-dark">
+        <form method="post" class="m-3">
+          {% csrf_token %}
+          <div class="field has-text-center mt-5 ">
+            <div class="control ">
+              <a href="{% url 'invoice:add-items' invoice.id %}" class="button is-danger is-outlined ml-5 mr-6 mb-2">
+                  Aκύρωση</a>
+                <a href="" class="button is-success  ml-5 mr-6">
+                  Eπόμενο: <strong>Υπολογισμός Φόρου/Κόστος </strong></a>
+
+              <button class="button is-info is-outlined ml-5 mr-6 box1-shadow" type="submit">
+                 <strong> Eπόμενο  &#x261B;</strong></button>
+            </div>
+          </div>
+
+          {% for form in form_instances %}
+
+          <div class="error">
+            {% if form.errors %}
+            <div class="notification is-danger">
+              <ul>
+                {% for field, errors in form.errors.items  %}
+                <li>{{field}}: {{ errors }}</li>
+                {% endfor %}
+              </ul>
+            </div>
+            {% endif %}
+          </div>
+
+          <div class="columns py-5 is-flex is-align-items-center is-multiline is-half-tablet "
+          style="border-bottom: 2px solid white;">
+
+
+            {% for field in form %}
+
+                <div class="column">
+                  <div class="field">
+                    <label class="label has-text-white">{{ field.label }}</label>
+                    <div class="control is-small">
+                      {{ field }}
+                    </div>
+                  </div>
+                </div>
+
+            {% endfor %}
+          </div>
+          {% endfor %}
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+{% endblock %}

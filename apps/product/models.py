@@ -125,7 +125,8 @@ class Package(models.Model):
         return f'{self.package_quantity}{self.package_unit} {self.material}'
 
 class Tax(models.Model):
-    value = models.FloatField('Τιμη Φορου %',  default=00.00)
+    value = models.DecimalField('Τιμη Φορου %',  default=00.00,
+                                max_digits=8, decimal_places=2)
 
     class Meta:
         verbose_name = 'Φορος'
