@@ -59,10 +59,16 @@ class InvoiceItemCreateUpdate(LoginRequiredMixin):
         initial['invoice'] = get_object_or_404(Invoice, id=self.kwargs['invoice_id'])
         return initial
 
+    def get_queryset(self):
+        qs = super().get_queryset()
+        return qs.select_related('product__package',
+                                 'product__tax_rate')
+
     def form_valid(self, form):
         response = super().form_valid(form)
         self.object.invoice.save()  # call save method on the associated invoice object
         return response
+
 
     def get_success_url(self):
         return reverse('invoice:invoice-detail', args=[self.object.invoice.pk])

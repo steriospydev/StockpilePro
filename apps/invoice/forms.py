@@ -1,5 +1,8 @@
 from django import forms
 from .models import Invoice, InvoiceItem
+from ..product.models import Product
+from django.db.models.functions import Concat
+from django.db.models import F
 
 class InvoiceForm(forms.ModelForm):
     class Meta:
@@ -27,3 +30,11 @@ class InvoiceItemForm(forms.ModelForm):
             }),
             'invoice': forms.HiddenInput()
         }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # self.fields['product'].queryset = Product.objects.select_related('package', 'tax_rate')
+        self.fields['product'].queryset = Product.objects.select_related(
+            'package',
+            'package__material',
+            'tax_rate')
