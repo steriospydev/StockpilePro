@@ -33,7 +33,6 @@ class InvoiceItemForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        # self.fields['product'].queryset = Product.objects.select_related('package', 'tax_rate')
         self.fields['product'].queryset = Product.objects.select_related(
             'package',
             'package__material',
