@@ -39,11 +39,11 @@ class Invoice(TimeStamp):
         return self.total_taxes
 
     def calculate_subtotal(self):
-        self.subtotal = sum([item.get_line_total() - item.get_tax_total for item in self.invoice_items.all()])
+        self.subtotal = sum([item.get_line_subtotal() for item in self.invoice_items.all()])
         return self.subtotal
 
     def calculate_total(self):
-        self.total = sum([item.get_line_total() for item in self.invoice_items.all()])
+        self.total = self.subtotal + self.total_taxes
         return self.total
 
     def get_absolute_url(self):
@@ -73,6 +73,9 @@ class InvoiceItem(models.Model):
     unit_price = models.DecimalField('Τιμή Μονάδας', blank=True,
                                      max_digits=8, decimal_places=2,
                                      default=00.00, validators=[MinValueValidator(0)])
+    line_subtotal = models.DecimalField('Μερικό', default=00.00,
+                                        max_digits=8, decimal_places=2,
+                                        blank=True)
     line_total = models.DecimalField('Τιμη', default=00.00,
                                      max_digits=8, decimal_places=2,
                                      blank=True)
@@ -94,12 +97,13 @@ class InvoiceItem(models.Model):
         self.total_tax = (self.quantity * (self.tax_rate / Decimal(100)) * self.unit_price).quantize(Decimal('0.00'))
         return self.total_tax
 
-    def get_line_total(self):
-        self.line_total = (self.quantity * self.unit_price)
-        return self.line_total
+    def get_line_subtotal(self):
+        self.line_subtotal = (self.quantity * self.unit_price)
+        return self.line_subtotal
 
     def save(self, *args, **kwargs):
         self.tax_rate = self.get_tax_rate()
         self.total_tax = self.get_tax_total
-        self.line_total = self.get_line_total()
+        self.line_subtotal = self.get_line_subtotal()
+        self.line_total = self.line_subtotal + self.total_tax
         super().save(*args, **kwargs)
