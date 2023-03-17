@@ -1,6 +1,8 @@
 from django.core.validators import MinValueValidator
 from django.db import models
 from decimal import Decimal
+
+from django.db.models import DecimalField
 from django.urls import reverse
 
 
@@ -58,8 +60,10 @@ class Invoice(TimeStamp):
 
 
 class InvoiceItem(models.Model):
-    invoice = models.ForeignKey(Invoice, related_name='invoice_items', on_delete=models.CASCADE)
-    product = models.ForeignKey(Product, related_name='product_items', on_delete=models.CASCADE)
+    invoice = models.ForeignKey(Invoice, related_name='invoice_items',
+                                on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, related_name='product_items',
+                                on_delete=models.CASCADE)
     quantity = models.DecimalField('Ποσότητα', default=00.00,
                                    max_digits=5, decimal_places=1,
                                    validators=[MinValueValidator(0)])
@@ -94,7 +98,9 @@ class InvoiceItem(models.Model):
 
     @property
     def get_tax_total(self):
-        self.total_tax = (self.quantity * (self.tax_rate / Decimal(100)) * self.unit_price).quantize(Decimal('0.00'))
+        # noinspection PyTypeChecker
+        self.total_tax = (self.quantity * (self.tax_rate / Decimal(100)) * self.unit_price).quantize(Decimal(
+            '0.00'))
         return self.total_tax
 
     def get_line_subtotal(self):
