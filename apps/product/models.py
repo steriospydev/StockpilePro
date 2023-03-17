@@ -2,7 +2,7 @@ from django.db import models
 from django.db.models.signals import pre_save
 from django.urls import reverse
 from django.core.files.base import ContentFile
-
+from django.core.exceptions import ValidationError
 
 import os
 from PIL import Image
@@ -135,6 +135,10 @@ class Tax(models.Model):
 
     def __str__(self):
         return f'{self.value}'
+
+    def clean(self):
+        if self.value < 0:
+            raise ValidationError('Tax value can not be negative')
 
 class Product(TimeStamp):
     product_name = models.CharField("Ονομασια", max_length=120)
