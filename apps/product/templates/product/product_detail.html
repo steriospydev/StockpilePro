@@ -7,7 +7,7 @@
 {% include 'Component/page_title.html' with tab1='Πληροφορίες Προιόντος' tab2=product.product_name %}
 {% include 'product/components/card_header.html' %}
 
-<div class="tile is-ancestor">
+<div class="title is-ancestor ml-2">
 
     <!-- General Info-->
     <div class="tile is-parent">
@@ -15,8 +15,10 @@
         <div class="card-content">
           <div class="level is-mobile">
             <div class="level-item">
-              <div class="is-widget-label"><h3 class="subtitle is-spaced mb-2">
-                  Γενικά
+              <div class="is-widget-label"><h3
+                  class="subtitle is-spaced mb-2
+">
+                  <strong class="has-text-danger">Γενικά</strong>
                   </h3>
                   <ul>
                     <li class="is-italic">Προιόν</li>
@@ -41,7 +43,8 @@
                     </li>
                     <li class="is-italic">Αριθμός SKU</li>
                     <li class="mb-2"> <strong>{{ product.sku_num }}</strong></li>
-                    <li><a class="button is-small is-success" href="{% url 'product:product-update' product.id %}">
+                    <li><a class="button is-small is-danger is-outlined"
+                           href="{% url 'product:product-update' product.id %}">
                         Ενημέρωση</a>
                     </li>
                   </ul>
@@ -51,11 +54,8 @@
             <div class="level-item has-widget-icon">
                 <div class="is-widget-icon">
                   <span class="icon has-text-danger is-large"><i
-                  class="mdi mdi-account-circle mdi-48px"></i></span>
-                  <ul>
-                    <li><small>Ανανεώθηκε</small></li>
-                    <li class="mb-2 is-italic"> <small>{{ product.updated_at }}</small></li>
-                  </ul>
+                  class="mdi mdi-note-text mdi-48px"></i></span>
+
 
               </div>
             </div>
@@ -64,13 +64,77 @@
       </div>
     </div>
     <!-- More Info-->
+
     <div class="tile is-parent">
+    <div class="card tile is-child">
+      <div class="card-content">
+        <div class="level is-mobile">
+          <div class="level-item">
+            <div class="is-widget-label"><h3 class="subtitle is-spaced mb-2">
+              <strong class="has-text-dark">Στοιχεία Τιμολογίων</strong>
+            </h3>
+                <ul>
+                  <li class="is-italic">Ποσότητα Παραγγελιών</li>
+                  <li class="mb-2"><strong> {{invoice_report.total_quantity}}</strong></li>
+                  <li class="is-italic"></li>
+                  <li class="is-italic">Σύνολο Φόρων</li>
+                  <li class="mb-2"> <strong>{{invoice_report.total_taxes}} &#x20AC;</strong></li>
+                  <li class="is-italic">Συνολο Αγορών</li>
+                  <li class="mb-2"> <strong>{{invoice_report.total_value}} &#x20AC;</strong></li>
+                  <li class="is-italic">Πλήθος ΤΙμολογίων</li>
+                  <li class="mb-2"> <strong>{{invoice_report.no_of_invoices}}</strong></li>
+                </ul>
+            </div>
+          </div>
+          <div class="level-item has-widget-icon">
+            <div class="is-widget-icon">
+                <span class="icon has-text-dark is-large"><i
+                class="mdi mdi-wallet-outline mdi-48px"></i></span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="tile is-ancestor ml-2">
+  <!-- rest Info-->
+  <div class="tile is-parent">
+    <div class="card tile is-child">
+      <div class="card-content">
+        <div class="level is-mobile">
+          <div class="level-item">
+            <div class="is-widget-label"><h3 class="subtitle is-spaced mb-2">
+              <strong class="has-text-info">Λοιπές Πληροφορίες</strong>
+            </h3>
+                <ul>
+                  <li class="is-italic">Σε Στοκ</li>
+                  <li class="mb-2"><strong> 43</strong></li>
+                  <li class="is-italic"></li>
+                  <li class="is-italic">Τελευταία Είσοδος</li>
+                  <li class="mb-2"> <strong>March 2, 2023, 7:55 p.m.</strong></li>
+                  <li class="is-italic">Τελευτάια Έξοδος</li>
+                  <li class="mb-2"> <strong>March 7, 2023, 11:55 p.m.</strong></li>
+                </ul>
+            </div>
+          </div>
+          <div class="level-item has-widget-icon">
+            <div class="is-widget-icon"><span class="icon has-text-info is-large"><i
+                class="mdi mdi-information-outline mdi-48px"></i></span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+    <div class="tile is-parent ">
       <div class="card tile is-child">
         <div class="card-content">
           <div class="level is-mobile">
             <div class="level-item">
               <div class="is-widget-label "><h3 class="subtitle is-spaced mb-2">
-                Στοιχεία Αναγνώρισης
+                <strong class="has-text-link">Στοιχεία Αναγνώρισης</strong>
               </h3>
                   <ul>
                     <li class="is-italic">Κατηγορία</li>
@@ -86,45 +150,14 @@
               </div>
             </div>
             <div class="level-item has-widget-icon">
-              <div class="is-widget-icon"><span class="icon has-text-danger is-large"><i
-                  class="mdi mdi-wallet-outline mdi-48px"></i></span>
+              <div class="is-widget-icon"><span class="icon has-text-link is-large"><i
+                  class="mdi mdi-label-multiple mdi-48px"></i></span>
               </div>
             </div>
           </div>
         </div>
       </div>
     </div>
-</div>
 
-<div class="tile is-ancestor">
-  <!-- rest Info-->
-  <div class="tile is-parent">
-    <div class="card tile is-child">
-      <div class="card-content">
-        <div class="level is-mobile">
-          <div class="level-item">
-            <div class="is-widget-label"><h3 class="subtitle is-spaced mb-2">
-              Λοιπές Πληροφορίες
-            </h3>
-                <ul>
-                  <li class="is-italic">Σε Στοκ</li>
-                  <li class="mb-2"><strong> 43</strong></li>
-                  <li class="is-italic"></li>
-                  <li class="is-italic">Τελευταία Είσοδος</li>
-                  <li class="mb-2"> <strong>March 2, 2023, 7:55 p.m.</strong></li>
-                  <li class="is-italic">Τελευτάια Έξοδος</li>
-                  <li class="mb-2"> <strong>March 7, 2023, 11:55 p.m.</strong></li>
-                </ul>
-            </div>
-          </div>
-          <div class="level-item has-widget-icon">
-            <div class="is-widget-icon"><span class="icon has-text-danger is-large"><i
-                class="mdi mdi-home-map-marker mdi-48px"></i></span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
 </div>
 {% endblock %}

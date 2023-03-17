@@ -5,12 +5,33 @@ from django.http import HttpResponseRedirect
 from django.views.generic import (ListView, DetailView,
                                   CreateView, UpdateView, DeleteView)
 
-from django.db.models import Count, Prefetch
+from django.db.models import Count, Prefetch, Sum
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.postgres.search import TrigramSimilarity
 
+
 from .models import Category, SubCategory, Product
 from .forms import CategoryForm, ProductForm, SubCategoryForm
+from ..invoice.models import InvoiceItem
+
+def get_invoice_report(product):
+    invoice_items = InvoiceItem.objects.filter(product=product)
+
+    # calculate total quantity, total taxes, and total value
+    total_quantity = invoice_items.aggregate(Sum('quantity'))['quantity__sum'] or 0
+    total_taxes = invoice_items.aggregate(Sum('total_tax'))['total_tax__sum'] or 0
+    total_value = invoice_items.aggregate(Sum('line_subtotal'))['line_subtotal__sum'] or 0
+
+    # count the number of invoices
+    no_of_invoices = invoice_items.values('invoice').distinct().count()
+
+    # return the calculated values
+    return {
+        'total_quantity': total_quantity,
+        'total_taxes': total_taxes,
+        'total_value': total_value,
+        'no_of_invoices': no_of_invoices,
+    }
 # Category based views
 class CategoryListView(LoginRequiredMixin, ListView):
     model = Category
@@ -220,3 +241,9 @@ class ProductDetailView(LoginRequiredMixin, DetailView):
     template_name = 'product/product_detail.html'
     context_object_name = 'product'
     login_url = '/'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        product = self.get_object()
+        context['invoice_report'] = get_invoice_report(product)
+        return context
