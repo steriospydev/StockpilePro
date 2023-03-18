@@ -6,23 +6,23 @@
 
 {% include 'Component/page_title.html' with tab1='Πληροφορίες Τιμολογίου' tab2=invoice %}
 {% include 'invoice/components/card_header.html' %}
-<div class="tile is-ancestor mx-5">
+<div class="tile is-ancestor mx-5 has-background-dark">
     <!-- General Info-->
     <div class="tile is-parent">
-      <div class="card tile is-child">
+      <div class="card tile is-child has-background-dark has-text-white">
         <div class="card-content">
           <div class="level is-mobile">
             <div class="level-item">
-              <div class="is-widget-label"><h3 class="subtitle is-spaced mb-2">
+              <div class="is-widget-label"><h3 class="subtitle is-spaced mb-2 ">
                   Γενικά
                   </h3>
                   <ul>
                     <li class="is-italic">Αριθμός</li>
-                    <li class="mb-2"><strong> {{ invoice.invoice_no}}</strong></li>
+                    <li class="mb-2 has-background-white"><strong> {{ invoice.invoice_no}}</strong></li>
                     <li class="is-italic">Προμηθευτής</li>
-                    <li class="mb-2"> <strong>{{ invoice.supplier.company }}</strong></li>
+                    <li class="mb-2 has-background-white"> <strong>{{ invoice.supplier.company }}</strong></li>
                     <li class="is-italic">Ημ.Έκδοσης</li>
-                    <li class="mb-2"> <strong>{{ invoice.date_of_issuance.date }}</strong></li>
+                    <li class="mb-2 has-background-white"> <strong>{{ invoice.date_of_issuance.date }}</strong></li>
 
                   </ul>
 
@@ -30,10 +30,10 @@
             </div>
             <div class="level-item has-widget-icon">
 
-                <div class="is-widget-icon">
+                <div class="is-widget-icon ">
                     <ul>
                         <li class="mb-4">
-                            <a class="button is-small is-success is-outlined"
+                            <a class="button is-small is-success is-outlined "
                            href="{% url 'invoice:invoice-item-create' invoice.id %}">
                         <strong>Προσθήκη Προιόντος</strong></a>
                         </li>
@@ -43,7 +43,7 @@
                         Διαγραφή Τιμολογίου</a>
                         </li>
                         <li><small>Ανανεώθηκε</small></li>
-                        <li class="mb-2 is-italic"> <small>{{ invoice.updated_at }}</small></li>
+                        <li class="mb-2 is-italic has-text-white"> <small>{{ invoice.updated_at }}</small></li>
                     </ul>
               </div>
             </div>
@@ -89,7 +89,7 @@
             <th>Προιον</th>
             <th>Ποσοτητα</th>
             <th>Τ.Μ. &#x20AC;</th>
-            <th>Μερικό&#x20AC;</th>
+            <th>Μερικό &#x20AC;</th>
             <th>ΦΠΑ &#x20AC;</th>
             <th>Κόστος &#x20AC;</th>
             <th>Actions</th>
