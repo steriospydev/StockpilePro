@@ -11,7 +11,7 @@ from apps.product.models import (Category, SubCategory,
                                  Tax, Product)
 from apps.product.forms import CategoryForm
 
-
+# models
 class CategoryModelTestCase(TestCase):
     def setUp(self):
         self.category = Category.objects.create(category_name='Category 1')
@@ -155,6 +155,7 @@ class ProductModelTest(TestCase):
         response = self.client.get(url)
         self.assertEqual(response.status_code, 302)
 
+# views
 class CategoryListViewTestCase(TestCase):
     def setUp(self):
         # Create some categories and products using factories
