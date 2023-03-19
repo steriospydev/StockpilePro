@@ -67,8 +67,8 @@ class InvoiceItemCreateUpdate(LoginRequiredMixin):
     def form_valid(self, form):
         response = super().form_valid(form)
         self.object.invoice.save()  # call save method on the associated invoice object
-        return response
 
+        return response
 
     def get_success_url(self):
         return reverse('invoice:invoice-detail', args=[self.object.invoice.pk])

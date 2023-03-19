@@ -3,9 +3,13 @@ from django.db.models import Count, Q, Case, When, BooleanField
 
 from .models import Storage, Section, Spot, Bin
 
+from django.db.models import Count, Q
+from django.shortcuts import render
+from .models import Storage, Bin
+
 def storehouse_home(request):
-    storages = Storage.objects.prefetch_related('bins').annotate(
-        total_sections=Count('bins__section', distinct=True))
+    storages = Storage.objects.prefetch_related('storage_bins').annotate(
+        total_sections=Count('storage_bins__section', distinct=True))
 
     bins_agg = Bin.objects.aggregate(
         total_bins=Count('id'),
@@ -14,8 +18,8 @@ def storehouse_home(request):
     bins_occupied = bins_agg['total_bins'] - bins_agg['bins_in_use']
 
     storage_count = storages.annotate(
-        total_bins=Count('bins'),
-        storage_bins_in_use=Count('bins', filter=Q(bins__in_use=True))
+        total_bins=Count('storage_bins'),
+        storage_bins_in_use=Count('storage_bins', filter=Q(storage_bins__in_use=True))
     ).values(
         'id',
         'storage_name',
@@ -35,7 +39,6 @@ def storehouse_home(request):
         'storage_count': storage_count
     }
     return render(request, 'storehouse/storehouse_main.html', context)
-
 
 def storage_bins_page(request, pk):
     #

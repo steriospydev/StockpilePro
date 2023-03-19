@@ -1,10 +1,34 @@
+import random
 from django.db import models
 from django.urls import reverse
 from django.core.validators import RegexValidator
+from django.db.models.signals import pre_save, post_save
+from django.dispatch import receiver
+
+from apps.utils import signals
+from ..invoice.models import InvoiceItem
+
 # Create your models here.
 class TimeStamp(models.Model):
     created_at = models.DateTimeField('Δημιουργηθηκε', auto_now_add=True)
     updated_at = models.DateTimeField('Ανανεωθηκε', auto_now=True)
+
+    class Meta:
+        abstract = True
+
+class BinType(models.Model):
+    SHELF = 'S'
+    FLOOR = 'F'
+    BIN_TYPE_CHOICES = [
+        (SHELF, 'Shelf'),
+        (FLOOR, 'Floor'),
+    ]
+
+    bin_type = models.CharField(
+        max_length=1,
+        choices=BIN_TYPE_CHOICES,
+        default=FLOOR,
+    )
 
     class Meta:
         abstract = True
@@ -52,9 +76,9 @@ class Spot(TimeStamp):
                                  max_length=3,
                                  default='000',
                                  validators=[RegexValidator(
-                                    regex=r'^[0-9]{3}$',
-                                    message='Η τιμή πρέπει να είναι από '
-                                            '001 έως 999',)]
+                                     regex=r'^[0-9]{3}$',
+                                     message='Η τιμή πρέπει να είναι από '
+                                             '001 έως 999', )]
                                  )
 
     class Meta:
@@ -64,30 +88,14 @@ class Spot(TimeStamp):
     def __str__(self):
         return f'{self.spot_name}'
 
-class BinType(models.Model):
-    SHELF = 'S'
-    FLOOR = 'F'
-    BIN_TYPE_CHOICES = [
-        (SHELF, 'Shelf'),
-        (FLOOR, 'Floor'),
-    ]
-    bin_type = models.CharField(
-        max_length=1,
-        choices=BIN_TYPE_CHOICES,
-        default=FLOOR,
-    )
-
-    class Meta:
-        abstract = True
-
 class UseManager(models.Manager):
     def get_queryset(self):
         return super().get_queryset().filter(in_use=True)
 
 class Bin(TimeStamp, BinType):
-    storage = models.ForeignKey(Storage, on_delete=models.CASCADE, related_name='bins')
-    section = models.ForeignKey(Section, on_delete=models.CASCADE)
-    spot = models.ForeignKey(Spot, on_delete=models.CASCADE)
+    storage = models.ForeignKey(Storage, on_delete=models.CASCADE, related_name='storage_bins')
+    section = models.ForeignKey(Section, on_delete=models.CASCADE, related_name='section_bins')
+    spot = models.ForeignKey(Spot, on_delete=models.CASCADE, related_name='spot_bins')
     in_use = models.BooleanField('Σε χρηση', default=False)
 
     objects = models.Manager()
@@ -103,3 +111,84 @@ class Bin(TimeStamp, BinType):
 
     def __str__(self):
         return f'{self.section}-{self.spot}{self.bin_type}'
+
+class Stock(TimeStamp):
+    item = models.OneToOneField(InvoiceItem, on_delete=models.CASCADE,
+                                related_name='stock')
+    expiration_date = models.DateField('Ημ.Ληξης', null=True)
+    start_quantity = models.DecimalField('Αρχικη Ποσοτητα', max_digits=12,
+                                         decimal_places=2, default=0)
+    retrieved = models.DecimalField('Εξαγωγη', max_digits=12,
+                                    decimal_places=2, default=0)
+    is_placed = models.BooleanField('Τοποθετηση', default=False)
+    deplete = models.BooleanField('Εξαντλημενο', default=False)
+
+    sku = models.CharField('SKU', max_length=9, unique=True,
+                           blank=True, null=True, editable=False)
+
+    class Meta:
+        verbose_name = 'Στοκ'
+        verbose_name_plural = 'Στοκ'
+        ordering = ['expiration_date']
+
+    def __str__(self):
+        return f'{self.item}/{self.sku}'
+
+    def get_unique_number(self, prefix):
+        while True:
+            # generate a random 3-digit number
+            number = str(random.randint(0, 999)).zfill(3)
+            sku = f"{prefix}-{number}"
+            # check if the sku is already taken
+            if not Stock.objects.filter(sku=sku).exists():
+                return number
+
+    def generate_sku_num(self):
+        part_1 = f"{self.item.invoice.supplier.sku_num}{self.item.product.sku_num}"
+        part_2 = self.get_unique_number(part_1)
+        return f"{part_1}-{part_2}"
+
+    def get_start_quantity(self):
+        return self.item.quantity
+
+    def change_deplete_status(self):
+        if self.retrieved >= self.start_quantity:
+            self.retrieved = self.start_quantity
+            return True
+        return False
+
+    def save(self, *args, **kwargs):
+        self.start_quantity = self.get_start_quantity()
+        self.deplete = self.change_deplete_status()
+        super().save(*args, **kwargs)
+
+class PlaceStock(TimeStamp):
+    stock = models.ForeignKey(Stock, on_delete=models.CASCADE)
+    bin = models.ForeignKey(Bin, on_delete=models.CASCADE)
+    deplete = models.BooleanField('Εξαντλημενο', default=False)
+    quantity = models.DecimalField("Ποσότητα", max_digits=8,
+                                   decimal_places=2, default=0)
+
+class Retrieve(TimeStamp):
+    pass
+# retrieve_id PK
+# store  FK
+# quantity BIGINT N
+
+
+# signals
+pre_save.connect(lambda sender, instance, **kwargs:
+                 signals.generate_stock_sku(sender, instance),
+                 sender=Stock)
+
+@receiver(post_save, sender=InvoiceItem)
+def create_or_update_stock(sender, instance, created, **kwargs):
+    if created:
+        stock = Stock.objects.create(item=instance)
+        stock.save()
+    else:
+        try:
+            stock = instance.stock
+        except Stock.DoesNotExist:
+            return
+        stock.save()

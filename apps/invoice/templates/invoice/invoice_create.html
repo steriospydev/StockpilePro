@@ -11,8 +11,6 @@
     <div class="column is-full-desktop  is-full-tablet is-full-mobile">
       <div class="card">
         <div class="card-content has-background-dark">
-
-
             <form method="post" class="m-3 ">
               {% csrf_token %}
               <div class="field has-text-center mt-5">
@@ -22,7 +20,6 @@
                     <button class="button is-success ml-5" type="Submit" >Αποθηκευση</button>
                 </div>
               </div>
-
                 <hr>
                   <div class="error">
                     {% if form.errors %}
