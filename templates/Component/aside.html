@@ -28,7 +28,7 @@
       <p class="menu-label">Γενικα</p>
       <ul class="menu-list">
         <li>
-          <a href="{% url 'index' %}"
+          <a href="{% url 'dashboard:index' %}"
              class="{% if request.resolver_match.url_name == 'index' %}is-active{% endif %} router-link-active has-icon">
             <span class="icon"><i class="mdi mdi-desktop-mac"></i></span>
             <span class="menu-item-label">Dashboard</span>

@@ -4,11 +4,10 @@ from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 
-from . import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('index/', views.index, name='index'),
+    path('dashboard/', include('apps.dashboard.urls')),
     path('', include('apps.account.urls')),
     path('supplier/', include('apps.supplier.urls')),
     path('storehouse/', include('apps.storehouse.urls')),
