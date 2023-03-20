@@ -43,22 +43,22 @@ def storehouse_home(request):
 def storage_bins_page(request, pk):
     #
     storage = Storage.objects.prefetch_related(
-        'bins', 'bins__section').get(id=pk)
+        'storage_bins', 'storage_bins__section').get(id=pk)
 
-    bins = storage.bins.select_related('section', 'spot').annotate(
+    bins = storage.storage_bins.select_related('section', 'spot').annotate(
         is_free=Case(
             When(in_use=False, then=True),
             default=False,
             output_field=BooleanField()))
 
     # Count available bins
-    all_bins = storage.bins.count()
-    free_bins = storage.bins.filter(in_use=False).count()
+    all_bins = storage.storage_bins.count()
+    free_bins = storage.storage_bins.filter(in_use=False).count()
     in_use_bins = all_bins - free_bins
 
     # Available bin depending on type
-    shelves_available = storage.bins.filter(bin_type='S', in_use=False).count()
-    floor_available = storage.bins.filter(bin_type='F', in_use=False).count()
+    shelves_available = storage.storage_bins.filter(bin_type='S', in_use=False).count()
+    floor_available = storage.storage_bins.filter(bin_type='F', in_use=False).count()
 
     context = {
         'bins': bins,

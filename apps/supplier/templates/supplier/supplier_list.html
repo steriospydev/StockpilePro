@@ -166,8 +166,6 @@
                     </span>
                 {% endif %}
               </td>
-
-
               <td class="is-actions-cell">
                 <div class="buttons is-right">
                   <a href="{{ supplier.get_absolute_url }}"
@@ -182,28 +180,27 @@
                   <!-- Modal -->
                   <div class="modal" id="delete-modal">
                     <div class="modal-background"></div>
-                    <div class="modal-card">
-                      <header class="modal-card-head">
-                        <p class="modal-card-title">Delete Confirmation</p>
-                        <button class="delete" aria-label="close"></button>
-                      </header>
-                      <section class="modal-card-body">
-                        Are you sure you want to delete this item?
-                      </section>
-                      <footer class="modal-card-foot">
-                        <form action="{% url 'supplier:supplier-delete' supplier.id %}"
-                              method="post">
-                          {% csrf_token %}
-                          <input type="submit" value="Delete" class="button is-danger">
-                          <a class="button" id="cancel-button">Cancel</a>
-                        </form>
-                      </footer>
+                        <div class="modal-card">
+                            <header class="modal-card-head">
+                            <p class="modal-card-title">Delete Confirmation</p>
+                            <button class="delete" aria-label="close"></button>
+                          </header>
+                            <section class="modal-card-body">
+                            Are you sure you want to delete this item?
+                          </section>
+                            <footer class="modal-card-foot">
+                            <form action="{% url 'supplier:supplier-delete' supplier.id %}"
+                                  method="post">
+                              {% csrf_token %}
+                              <input type="submit" value="Delete" class="button is-danger">
+                              <a class="button" id="cancel-button">Cancel</a>
+                            </form>
+                          </footer>
+                        </div>
                     </div>
                   </div>
-
-                </div>
               </td>
-                </tr>
+            </tr>
           {% empty %}
             {% if request.resolver_match.url_name == 'supplier-list' %}
               <div style="display: flex; justify-content: center; height: 100%;">

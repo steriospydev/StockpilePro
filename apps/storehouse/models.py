@@ -169,8 +169,8 @@ class PlaceStock(TimeStamp):
     quantity = models.DecimalField("Ποσότητα", max_digits=8,
                                    decimal_places=2, default=0)
 
-class Retrieve(TimeStamp):
-    pass
+# class Retrieve(TimeStamp):
+#     pass
 # retrieve_id PK
 # store  FK
 # quantity BIGINT N

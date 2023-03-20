@@ -1,9 +1,202 @@
 {% extends 'base.html' %}
 
 {% block title%}Διαχείρηση Αποθήκης {% endblock %}
+{% block css %}
+.mybox {
+  box-shadow:30px 20px 15px rgba(0, 0, 0, 0.5); /* add a shadow */
+  width: 80%; /* reduce width to 80% */
+  margin: 10px auto; /* center the box horizontally */
+  padding: 20px; /* add some padding */
 
+}
+.myform {
+  box-shadow: 0px 0px 53px rgba(0, 0, 0, 0.5); /* add a shadow */
+  width: 70%; /* reduce width to 80% */
+  margin: 10px auto; /* center the box horizontally */
+  padding: 10px; /* add some padding */
+
+}
+.media-content{
+overflow: hidden; // hide horizontal
+}
+
+.button-width{
+    max-width: 100px;
+}
+{% endblock%}
 {% block content %}
 {% include 'Component/page_title.html' with tab1='Dashboard' %}
-{% include 'Component/main/header.html' %}
 
+<div class="tile is-ancestor ml-3 mr-3 ">
+    <div class="tile is-parent">
+        <div class="card tile is-child">
+          <div class="card-content has-background-dark ">
+            <div class="level is-mobile">
+              <div class="level-item ">
+                <div class="is-widget-label "><h3 class="subtitle is-spaced has-text-warning">
+                  Αποθήκες
+                </h3>
+                  <h1 class="title has-text-white">
+                   6
+                  </h1>
+                </div>
+              </div>
+              <div class="level-item has-widget-icon">
+                <div class="is-widget-icon"><span class="icon has-text-warning is-large"><i
+                    class="mdi mdi-store mdi-48px"></i></span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    <div class="tile is-parent">
+        <div class="card tile is-child">
+          <div class="card-content has-background-dark ">
+            <div class="level is-mobile">
+              <div class="level-item ">
+                <div class="is-widget-label "><h3 class="subtitle is-spaced has-text-link">
+                  Προμηθευτές
+                </h3>
+                  <h1 class="title has-text-white">
+                      12
+                  </h1>
+                </div>
+              </div>
+              <div class="level-item has-widget-icon">
+                <div class="is-widget-icon"><span class="icon has-text-link is-large"><i
+                    class="mdi mdi-account-multiple mdi-48px"></i></span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+</div>
+<div class="tile is-ancestor ml-3 mr-3 ">
+
+         <div class="tile is-parent">
+            <div class="card tile is-child">
+              <div class="card-content has-background-dark ">
+                <div class="level is-mobile">
+                  <div class="level-item ">
+                    <div class="is-widget-label "><h3 class="subtitle is-spaced has-text-danger">
+                        Προιόντα
+                    </h3>
+                      <h1 class="title has-text-white">
+                          1230
+                      </h1>
+                    </div>
+                  </div>
+                  <div class="level-item has-widget-icon">
+                    <div class="is-widget-icon"><span class="icon has-text-danger is-large"><i
+                        class="mdi mdi-cart mdi-48px"></i></span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="tile is-parent">
+            <div class="card tile is-child">
+              <div class="card-content has-background-dark ">
+                <div class="level is-mobile">
+                  <div class="level-item ">
+                    <div class="is-widget-label "><h3 class="subtitle is-spaced has-text-success">
+                      Τιμολόγια
+                    </h3>
+                      <h1 class="title has-text-white">
+                          245
+                      </h1>
+                    </div>
+                  </div>
+                  <div class="level-item has-widget-icon">
+                    <div class="is-widget-icon"><span class="icon has-text-success is-large"><i
+                        class="mdi mdi-briefcase-check mdi-48px"></i></span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+         </div>
+
+      </div>
+
+<div class="container">
+    <div class="row myform">
+        <div class="col ">
+            <form method="POST" action="{% url 'dashboard:index' %}" >
+                {% csrf_token %}
+                <div class="field is-horizontal">
+                    <div class="field-body">
+                        <div class="field ml-6">
+                            <div class="control">
+                                <button class="button is-dark " type="submit">Ανακοίνωση</button>
+                            </div>
+                        </div>
+                        <div class="field is-fullwidth">
+                            <div class="control">
+                                {{ form.task }}
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+<header class="card-header ml-6">
+  <p class="card-header-title">
+    <span class="icon"><i class="mdi mdi-file-document-edit-outline"></i></span>
+      Πίνακας Ανακοινώσεων
+</header>
+
+    {% for todo in todos %}
+    <div class="mybox box has-background-dark has-text-white">
+      <article class="media">
+        <div class="media-content">
+          <div class="columns">
+              <div class="column is-four-fifths">
+                <p>
+                    <strong class="has-text-warning">{{ todo.username }}</strong>,
+                    <small><em>{{todo.timestamp}}</em></small>
+                    <br>
+                    {{ todo.task }}
+                </p>
+              </div>
+              <div class="column buttons is-right p-1 m-2">
+                {%if todo.completed %}
+                    <a href="{% url 'dashboard:todo-change' todo.id %}"
+                       class="button is-success level-item is-small button-width">
+                        <span class="icon">
+                            Complete
+                            <i class="mdi mdi-check-decagram"></i>
+                        </span>
+                    </a>
+                {% else %}
+                    <a href="{% url 'dashboard:todo-change' todo.id %}"
+                       class="button is-danger level-item is-small  button-width">
+                        <span class="icon">
+                            Not Completed
+                            <i class="mdi mdi-cancel"></i>
+                        </span>
+                    </a>
+                {% endif %}
+                <a href="{% url 'dashboard:todo-remove' todo.id %}"
+                   class="button is-warning level-item is-small  button-width">
+                    <span class="icon">
+                        Διαγραφή
+                        <i class="mdi mdi-trash-can"></i>
+                    </span>
+                </a>
+              </div>
+          </div>
+        </div>
+      </article>
+    </div>
+
+    {% endfor %}
 {% endblock %}
