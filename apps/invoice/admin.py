@@ -13,7 +13,3 @@ class InvoiceAdmin(admin.ModelAdmin):
                     'date_of_issuance',
                     'total', 'total_taxes']
     inlines = [InvoiceItemInline]
-
-
-# προιον | Ποσοτητα |Τιμη   |   ΦΠΑ |  Φορος | ολικο
-# Αυρα   |  10      | 1.00  |   13% |   1,30 |  10

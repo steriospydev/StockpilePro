@@ -110,16 +110,20 @@ class Bin(TimeStamp, BinType):
         ordering = ['storage', 'section', 'bin_type', 'spot']
 
     def __str__(self):
-        return f'{self.section}-{self.spot}{self.bin_type}'
+        return f'{self.storage}/{self.section}-{self.spot}{self.bin_type}'
 
 class Stock(TimeStamp):
     item = models.OneToOneField(InvoiceItem, on_delete=models.CASCADE,
-                                related_name='stock')
+                                related_name='invoice_stock')
     expiration_date = models.DateField('Ημ.Ληξης', null=True)
+
     start_quantity = models.DecimalField('Αρχικη Ποσοτητα', max_digits=12,
                                          decimal_places=2, default=0)
+    stock_placed = models.DecimalField('Τοποθετημένο στοκ', max_digits=12,
+                                       decimal_places=2, default=0)
     retrieved = models.DecimalField('Εξαγωγη', max_digits=12,
                                     decimal_places=2, default=0)
+
     is_placed = models.BooleanField('Τοποθετηση', default=False)
     deplete = models.BooleanField('Εξαντλημενο', default=False)
 
@@ -157,9 +161,15 @@ class Stock(TimeStamp):
             return True
         return False
 
+    def change_is_placed(self):
+        if self.stock_placed == self.start_quantity:
+            return True
+        return False
+
     def save(self, *args, **kwargs):
         self.start_quantity = self.get_start_quantity()
         self.deplete = self.change_deplete_status()
+        self.is_placed = self.change_is_placed()
         super().save(*args, **kwargs)
 
 class PlaceStock(TimeStamp):
@@ -169,11 +179,34 @@ class PlaceStock(TimeStamp):
     quantity = models.DecimalField("Ποσότητα", max_digits=8,
                                    decimal_places=2, default=0)
 
-# class Retrieve(TimeStamp):
-#     pass
-# retrieve_id PK
-# store  FK
-# quantity BIGINT N
+    class Meta:
+        verbose_name = 'Τοποθετηση'
+        verbose_name_plural = 'Τοποθετησεις'
+        ordering = ['stock__expiration_date']
+
+    def update_stock_stock_placed(self):
+        max_stock_left = self.stock.start_quantity - self.stock.stock_placed
+        if self.quantity >= max_stock_left:
+            self.quantity = max_stock_left
+            self.stock.stock_placed += max_stock_left
+        if self.quantity < max_stock_left:
+            self.stock.stock_placed += self.quantity
+
+        self.stock.save()
+
+    def update_bin_use(self):
+        self.bin.in_use = True
+        self.bin.save()
+
+    def save(self, *args, **kwargs):
+        self.update_stock_stock_placed()
+        self.update_bin_use()
+        super().save(*args, **kwargs)
+
+# class RetrieveStock(TimeStamp):
+#     placed_stock = models.ForeignKey(PlaceStock, on_delete=models.CASCADE)
+#     quantity = models.DecimalField("Ποσότητα", max_digits=8,
+#                                    decimal_places=2, default=0)
 
 
 # signals
