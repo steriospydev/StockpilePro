@@ -1,4 +1,6 @@
 from django.shortcuts import render
+from django.shortcuts import reverse
+
 from django.db.models import Count, Q, Case, When, BooleanField
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import (ListView, DetailView,
@@ -9,6 +11,7 @@ from django.contrib.postgres.search import SearchVector
 
 from .models import (Storage, Bin, Section, Spot,
                      Stock, PlaceStock)
+from .forms import StockForm
 
 def storehouse_home(request):
     storages = Storage.objects.prefetch_related('storage_bins').annotate(
@@ -74,7 +77,6 @@ def storage_bins_page(request, pk):
     }
     return render(request, 'storehouse/storehouse_detail.html', context)
 
-
 class BaseStockList(LoginRequiredMixin, ListView):
     """
     Base view for displaying a list of stocks.
@@ -100,7 +102,6 @@ class StockList(BaseStockList):
     Display all products
     """
     paginate_by = 10
-
 
 class SearchConstructMixin:
     """
@@ -146,3 +147,34 @@ class StockSearchView(BaseStockList, SearchConstructMixin):
             })
 
         return context
+
+class StockDetailView(LoginRequiredMixin, DetailView):
+    model = Stock
+    template_name = 'storehouse/ops/stock_detail.html'
+    context_object_name = 'stock'
+    login_url = '/'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        return context
+
+class StockCreateUpdate(LoginRequiredMixin):
+    template_name = 'storehouse/ops/stock_update.html'
+    model = Stock
+    form_class = StockForm
+    login_url = '/'
+
+    def form_valid(self, form):
+        form.instance.created_by = self.request.user
+        return super().form_valid(form)
+
+class StockUpdateView(StockCreateUpdate, CreateView):
+    context_object_name = 'stock'
+
+    def get_success_url(self):
+        return reverse('storehouse:stock-detail', args=[self.object.pk])
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['instance'] = self.get_object()
+        return kwargs

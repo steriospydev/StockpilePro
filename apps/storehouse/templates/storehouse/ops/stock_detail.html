@@ -1,0 +1,131 @@
+{% extends 'base.html' %}
+
+{% block title%}Στοκ {{stock.sku}}{% endblock %}
+
+{% block content %}
+
+{% include 'Component/page_title.html' with tab1='Πληροφορίες Στοκ' tab2=stock.sku %}
+{% include 'storehouse/ops/components/card_header.html' %}
+
+<div class="tile is-ancestor mx-5 has-background-dark">
+    <!-- General Info-->
+    <div class="tile is-parent">
+      <div class="card tile is-child has-background-dark has-text-warning">
+        <div class="card-content">
+          <div class="level is-mobile">
+            <div class="level-item">
+              <div class="is-widget-label">
+                  <h3 class="subtitle is-spaced mb-2 ">Γενικά</h3>
+                  <ul>
+                    <li class="is-italic">Προιόν</li>
+                    <li class="mb-2" ><strong style="color:white;"> {{ stock.item }}</strong></li>
+                    <li class="is-italic">Αριθμός SKU</li>
+                    <li class="mb-2" ><strong style="color:white;"> {{ stock.sku }}</strong></li>
+
+                    <li class="is-italic">Τοποθετημενο/Διαθέσιμο</li>
+                    <li class="mb-2">
+                        {% if stock.is_placed %}
+                            <span class="icon has-text-success "><i class="mdi mdi-check-decagram "></i></span>
+                        {% else %}
+                            <span class="icon has-text-danger "><i class="mdi mdi-cancel "></i></span>
+                        {% endif %}
+                        {% if not stock.deplete %}
+                            <span class="icon has-text-success "><i class="mdi mdi-check-decagram "></i></span>
+                        {% else %}
+                            <span class="icon has-text-danger "><i class="mdi mdi-cancel"></i></span>
+                        {% endif %}
+                    </li>
+                    <li class="is-italic">Ημ. Ληξης</li>
+                    <li class="mb-2" ><strong style="color:white;">
+                         <a class="button is-small is-danger    "
+                           href="{% url 'storehouse:stock-update' stock.id %}">
+                            {% if stock.expiration_date %}
+                            {{ stock.expiration_date }}
+                        {% else %}
+                            Δεν έχει οριστεί
+                        {% endif %}
+                         </a></strong></li>
+                    <li class="is-italic">Τιμολογιο</li>
+                    <li class="mb-2">
+                        <strong style="color:white;">
+                            <a class='button is-small is-info' href="{{ stock.item.invoice.get_absolute_url }}">
+                                {{stock.item.invoice }}
+                            </a>
+                        </strong>
+                    </li>
+                    <li class="is-italic">Ανανεώθηκε</li>
+                    <li class="mb-2" ><strong style="color:white;"> {{ stock.updated_at }}</strong></li>
+                  </ul>
+              </div>
+            </div>
+            <div class="level-item has-widget-icon">
+                <div class="is-widget-icon ">
+                    <ul>
+                        <li class="mb-4">
+                            <a class="button is-small is-success is-outlined"
+                           href="#">
+                            <strong>Νεα Τοποθέτηση</strong></a>
+                        </li>
+                        <li class="mb-4">
+                            <a class="button is-small is-danger is-outlined"
+                           href="#">
+                          <strong>Διαγραφή Στοκ  </strong></a>
+                        </li>
+                        <li class="is-italic">Τιμη Αγορας</li>
+                        <li class="mb-2" ><strong style="color:white;"> {{ stock.item.unit_price }} &#x20AC;</strong></li>
+                        <li class="is-italic">Αρχικη Ποσοτητα</li>
+                        <li class="mb-2" ><strong style="color:white;"> {{ stock.start_quantity }}</strong></li>
+                        <li class="is-italic">Τοποθετημενη</li>
+                        <li class="mb-2" ><strong style="color:white;"> {{ stock.stock_placed }}</strong></li>
+                        <li class="is-italic">Υπολοιπο</li>
+                        <li class="mb-2" ><strong style="color:white;"> {{ stock.retrieved }}</strong></li>
+                    </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+</div>
+
+  <div class="b-table has-pagination mx-6">
+    <div class="table-wrapper has-mobile-cards">
+      <table class="table is-fullwidth is-striped is-hoverable is-sortable is-fullwidth">
+        <thead>
+          <tr>
+            <th>Αποθήκη</th>
+            <th>Θέση</th>
+            <th>Ποσότητα </th>
+            <th>Εξαντλημένο</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for item in invoice_items %}
+            <tr>
+              <td data-label="Αποθήκη">{{item.product}}</td>
+              <td data-label="Θέση">{{item.quantity}}</td>
+              <td data-label="Ποσότητα">{{item.line_subtotal}}</td>
+              <td data-label="Εξαντλημένο">{{item.quantity}}</td>
+              <td class="is-actions-cell">
+                <div class="buttons is-right">
+                  <a href="{{ item.get_absolute_url }}"
+                     class="button is-small is-info" type="button">
+                    <span class="icon"><i class="mdi mdi-eye"></i></span>
+                  </a>
+                </div>
+              </td>
+            </tr>
+          {% empty %}
+              <div style="display: flex; justify-content: center; height: 100%;">
+                <div class="notification is-success">
+                  Αυτο το στοκ δεν έχει τοποθετηθεί ακόμα.
+                </div>
+              </div>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+{% endblock %}

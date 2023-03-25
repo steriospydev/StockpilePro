@@ -11,5 +11,7 @@ urlpatterns = [
          views.storage_bins_page, name="storage-detail"),
     path('stock/', views.StockList.as_view(), name="stock-list"),
     path('search/',
-         views.StockSearchView.as_view(), name='stock-search')
+         views.StockSearchView.as_view(), name='stock-search'),
+    path('stock/<int:pk>/', views.StockDetailView.as_view(), name='stock-detail'),
+    path('stock/<int:pk>/edit/', views.StockUpdateView.as_view(), name='stock-update')
 ]

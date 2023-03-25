@@ -138,6 +138,9 @@ class Stock(TimeStamp):
     def __str__(self):
         return f'{self.item}/{self.sku}'
 
+    def get_absolute_url(self):
+        return reverse('storehouse:stock-detail', args=[str(self.id)])
+
     def get_unique_number(self, prefix):
         while True:
             # generate a random 3-digit number
