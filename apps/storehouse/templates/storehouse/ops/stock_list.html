@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
-{% block title%}Τιμολόγια {% endblock %}
+{% block title%}Στοκ {% endblock %}
 {% block css %}
     #search_term::-webkit-input-placeholder {
       color: black;
@@ -19,7 +19,7 @@
 
 {% endblock %}
 {% block content %}
-  {% include 'Component/page_title.html' with tab1='Τιμολόγια' %}
+  {% include 'Component/page_title.html' with tab1='Στοκ' %}
 
   <!-- Product Header-->
   <div class="tile is-ancestor ml-3 mr-3 ">
@@ -29,7 +29,7 @@
             <div class="level is-mobile">
               <div class="level-item has-widget-icon">
                 <div class="is-widget-icon">
-                  <a href="{% url 'invoice:invoice-create' %}">
+                  <a href="#">
                     <span class="icon has-text-success is-large"><i
                     class="mdi mdi-plus-thick mdi-48px"></i></span>
                    </a>
@@ -41,7 +41,7 @@
                       Δημιουργία
                   </h3>
                   <h3 class="subtitle is-spaced has-text-success">
-                      Τιμολογίου
+                      Στοκ
                   </h3>
                 </div>
               </div>
@@ -57,16 +57,16 @@
             <div class="level is-mobile">
               <div class="level-item ">
                 <div class="is-widget-label "><h3 class="subtitle is-spaced has-text-warning">
-                  Τιμολόγια
+                  Στοκ
                 </h3>
                   <h1 class="title has-text-danger">
-                    {{ total_invoices }}
+                    {{ total_stock }}
                   </h1>
                 </div>
               </div>
               <div class="level-item has-widget-icon">
                 <div class="is-widget-icon"><span class="icon has-text-warning is-large"><i
-                    class="mdi mdi-briefcase-check mdi-48px"></i></span>
+                    class="mdi mdi-package mdi-48px"></i></span>
                 </div>
               </div>
             </div>
@@ -78,16 +78,15 @@
   <div class="card has-table has-mobile-sort-spaced">
     <header class="card-header">
       <p class="card-header-title">
-        <span class="icon"><i class="mdi mdi-briefcase-check"></i></span>
-          Τιμολόγια
+        <span class="icon"><i class="mdi mdi-package"></i></span>
+          Στοκ
     </header>
   </div>
   <!-- Product Search-->
   <div class="card-content has-text-centered has-mobile">
-    <form action="#" method="get" class="field is-grouped is-horizontal-mobile">
+    <form action="{% url 'storehouse:stock-search' %}" method="get" class="field is-grouped is-horizontal-mobile">
         <div class="control is-expanded ">
-            <input class="input"  value="{{ query }}" name="q" id="q"
-                   type="text" placeholder="Search for invoices..">
+            <input class="input"  value="{{ query }}" name="q" id="q" type="text" placeholder="Search for stock..">
         </div>
         <div class="control">
             <button class="button is-info" type='submit'>
@@ -95,17 +94,36 @@
                 <span class="icon has-text-light is-large"><i class="mdi mdi-account-search"></i></span>
             </button>
         </div>
+        <div class="field is-flex-direction-column">
+          <div class="control">
+            <div class="is-flex is-align-items-center">
+              <label class="checkbox">
+                <input type="checkbox" name="deplete" {% if request.GET.deplete %}checked{% endif %}>
+                Out of stock
+              </label>
+            </div>
+          </div>
+          <div class="control">
+            <div class="is-flex is-align-items-center">
+              <label class="checkbox">
+                <input type="checkbox" name="is_placed" {% if request.GET.is_placed %}checked{% endif %}>
+                Not placed
+              </label>
+            </div>
+          </div>
+        </div>
+
     </form>
 
   </div>
   <!-- Product Table-->
-  {% if request.resolver_match.url_name == 'invoice-search' %}
+  {% if request.resolver_match.url_name == 'product-search' %}
     <div style="display: flex; justify-content: center; height: 100%;">
       <div class="notification is-success">
-        {% if not invoices %}
-          Δεν βρέθηκαν αποτελέσματα τιμολογιών με προμηθευτή: {{query}}.
+        {% if not products %}
+          Δεν βρέθηκαν αποτελέσματα στοκ με {{search_option }}: {{query}}.
         {% else %}
-          Bρέθηκαν {{invoices|length}} Τιμολόγια του {{query}}.
+          Bρέθηκαν {{stocks|length}} στοκ με {{search_option }}: {{query}}.
         {% endif %}
       </div>
     </div>
@@ -117,39 +135,64 @@
       <table class="table is-fullwidth is-striped is-hoverable is-sortable is-fullwidth">
         <thead>
           <tr>
-            <th>Invoice No.</th>
-            <th>Ημ.Εκδοσης</th>
-            <th>Προμηθευτής</th>
-            <th>Φ.Π.Α</th>
-
-            <th>Σύνολο</th>
+            <th>Stock</th>
+            <th>Ημ.Ληξης</th>
+            <th>Υπολοιπο</th>
+            <th>Τοποθετημενο</th>
+            <th>Διαθεσιμο</th>
             <th>Actions</th>
           </tr>
         </thead>
         <tbody>
-          {% for invoice in invoices %}
+          {% for stock in stocks %}
             <tr>
-              <td data-label="Invoice No.">{{ invoice.invoice_no }}</td>
-              <td data-label="Ημ.Εκδοσης">{{invoice.date_of_issuance.date}}</td>
-              <td data-label="Προμηθευτής"> {{invoice.supplier.company}}</td>
-              <td data-label="Φ.Π.Α"> {{ invoice.total_taxes}} &#x20AC;</td>
-              <td data-label="Σύνολο"> {{ invoice.total }} &#x20AC;</td>
-
+              <td data-label="Stock">{{stock.item}}/<strong>{{stock.sku}}</strong>  </td>
+              <td data-label="Ημ.Ληξης">
+                  {% if stock.expiration_date %}
+                    {{stock.expiration_date}}
+                  {% else %}
+                    NOT SET
+                  {% endif %}
+              </td>
+                <td data-label="Ποσοτητα">{{stock.retrieved|floatformat:0}}/{{stock.start_quantity|floatformat:0}} </td>
+              <td data-label="Τοποθετημενο">
+                {% if stock.is_placed %}
+                  <span class="icon has-text-success ">
+                    <i class="mdi mdi-check-decagram "></i>
+                  </span>
+                {% else %}
+                    <span class="icon has-text-danger ">
+                      <i class="mdi mdi-cancel "></i>
+                    </span>
+                {% endif %}
+              </td>
+              <td data-label="Διαθεσιμο">
+                {% if not stock.deplete %}
+                  <span class="icon has-text-success ">
+                    <i class="mdi mdi-check-decagram "></i>
+                  </span>
+                {% else %}
+                    <span class="icon has-text-danger ">
+                      <i class="mdi mdi-cancel "></i>
+                    </span>
+                {% endif %}
+              </td>
 
               <td class="is-actions-cell">
                 <div class="buttons is-right">
-                  <a href="{{ invoice.get_absolute_url }}"
+                    <a href="#"
                      class="button is-small is-info" type="button">
                     <span class="icon"><i class="mdi mdi-eye"></i></span>
                   </a>
+
                 </div>
               </td>
-            </tr>
+                </tr>
           {% empty %}
-            {% if request.resolver_match.url_name == 'invoice-list' %}
+            {% if request.resolver_match.url_name == 'stock-list' %}
               <div style="display: flex; justify-content: center; height: 100%;">
                 <div class="notification is-success">
-                  Δεν υπάρχουν ακόμα αποθηκευμένα τιμολόγια.
+                  Δεν υπάρχει ακόμα αποθηκευμένο στοκ.
                 </div>
               </div>
             {% endif%}

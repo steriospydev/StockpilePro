@@ -1,11 +1,14 @@
 from django.shortcuts import render
 from django.db.models import Count, Q, Case, When, BooleanField
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.views.generic import (ListView, DetailView,
+                                  CreateView, UpdateView, DeleteView)
+from django.contrib.postgres.search import TrigramSimilarity
+from django.db.models.functions import Coalesce
+from django.contrib.postgres.search import SearchVector
 
-from .models import Storage, Section, Spot, Bin
-
-from django.db.models import Count, Q
-from django.shortcuts import render
-from .models import Storage, Bin
+from .models import (Storage, Bin, Section, Spot,
+                     Stock, PlaceStock)
 
 def storehouse_home(request):
     storages = Storage.objects.prefetch_related('storage_bins').annotate(
@@ -70,3 +73,76 @@ def storage_bins_page(request, pk):
         'free_floor': floor_available
     }
     return render(request, 'storehouse/storehouse_detail.html', context)
+
+
+class BaseStockList(LoginRequiredMixin, ListView):
+    """
+    Base view for displaying a list of stocks.
+    """
+
+    model = Stock
+    template_name = 'storehouse/ops/stock_list.html'
+    context_object_name = 'stocks'
+    paginate_by = 10
+    queryset = Stock.objects.all()
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        return queryset
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['total_stock'] = self.queryset.filter(deplete=False).count()
+        return context
+
+class StockList(BaseStockList):
+    """
+    Display all products
+    """
+    paginate_by = 10
+
+
+class SearchConstructMixin:
+    """
+    Class that provides search functionality for stocks
+    """
+    q = 'q'
+
+    def search_construct(self, term):
+        stocks = Stock.objects.all().annotate(
+            search_vector=SearchVector('sku', 'item__product__product_name')
+        ).filter(
+            Q(search_vector=term) | Q(item__product__product_name__icontains=term)
+        )
+        return stocks
+
+class StockSearchView(BaseStockList, SearchConstructMixin):
+    """
+    Display search results for Supplier.
+    """
+    def get_queryset(self):
+        return super().get_queryset()
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        query = self.request.GET.get(self.q)
+        deplete = self.request.GET.get('deplete')
+        is_placed = self.request.GET.get('is_placed')
+        filters = {}
+        if deplete:
+            filters['deplete'] = True
+        if is_placed:
+            filters['is_placed'] = False
+        if query:
+            stocks = self.search_construct(query).filter(**filters)
+            context.update({
+                'stocks': stocks,
+                'query': query
+            })
+        else:
+            stocks = Stock.objects.filter(**filters)
+            context.update({
+                'stocks': stocks,
+            })
+
+        return context

@@ -9,7 +9,7 @@
 <div class="tile is-ancestor mx-5 has-background-dark">
     <!-- General Info-->
     <div class="tile is-parent">
-      <div class="card tile is-child has-background-dark has-text-white">
+      <div class="card tile is-child has-background-dark has-text-warning">
         <div class="card-content">
           <div class="level is-mobile">
             <div class="level-item">
@@ -18,11 +18,11 @@
                   </h3>
                   <ul>
                     <li class="is-italic">Αριθμός</li>
-                    <li class="mb-2 has-background-white"><strong> {{ invoice.invoice_no}}</strong></li>
+                    <li class="mb-2" ><strong style="color:white;"> {{ invoice.invoice_no}}</strong></li>
                     <li class="is-italic">Προμηθευτής</li>
-                    <li class="mb-2 has-background-white"> <strong>{{ invoice.supplier.company }}</strong></li>
+                    <li class="mb-2"> <strong style="color:white;">{{ invoice.supplier.company }}</strong></li>
                     <li class="is-italic">Ημ.Έκδοσης</li>
-                    <li class="mb-2 has-background-white"> <strong>{{ invoice.date_of_issuance.date }}</strong></li>
+                    <li class="mb-2 "> <strong style="color:white;">{{ invoice.date_of_issuance.date }}</strong></li>
 
                   </ul>
 
@@ -53,25 +53,25 @@
     </div>
     <!-- Payment Info-->
     <div class="tile is-parent">
-      <div class="card tile is-child">
+      <div class="card tile is-child has-background-warning">
         <div class="card-content">
           <div class="level is-mobile">
             <div class="level-item">
-              <div class="is-widget-label "><h3 class="subtitle is-spaced mb-2">
+              <div class="is-widget-label "><h3 class="subtitle is-spaced mb-2 has-text-dark">
                 Στοιχεία Πληρωμής
               </h3>
                   <ul>
-                    <li class="is-italic">Μερικό Σύνολο</li>
-                    <li class="mb-2"><strong> {{invoice.subtotal }} &#x20AC;</strong></li>
-                    <li class="is-italic">Φόροι Τιμολογίου</li>
-                    <li class="mb-2"> <strong>{{ invoice.total_taxes }} &#x20AC;</strong></li>
-                      <li class="is-italic">Σύνολο</li>
-                    <li class="mb-2"><strong> {{ invoice.total }} &#x20AC;</strong></li>
+                    <li class="is-italic"><strong>Μερικό Σύνολο</strong></li>
+                    <li class="mb-2"> {{invoice.subtotal }} &#x20AC;</li>
+                    <li class="is-italic"><strong>Φόροι Τιμολογίου</strong></li>
+                    <li class="mb-2"> {{ invoice.total_taxes }} &#x20AC;</li>
+                      <li class="is-italic"><strong>Σύνολο</strong></li>
+                    <li class="mb-2"> {{ invoice.total }} &#x20AC;</li>
                   </ul>
               </div>
             </div>
             <div class="level-item has-widget-icon">
-              <div class="is-widget-icon"><span class="icon has-text-danger is-large"><i
+              <div class="is-widget-icon"><span class="icon has-text-dark is-large"><i
                   class="mdi mdi-wallet-outline mdi-48px"></i></span>
               </div>
             </div>

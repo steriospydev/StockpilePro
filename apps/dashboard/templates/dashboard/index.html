@@ -13,7 +13,14 @@
   box-shadow: 0px 0px 53px rgba(0, 0, 0, 0.5); /* add a shadow */
   width: 70%; /* reduce width to 80% */
   margin: 10px auto; /* center the box horizontally */
-  padding: 10px; /* add some padding */
+  padding: 15px; /* add some padding */
+  border-radius: 10px;
+
+}
+.myform input{
+  width: 100%;
+  border: 1px solid;
+
 
 }
 .media-content{
@@ -23,6 +30,7 @@ overflow: hidden; // hide horizontal
 .button-width{
     max-width: 100px;
 }
+
 {% endblock%}
 {% block content %}
 {% include 'Component/page_title.html' with tab1='Dashboard' %}
@@ -123,23 +131,22 @@ overflow: hidden; // hide horizontal
       </div>
 
 <div class="container">
-    <div class="row myform">
-        <div class="col ">
+    <div class="row myform has-background-dark">
+        <div class="col">
             <form method="POST" action="{% url 'dashboard:index' %}" >
                 {% csrf_token %}
                 <div class="field is-horizontal">
                     <div class="field-body">
-                        <div class="field ml-6">
+                        <div class="field mx-2">
                             <div class="control">
-                                <button class="button is-dark " type="submit">Ανακοίνωση</button>
+                                <button class="button is-warning is-outlined " type="submit">Ανακοίνωση</button>
                             </div>
                         </div>
-                        <div class="field is-fullwidth">
+                        <div class="field mx-2">
                             <div class="control">
                                 {{ form.task }}
                             </div>
                         </div>
-
                     </div>
                 </div>
             </form>

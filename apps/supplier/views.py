@@ -12,15 +12,18 @@ from .forms import SupplierForm
 class BaseSupplierList(LoginRequiredMixin, ListView):
     template_name = 'supplier/supplier_list.html'
     context_object_name = 'suppliers'
-    paginate_by = 5
+    # paginate_by = 5
     login_url = '/'
 
     def get_queryset(self):
-        active = self.request.GET.get('active')
-        if active == 'false':
-            return Supplier.objects.filter(is_active=False)
-        else:
-            return Supplier.active.all()
+        return Supplier.objects.all()
+
+    # def get_queryset(self):
+    #     active = self.request.GET.get('active')
+    #     if active == 'false':
+    #         return Supplier.objects.filter(is_active=False)
+    #     else:
+    #         return Supplier.active.all()
 
 class SearchConstructMixin:
     q = 'q'

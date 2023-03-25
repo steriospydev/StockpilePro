@@ -24,7 +24,7 @@ urlpatterns = [
          views.SubCategoryUpdateView.as_view(),
          name='subcategory-update'),
     # product
-    path('all/', views.ProductList.as_view(), name='product-list'),
+    path('', views.ProductList.as_view(), name='product-list'),
     path('new/', views.ProductCreateView.as_view(), name='product-create'),
     path('<int:pk>/', views.ProductDetailView.as_view(), name='product-detail'),
     path('<int:pk>/edit/', views.ProductUpdateView.as_view(), name='product-update'),

@@ -21,7 +21,8 @@ class BaseInvoiceList(LoginRequiredMixin, ListView):
     template_name = 'invoice/invoice_list.html'
     context_object_name = 'invoices'
     paginate_by = 10
-    queryset = Invoice.objects.annotate(num_items=Count('id')).select_related('supplier')
+    queryset = Invoice.objects.annotate(
+        num_items=Count('id')).select_related('supplier').order_by('-created_at')
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
