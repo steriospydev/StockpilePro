@@ -84,14 +84,14 @@ class InvoiceItem(models.Model):
                                      max_digits=8, decimal_places=2,
                                      blank=True)
 
-    def get_absolute_url(self):
-        return reverse('invoice:invoice-item-update', args=[self.invoice.id, self.id])
-
     class Meta:
         unique_together = ('invoice', 'product')
 
     def __str__(self):
         return f'{self.product}'
+
+    def get_absolute_url(self):
+        return reverse('invoice:invoice-item-update', args=[self.invoice.id, self.id])
 
     def get_tax_rate(self):
         return self.product.tax_rate.value

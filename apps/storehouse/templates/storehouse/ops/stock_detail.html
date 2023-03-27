@@ -63,7 +63,7 @@
                     <ul>
                         <li class="mb-4">
                             <a class="button is-small is-success is-outlined"
-                           href="#">
+                           href="{% url 'storehouse:stock-place' pk=stock.id %}">
                             <strong>Νεα Τοποθέτηση</strong></a>
                         </li>
                         <li class="mb-4">
@@ -74,11 +74,12 @@
                         <li class="is-italic">Τιμη Αγορας</li>
                         <li class="mb-2" ><strong style="color:white;"> {{ stock.item.unit_price }} &#x20AC;</strong></li>
                         <li class="is-italic">Αρχικη Ποσοτητα</li>
-                        <li class="mb-2" ><strong style="color:white;"> {{ stock.start_quantity }}</strong></li>
+                        <li class="mb-2" ><strong style="color:white;"> {{ stock.start_quantity|floatformat:0 }}</strong></li>
                         <li class="is-italic">Τοποθετημενη</li>
-                        <li class="mb-2" ><strong style="color:white;"> {{ stock.stock_placed }}</strong></li>
-                        <li class="is-italic">Υπολοιπο</li>
-                        <li class="mb-2" ><strong style="color:white;"> {{ stock.retrieved }}</strong></li>
+                        <li class="mb-2" ><strong style="color:white;"> {{ stock.stock_placed |floatformat:0}}</strong></li>
+                        <li class="is-italic">Εξαγωγή</li>
+                        <li class="mb-2"
+                        ><strong style="color:white;"> {{ stock.retrieved|floatformat:0 }}/{{stock.start_quantity|floatformat:0}}</strong></li>
                     </ul>
               </div>
             </div>
@@ -96,17 +97,27 @@
             <th>Αποθήκη</th>
             <th>Θέση</th>
             <th>Ποσότητα </th>
-            <th>Εξαντλημένο</th>
+            <th>Διαθεσιμο</th>
             <th>Actions</th>
           </tr>
         </thead>
         <tbody>
-          {% for item in invoice_items %}
+          {% for item in place_stock_objects %}
             <tr>
-              <td data-label="Αποθήκη">{{item.product}}</td>
-              <td data-label="Θέση">{{item.quantity}}</td>
-              <td data-label="Ποσότητα">{{item.line_subtotal}}</td>
-              <td data-label="Εξαντλημένο">{{item.quantity}}</td>
+              <td data-label="Αποθήκη">{{item.bin.storage}}</td>
+              <td data-label="Θέση">{{item.bin.section}}-{{item.bin.spot}}</td>
+              <td data-label="Ποσότητα">{{item.quantity|floatformat:0}}</td>
+              <td data-label="Διαθεσιμο">
+                  {% if not item.deplete %}
+                  <span class="icon has-text-success ">
+                    <i class="mdi mdi-check-decagram "></i>
+                  </span>
+                {% else %}
+                    <span class="icon has-text-danger ">
+                      <i class="mdi mdi-cancel "></i>
+                    </span>
+                {% endif %}
+              </td>
               <td class="is-actions-cell">
                 <div class="buttons is-right">
                   <a href="{{ item.get_absolute_url }}"

@@ -1,17 +1,16 @@
-from django.shortcuts import render
-from django.shortcuts import reverse
-
-from django.db.models import Count, Q, Case, When, BooleanField
+from django.shortcuts import render, reverse, get_object_or_404, redirect
+from django.urls import reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.views.generic import (ListView, DetailView,
-                                  CreateView, UpdateView, DeleteView)
 from django.contrib.postgres.search import TrigramSimilarity
+from django.db.models import Count, Q, Case, When, BooleanField
 from django.db.models.functions import Coalesce
 from django.contrib.postgres.search import SearchVector
 
+from django.views.generic import (ListView, DetailView,
+                                  CreateView, UpdateView, DeleteView)
 from .models import (Storage, Bin, Section, Spot,
                      Stock, PlaceStock)
-from .forms import StockForm
+from .forms import StockForm, PlaceStockForm
 
 def storehouse_home(request):
     storages = Storage.objects.prefetch_related('storage_bins').annotate(
@@ -90,6 +89,7 @@ class BaseStockList(LoginRequiredMixin, ListView):
 
     def get_queryset(self):
         queryset = super().get_queryset()
+        queryset = queryset.select_related('item__product__package', 'item__product__package__material')
         return queryset
 
     def get_context_data(self, **kwargs):
@@ -154,8 +154,15 @@ class StockDetailView(LoginRequiredMixin, DetailView):
     context_object_name = 'stock'
     login_url = '/'
 
+    def get_queryset(self):
+        return super().get_queryset().select_related('item__product__package__material').select_related(
+            'item__invoice__supplier')
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        # Retrieve the related PlaceStock objects
+        place_stock_objects = self.object.place_stock.all()
+        context['place_stock_objects'] = place_stock_objects
         return context
 
 class StockCreateUpdate(LoginRequiredMixin):
@@ -178,3 +185,26 @@ class StockUpdateView(StockCreateUpdate, CreateView):
         kwargs = super().get_form_kwargs()
         kwargs['instance'] = self.get_object()
         return kwargs
+
+class PlaceStockCreateUpdate(LoginRequiredMixin):
+    template_name = 'storehouse/ops/stock_place.html'
+    model = PlaceStock
+    form_class = PlaceStockForm
+    login_url = '/'
+
+    def form_valid(self, form):
+        form.instance.created_by = self.request.user
+        return super().form_valid(form)
+
+class PlaceStockCreateView(PlaceStockCreateUpdate, CreateView):
+
+    def get_initial(self):
+        initial = super().get_initial()
+        get_id = self.kwargs.get('id')
+        if get_id:
+            stock = get_object_or_404(Stock, id=get_id)
+            initial['stock'] = stock
+        return initial
+
+    def get_success_url(self):
+        return reverse_lazy('storehouse:stock-detail', kwargs={'pk': self.object.stock.id})

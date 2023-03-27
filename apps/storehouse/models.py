@@ -2,7 +2,7 @@ import random
 from django.db import models
 from django.urls import reverse
 from django.core.validators import RegexValidator
-from django.db.models.signals import pre_save, post_save
+from django.db.models.signals import pre_save, post_save, pre_delete
 from django.dispatch import receiver
 
 from apps.utils import signals
@@ -93,8 +93,10 @@ class UseManager(models.Manager):
         return super().get_queryset().filter(in_use=True)
 
 class Bin(TimeStamp, BinType):
-    storage = models.ForeignKey(Storage, on_delete=models.CASCADE, related_name='storage_bins')
-    section = models.ForeignKey(Section, on_delete=models.CASCADE, related_name='section_bins')
+    storage = models.ForeignKey(Storage, on_delete=models.CASCADE,
+                                related_name='storage_bins')
+    section = models.ForeignKey(Section, on_delete=models.CASCADE,
+                                related_name='section_bins')
     spot = models.ForeignKey(Spot, on_delete=models.CASCADE, related_name='spot_bins')
     in_use = models.BooleanField('Σε χρηση', default=False)
 
@@ -111,6 +113,11 @@ class Bin(TimeStamp, BinType):
 
     def __str__(self):
         return f'{self.storage}/{self.section}-{self.spot}{self.bin_type}'
+
+
+class StockManager(models.Manager):
+    def get_queryset(self):
+        return super().get_queryset().prefetch_related('item')
 
 class Stock(TimeStamp):
     item = models.OneToOneField(InvoiceItem, on_delete=models.CASCADE,
@@ -129,6 +136,8 @@ class Stock(TimeStamp):
 
     sku = models.CharField('SKU', max_length=9, unique=True,
                            blank=True, null=True, editable=False)
+
+    objects = StockManager()
 
     class Meta:
         verbose_name = 'Στοκ'
@@ -164,7 +173,7 @@ class Stock(TimeStamp):
             return True
         return False
 
-    def change_is_placed(self):
+    def stock_is_placed(self):
         if self.stock_placed == self.start_quantity:
             return True
         return False
@@ -172,12 +181,14 @@ class Stock(TimeStamp):
     def save(self, *args, **kwargs):
         self.start_quantity = self.get_start_quantity()
         self.deplete = self.change_deplete_status()
-        self.is_placed = self.change_is_placed()
+        self.is_placed = self.stock_is_placed()
         super().save(*args, **kwargs)
 
 class PlaceStock(TimeStamp):
-    stock = models.ForeignKey(Stock, on_delete=models.CASCADE)
-    bin = models.ForeignKey(Bin, on_delete=models.CASCADE)
+    stock = models.ForeignKey(Stock, on_delete=models.CASCADE,
+                              related_name='place_stock')
+    bin = models.ForeignKey(Bin, on_delete=models.CASCADE,
+                            related_name='stock_bin')
     deplete = models.BooleanField('Εξαντλημενο', default=False)
     quantity = models.DecimalField("Ποσότητα", max_digits=8,
                                    decimal_places=2, default=0)
@@ -191,11 +202,12 @@ class PlaceStock(TimeStamp):
         max_stock_left = self.stock.start_quantity - self.stock.stock_placed
         if self.quantity >= max_stock_left:
             self.quantity = max_stock_left
-            self.stock.stock_placed += max_stock_left
+            self.stock.stock_placed = self.stock.start_quantity
         if self.quantity < max_stock_left:
             self.stock.stock_placed += self.quantity
 
         self.stock.save()
+        print(f"Updated stock_placed to {self.stock.stock_placed}")
 
     def update_bin_use(self):
         self.bin.in_use = True
@@ -205,6 +217,22 @@ class PlaceStock(TimeStamp):
         self.update_stock_stock_placed()
         self.update_bin_use()
         super().save(*args, **kwargs)
+
+    def delete(self, *args, **kwargs):
+        print(f"Before update: stock_placed={self.stock.stock_placed}, is_placed={self.stock.is_placed}")
+        # Calculate the new stock_placed value
+        self.stock.stock_placed -= self.quantity
+        if self.stock.stock_placed < 0:
+            self.stock.stock_placed = 0
+        self.stock.is_placed = False
+
+        # Save the changes to the Stock object
+        self.stock.save()
+
+        print(f"After update: stock_placed={self.stock.stock_placed}, is_placed={self.stock.is_placed}")
+        # Call the superclass delete method to delete the PlaceStock object
+        super().delete(*args, **kwargs)
+
 
 # class RetrieveStock(TimeStamp):
 #     placed_stock = models.ForeignKey(PlaceStock, on_delete=models.CASCADE)
@@ -224,7 +252,31 @@ def create_or_update_stock(sender, instance, created, **kwargs):
         stock.save()
     else:
         try:
-            stock = instance.stock
+            stock = Stock.objects.get(item=instance)
         except Stock.DoesNotExist:
             return
         stock.save()
+
+@receiver(pre_delete, sender=PlaceStock)
+def update_stock_on_placestock_delete(sender, instance, **kwargs):
+    # Calculate the new stock_placed value
+    instance.stock.stock_placed -= instance.quantity
+    instance.bin.in_use = False
+    instance.bin.save()
+    if instance.stock.stock_placed < 0:
+        instance.stock.stock_placed = 0
+    instance.stock.is_placed = False
+
+    # Save the changes to the Stock object
+    instance.stock.save()
+
+@receiver(pre_delete, sender=InvoiceItem)
+def delete_stock_instance(sender, instance, **kwargs):
+    stock = Stock.objects.get(item=instance)
+
+    # Delete all PlaceStock objects that are connected to the Stock object
+    place_stocks = PlaceStock.objects.filter(stock=stock)
+    place_stocks.delete()
+
+    # Delete the Stock object
+    stock.delete()
