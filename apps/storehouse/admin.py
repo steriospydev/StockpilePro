@@ -43,23 +43,40 @@ class StockAdmin(admin.ModelAdmin):
 class PlaceStockForm(forms.ModelForm):
     class Meta:
         model = PlaceStock
-        exclude = []
+        fields = ['stock', 'bin', 'quantity', 'exit_stock', 'deplete']
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields['stock'].queryset = Stock.objects.filter(is_placed=False).select_related(
-            'item__product__package',
-            'item__product__package__material'
-        )
-        self.fields['bin'].queryset = Bin.objects.filter(in_use=False).select_related('storage',
-                                                                                      'section',
-                                                                                      'spot')
+
+        # Check if the form instance has an instance of PlaceStock
+        if self.instance.pk:
+            # Fetch the related objects using select_related
+            self.fields['stock'].queryset = Stock.objects.filter(pk=self.instance.stock.pk).select_related(
+                'item__product__package',
+                'item__product__package__material')
+            self.fields['bin'].queryset = Bin.objects.filter(pk=self.instance.bin.pk).select_related('storage',
+                                                                                                     'section',
+                                                                                                     'spot')
+
+            # Set the stock and bin fields to disabled, since they are already set
+            self.fields['stock'].disabled = True
+            self.fields['bin'].disabled = True
+
+        else:
+            # Set the queryset for the stock and bin fields as before
+            self.fields['stock'].queryset = Stock.objects.filter(is_placed=False).select_related(
+                'item__product__package',
+                'item__product__package__material'
+            )
+            self.fields['bin'].queryset = Bin.objects.filter(in_use=False).select_related('storage',
+                                                                                          'section',
+                                                                                          'spot')
 
 
 class PlaceStockAdmin(admin.ModelAdmin):
     model = PlaceStock
     form = PlaceStockForm
-    list_display = ('stock', 'quantity', 'bin', 'deplete')
+    list_display = ('stock', 'quantity', 'bin', 'exit_stock', 'deplete')
 
 
 admin.site.register(PlaceStock, PlaceStockAdmin)

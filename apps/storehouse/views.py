@@ -162,7 +162,9 @@ class StockDetailView(LoginRequiredMixin, DetailView):
         context = super().get_context_data(**kwargs)
         # Retrieve the related PlaceStock objects
         place_stock_objects = self.object.place_stock.all()
-        context['place_stock_objects'] = place_stock_objects
+
+        context['place_stock_objects'] = place_stock_objects.select_related(
+            'bin__storage', 'bin__section', 'bin__spot')
         return context
 
 class StockCreateUpdate(LoginRequiredMixin):
@@ -208,3 +210,7 @@ class PlaceStockCreateView(PlaceStockCreateUpdate, CreateView):
 
     def get_success_url(self):
         return reverse_lazy('storehouse:stock-detail', kwargs={'pk': self.object.stock.id})
+
+
+def retrieve_stock(request, placestock_id):
+    pass

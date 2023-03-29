@@ -61,11 +61,19 @@
             <div class="level-item has-widget-icon">
                 <div class="is-widget-icon ">
                     <ul>
+                        {% if stock.is_placed %}
+                            <li class="mb-4">
+                            <a class="button is-small is-success"
+                           href="#">
+                            <strong>Τoποθετημένο</strong></a>
+                        </li>
+                        {% else %}
                         <li class="mb-4">
                             <a class="button is-small is-success is-outlined"
                            href="{% url 'storehouse:stock-place' pk=stock.id %}">
                             <strong>Νεα Τοποθέτηση</strong></a>
                         </li>
+                        {% endif %}
                         <li class="mb-4">
                             <a class="button is-small is-danger is-outlined"
                            href="#">
@@ -97,6 +105,7 @@
             <th>Αποθήκη</th>
             <th>Θέση</th>
             <th>Ποσότητα </th>
+            <th>Εξαγωγη</th>
             <th>Διαθεσιμο</th>
             <th>Actions</th>
           </tr>
@@ -105,8 +114,9 @@
           {% for item in place_stock_objects %}
             <tr>
               <td data-label="Αποθήκη">{{item.bin.storage}}</td>
-              <td data-label="Θέση">{{item.bin.section}}-{{item.bin.spot}}</td>
+              <td data-label="Θέση">{{item.bin.section}}-{{item.bin.spot}}{{item.bin.bin_type}}</td>
               <td data-label="Ποσότητα">{{item.quantity|floatformat:0}}</td>
+              <td data-label="Εξαγωγη">{{item.exit_stock|floatformat:0}}</td>
               <td data-label="Διαθεσιμο">
                   {% if not item.deplete %}
                   <span class="icon has-text-success ">
@@ -124,6 +134,7 @@
                      class="button is-small is-info" type="button">
                     <span class="icon"><i class="mdi mdi-eye"></i></span>
                   </a>
+
                 </div>
               </td>
             </tr>

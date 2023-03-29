@@ -192,6 +192,8 @@ class PlaceStock(TimeStamp):
     deplete = models.BooleanField('Εξαντλημενο', default=False)
     quantity = models.DecimalField("Ποσότητα", max_digits=8,
                                    decimal_places=2, default=0)
+    exit_stock = models.DecimalField('Εξαγωγη', max_digits=12,
+                                     decimal_places=2, default=0)
 
     class Meta:
         verbose_name = 'Τοποθετηση'
@@ -207,19 +209,36 @@ class PlaceStock(TimeStamp):
             self.stock.stock_placed += self.quantity
 
         self.stock.save()
-        print(f"Updated stock_placed to {self.stock.stock_placed}")
 
     def update_bin_use(self):
-        self.bin.in_use = True
+        if self.exit_stock == self.quantity:
+            self.bin.in_use = False
+            self.deplete = True
+        else:
+            self.bin.in_use = True
         self.bin.save()
 
+    def validate_exit_stock(self):
+        if self.exit_stock >= self.quantity:
+            self.exit_stock = self.quantity
+        return
+
+    def update_stock_retrieved(self):
+        objs = PlaceStock.objects.filter(stock=self.stock)
+        sum_retrieved = 0
+        for obj in objs:
+            sum_retrieved += obj.exit_stock
+        self.stock.retrieved = sum_retrieved
+        self.stock.save()
+
     def save(self, *args, **kwargs):
-        self.update_stock_stock_placed()
+        if not self.stock.is_placed:
+            self.update_stock_stock_placed()
+        self.validate_exit_stock()
         self.update_bin_use()
         super().save(*args, **kwargs)
 
     def delete(self, *args, **kwargs):
-        print(f"Before update: stock_placed={self.stock.stock_placed}, is_placed={self.stock.is_placed}")
         # Calculate the new stock_placed value
         self.stock.stock_placed -= self.quantity
         if self.stock.stock_placed < 0:
@@ -229,21 +248,17 @@ class PlaceStock(TimeStamp):
         # Save the changes to the Stock object
         self.stock.save()
 
-        print(f"After update: stock_placed={self.stock.stock_placed}, is_placed={self.stock.is_placed}")
         # Call the superclass delete method to delete the PlaceStock object
         super().delete(*args, **kwargs)
 
 
-# class RetrieveStock(TimeStamp):
-#     placed_stock = models.ForeignKey(PlaceStock, on_delete=models.CASCADE)
-#     quantity = models.DecimalField("Ποσότητα", max_digits=8,
-#                                    decimal_places=2, default=0)
-
-
 # signals
-pre_save.connect(lambda sender, instance, **kwargs:
-                 signals.generate_stock_sku(sender, instance),
-                 sender=Stock)
+
+
+@receiver(pre_save, sender=Stock)
+def generate_stock_sku(sender, instance, *args, **kwargs):
+    if not instance.sku:
+        instance.sku = instance.generate_sku_num()
 
 @receiver(post_save, sender=InvoiceItem)
 def create_or_update_stock(sender, instance, created, **kwargs):
@@ -255,7 +270,17 @@ def create_or_update_stock(sender, instance, created, **kwargs):
             stock = Stock.objects.get(item=instance)
         except Stock.DoesNotExist:
             return
+        stock.quantity = instance.quantity
         stock.save()
+
+@receiver(pre_save, sender=PlaceStock)
+def update_stock_retrieved_on_save(sender, instance, **kwargs):
+    # Calculate the new stock_placed value
+    instance.update_stock_retrieved()
+
+    # Save the changes to the Stock object
+    instance.stock.save()
+
 
 @receiver(pre_delete, sender=PlaceStock)
 def update_stock_on_placestock_delete(sender, instance, **kwargs):
@@ -269,6 +294,16 @@ def update_stock_on_placestock_delete(sender, instance, **kwargs):
 
     # Save the changes to the Stock object
     instance.stock.save()
+
+@receiver(post_save, sender=PlaceStock)
+def update_exit_stock(sender, instance, **kwargs):
+    if instance.exit_stock >= instance.quantity:
+        instance.exit_stock = instance.quantity
+        instance.bin.in_use = False
+        instance.deplete = True
+    instance.stock.retrieved += instance.exit_stock
+    instance.stock.save()
+    instance.bin.save()
 
 @receiver(pre_delete, sender=InvoiceItem)
 def delete_stock_instance(sender, instance, **kwargs):
