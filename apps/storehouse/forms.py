@@ -1,6 +1,7 @@
 from django import forms
 from django.forms import Select
 from django.core.exceptions import ValidationError
+from django.db.models import Q
 
 from .models import Stock, PlaceStock, Bin
 
@@ -39,6 +40,36 @@ class PlaceStockForm(forms.ModelForm):
             'item__product__package',
             'item__product__package__material'
         )
+
         self.fields['bin'].queryset = Bin.objects.filter(in_use=False).select_related('storage',
                                                                                       'section',
                                                                                       'spot')
+
+class ExitStockForm(forms.ModelForm):
+    class Meta:
+        model = PlaceStock
+        fields = ['quantity', 'exit_stock','bin', 'deplete']
+        widgets = {
+
+            'quantity': forms.NumberInput(attrs={
+                'class': 'input is-small is-rounded',
+                'style': 'width: 50%;',
+
+            }),
+            'exit_stock': forms.NumberInput(attrs={
+                'class': 'input is-small is-rounded',
+                'style': 'width: 50%;',
+            }),
+            'deplete': forms.CheckboxInput(attrs={'class': 'checkbox'}),
+        }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # Get the current instance
+        instance = kwargs.get('instance')
+        # Filter the bin queryset based on in_use flag and current bin
+        self.fields['bin'].queryset = Bin.objects.filter(Q(in_use=False) | Q(pk=instance.bin.pk)).select_related(
+            'storage', 'section', 'spot')
+        # Set the current value of bin as the initial value
+        initial_bin = instance.bin if instance else None
+        self.fields['bin'].initial = initial_bin

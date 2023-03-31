@@ -10,7 +10,7 @@ from django.views.generic import (ListView, DetailView,
                                   CreateView, UpdateView, DeleteView)
 from .models import (Storage, Bin, Section, Spot,
                      Stock, PlaceStock)
-from .forms import StockForm, PlaceStockForm
+from .forms import StockForm, PlaceStockForm, ExitStockForm
 
 def storehouse_home(request):
     storages = Storage.objects.prefetch_related('storage_bins').annotate(
@@ -211,6 +211,14 @@ class PlaceStockCreateView(PlaceStockCreateUpdate, CreateView):
     def get_success_url(self):
         return reverse_lazy('storehouse:stock-detail', kwargs={'pk': self.object.stock.id})
 
+class PlaceStockUpdateView(PlaceStockCreateUpdate, UpdateView):
+    context_object_name = 'placestock'
+    form_class = ExitStockForm
 
-def retrieve_stock(request, placestock_id):
-    pass
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['instance'] = self.get_object()
+        return kwargs
+
+    def get_success_url(self):
+        return reverse_lazy('storehouse:stock-detail', kwargs={'pk': self.object.stock.id})

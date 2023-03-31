@@ -210,6 +210,9 @@ class PlaceStock(TimeStamp):
         verbose_name_plural = 'Τοποθετησεις'
         ordering = ['stock__expiration_date']
 
+    def get_absolute_url(self):
+        return reverse('storehouse:stock-exit', kwargs={'pk': self.id})
+
     def validate_quantity(self):
         total_quantity = PlaceStock.objects.filter(stock=self.stock).exclude(pk=self.pk).aggregate(Sum('quantity'))['quantity__sum'] or 0
         available_quantity = self.stock.start_quantity - total_quantity
@@ -256,6 +259,22 @@ def bin_update_on_delete(sender, instance, *args, **kwargs):
     instance.bin.in_use = False
     instance.bin.save()
 
+@receiver(pre_save, sender=PlaceStock)
+def bin_update_on_change(sender, instance, *args, **kwargs):
+    # If the instance is being updated
+    if instance.pk:
+        # Get the old instance from the database
+        old_instance = PlaceStock.objects.get(pk=instance.pk)
+        # If the bin has changed
+        if old_instance.bin != instance.bin:
+            # Set the in_use field of the old bin to False
+            old_bin = old_instance.bin
+            old_bin.in_use = False
+            old_bin.save()
+            # Set the in_use field of the new bin to True
+            new_bin = instance.bin
+            new_bin.in_use = True
+            new_bin.save()
 
 # Signal from Stock
 @receiver(pre_save, sender=Stock)
