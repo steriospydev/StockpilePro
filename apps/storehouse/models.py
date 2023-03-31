@@ -2,11 +2,13 @@ import random
 from django.db import models
 from django.urls import reverse
 from django.core.validators import RegexValidator
-from django.db.models.signals import pre_save, post_save, pre_delete
+from django.db.models.signals import pre_save, post_save, pre_delete, post_delete
 from django.dispatch import receiver
+from django.db.models import Sum
 
 from apps.utils import signals
 from ..invoice.models import InvoiceItem
+
 
 # Create your models here.
 class TimeStamp(models.Model):
@@ -15,6 +17,7 @@ class TimeStamp(models.Model):
 
     class Meta:
         abstract = True
+
 
 class BinType(models.Model):
     SHELF = 'S'
@@ -32,6 +35,7 @@ class BinType(models.Model):
 
     class Meta:
         abstract = True
+
 
 class Storage(TimeStamp):
     storage_name = models.CharField("Ονομασία",
@@ -54,6 +58,7 @@ class Storage(TimeStamp):
     def __str__(self):
         return f'{self.storage_name}'
 
+
 class Section(TimeStamp):
     section_name = models.CharField('Μπλόκ', unique=True,
                                     max_length=1,
@@ -70,6 +75,7 @@ class Section(TimeStamp):
 
     def __str__(self):
         return f'{self.section_name}'
+
 
 class Spot(TimeStamp):
     spot_name = models.CharField('Θεση', unique=True,
@@ -88,9 +94,11 @@ class Spot(TimeStamp):
     def __str__(self):
         return f'{self.spot_name}'
 
+
 class UseManager(models.Manager):
     def get_queryset(self):
         return super().get_queryset().filter(in_use=True)
+
 
 class Bin(TimeStamp, BinType):
     storage = models.ForeignKey(Storage, on_delete=models.CASCADE,
@@ -118,6 +126,7 @@ class Bin(TimeStamp, BinType):
 class StockManager(models.Manager):
     def get_queryset(self):
         return super().get_queryset().prefetch_related('item')
+
 
 class Stock(TimeStamp):
     item = models.OneToOneField(InvoiceItem, on_delete=models.CASCADE,
@@ -184,6 +193,7 @@ class Stock(TimeStamp):
         self.is_placed = self.stock_is_placed()
         super().save(*args, **kwargs)
 
+
 class PlaceStock(TimeStamp):
     stock = models.ForeignKey(Stock, on_delete=models.CASCADE,
                               related_name='place_stock')
@@ -200,110 +210,74 @@ class PlaceStock(TimeStamp):
         verbose_name_plural = 'Τοποθετησεις'
         ordering = ['stock__expiration_date']
 
-    def update_stock_stock_placed(self):
-        max_stock_left = self.stock.start_quantity - self.stock.stock_placed
-        if self.quantity >= max_stock_left:
-            self.quantity = max_stock_left
-            self.stock.stock_placed = self.stock.start_quantity
-        if self.quantity < max_stock_left:
-            self.stock.stock_placed += self.quantity
-
-        self.stock.save()
-
-    def update_bin_use(self):
-        if self.exit_stock == self.quantity:
-            self.bin.in_use = False
-            self.deplete = True
-        else:
-            self.bin.in_use = True
-        self.bin.save()
+    def validate_quantity(self):
+        total_quantity = PlaceStock.objects.filter(stock=self.stock).exclude(pk=self.pk).aggregate(Sum('quantity'))['quantity__sum'] or 0
+        available_quantity = self.stock.start_quantity - total_quantity
+        if self.quantity > available_quantity:
+            self.quantity = available_quantity
+        return self.quantity
 
     def validate_exit_stock(self):
-        if self.exit_stock >= self.quantity:
-            self.exit_stock = self.quantity
-        return
-
-    def update_stock_retrieved(self):
-        objs = PlaceStock.objects.filter(stock=self.stock)
-        sum_retrieved = 0
-        for obj in objs:
-            sum_retrieved += obj.exit_stock
-        self.stock.retrieved = sum_retrieved
-        self.stock.save()
+        if self.exit_stock > self.quantity:
+            return self.quantity
+        return self.exit_stock
 
     def save(self, *args, **kwargs):
-        if not self.stock.is_placed:
-            self.update_stock_stock_placed()
-        self.validate_exit_stock()
-        self.update_bin_use()
+        self.quantity = self.validate_quantity()
+        self.exit_stock = self.validate_exit_stock()
         super().save(*args, **kwargs)
-
-    def delete(self, *args, **kwargs):
-        # Calculate the new stock_placed value
-        self.stock.stock_placed -= self.quantity
-        if self.stock.stock_placed < 0:
-            self.stock.stock_placed = 0
-        self.stock.is_placed = False
-
-        # Save the changes to the Stock object
-        self.stock.save()
-
-        # Call the superclass delete method to delete the PlaceStock object
-        super().delete(*args, **kwargs)
 
 
 # signals
+@receiver([post_save, post_delete], sender=PlaceStock)
+def update_stock_stock_placed(sender, instance, *args, **kwargs):
+    objs = PlaceStock.objects.filter(stock=instance.stock)
+    pstock = 0
+    ex_stock = 0
+    for item in objs:
+        pstock += item.quantity
+        ex_stock += item.exit_stock
+    instance.stock.stock_placed = pstock
+    instance.stock.retrieved = ex_stock
+    instance.stock.save()
+
+@receiver([pre_save, pre_delete], sender=PlaceStock)
+def stock_deplete(sender, instance, *args, **kwargs):
+    if instance.quantity == instance.exit_stock and instance.exit_stock != 0:
+        instance.bin.in_use = False
+        instance.deplete = True
+    else:
+        instance.bin.in_use = True
+        instance.deplete = False
+    instance.bin.save()
+
+@receiver(pre_delete, sender=PlaceStock)
+def bin_update_on_delete(sender, instance, *args, **kwargs):
+    instance.bin.in_use = False
+    instance.bin.save()
 
 
+# Signal from Stock
 @receiver(pre_save, sender=Stock)
 def generate_stock_sku(sender, instance, *args, **kwargs):
     if not instance.sku:
         instance.sku = instance.generate_sku_num()
 
+
+# Signals from InvoiceItem
 @receiver(post_save, sender=InvoiceItem)
 def create_or_update_stock(sender, instance, created, **kwargs):
-    if created:
+    try:
+        stock = instance.invoice_stock
+    except Stock.DoesNotExist:
+        stock = None
+
+    if created or stock is None:
         stock = Stock.objects.create(item=instance)
-        stock.save()
     else:
-        try:
-            stock = Stock.objects.get(item=instance)
-        except Stock.DoesNotExist:
-            return
-        stock.quantity = instance.quantity
+        stock.start_quantity = instance.quantity
         stock.save()
 
-@receiver(pre_save, sender=PlaceStock)
-def update_stock_retrieved_on_save(sender, instance, **kwargs):
-    # Calculate the new stock_placed value
-    instance.update_stock_retrieved()
-
-    # Save the changes to the Stock object
-    instance.stock.save()
-
-
-@receiver(pre_delete, sender=PlaceStock)
-def update_stock_on_placestock_delete(sender, instance, **kwargs):
-    # Calculate the new stock_placed value
-    instance.stock.stock_placed -= instance.quantity
-    instance.bin.in_use = False
-    instance.bin.save()
-    if instance.stock.stock_placed < 0:
-        instance.stock.stock_placed = 0
-    instance.stock.is_placed = False
-
-    # Save the changes to the Stock object
-    instance.stock.save()
-
-@receiver(post_save, sender=PlaceStock)
-def update_exit_stock(sender, instance, **kwargs):
-    if instance.exit_stock >= instance.quantity:
-        instance.exit_stock = instance.quantity
-        instance.bin.in_use = False
-        instance.deplete = True
-    instance.stock.retrieved += instance.exit_stock
-    instance.stock.save()
-    instance.bin.save()
 
 @receiver(pre_delete, sender=InvoiceItem)
 def delete_stock_instance(sender, instance, **kwargs):
