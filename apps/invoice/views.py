@@ -7,6 +7,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
 
 from django.db.models import Count
+from django.contrib.postgres.search import TrigramSimilarity
 
 from .models import Invoice, InvoiceItem
 from .forms import InvoiceForm, InvoiceItemForm
@@ -85,7 +86,36 @@ class InvoiceItemCreateView(InvoiceItemCreateUpdate, CreateView):
 class InvoiceItemUpdateView(InvoiceItemCreateUpdate, UpdateView):
     context_object_name = 'item'
 
+class SearchConstructMixin:
+    """
+    Class that provides search functionality for products
+    """
+    q = 'q'
 
+    def search_construct(self, term):
+        invoices = Invoice.objects.select_related('supplier').annotate(
+            similarity=TrigramSimilarity('supplier__company', term)
+        ).filter(similarity__gt=0.1).order_by('-similarity')
+        return invoices
+
+class InvoiceSearchView(BaseInvoiceList, SearchConstructMixin):
+    """
+    Display search results for Supplier.
+    """
+    def get_queryset(self):
+        return super().get_queryset()
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        query = self.request.GET.get(self.q)
+        if query:
+            invoices = self.search_construct(query)
+            context.update({
+                'invoices': invoices,
+                'query': query
+            })
+
+        return context
 @login_required(login_url='/')
 def invoice_create(request):
     if request.method == 'POST':

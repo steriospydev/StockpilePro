@@ -82,9 +82,9 @@
           Τιμολόγια
     </header>
   </div>
-  <!-- Product Search-->
+  <!-- Invoice Search-->
   <div class="card-content has-text-centered has-mobile">
-    <form action="#" method="get" class="field is-grouped is-horizontal-mobile">
+    <form action="{% url 'invoice:invoice-search' %}" method="get" class="field is-grouped is-horizontal-mobile">
         <div class="control is-expanded ">
             <input class="input"  value="{{ query }}" name="q" id="q"
                    type="text" placeholder="Search for invoices..">
@@ -92,7 +92,8 @@
         <div class="control">
             <button class="button is-info" type='submit'>
                 <span>Αναζήτηση</span>
-                <span class="icon has-text-light is-large"><i class="mdi mdi-account-search"></i></span>
+                <span class="icon has-text-light is-large">
+                    <i class="mdi mdi-table-search"></i></span>
             </button>
         </div>
     </form>

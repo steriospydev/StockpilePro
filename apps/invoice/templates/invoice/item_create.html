@@ -18,8 +18,10 @@
               <div class="field has-text-center mt-5">
                 <div class="control">
                   <a href="{{ invoice.get_absolute_url }}"
-                     class="button is-danger mr-6">Aκύρωση</a>
+                     class="button is-danger mr-3">Aκύρωση</a>
                     <button class="button is-success ml-5" type="Submit" >Αποθηκευση</button>
+                  <a href="{% url 'product:product-create' %}"
+                     class="button is-link ml-6">Νέο Προιόν</a>
                 </div>
               </div>
 

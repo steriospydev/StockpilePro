@@ -20,4 +20,6 @@ urlpatterns = [
     path('<int:invoice_id>/item/<int:pk>/update/',
          views.InvoiceItemUpdateView.as_view(),
          name='invoice-item-update'),
+    path('search/', views.InvoiceSearchView.as_view(),
+         name='invoice-search')
    ]
