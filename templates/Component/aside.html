@@ -90,12 +90,13 @@
         </li>
 
       </ul>
-      <p class="menu-label">About</p>
+      <p class="menu{% if request.resolver_match.url_name == 'supplier-list' %}is-active{% endif %}-label">About</p>
       <ul class="menu-list">
         <li>
-          <a href="https://justboil.me/bulma-admin-template/free-html-dashboard/" class="has-icon">
-            <span class="icon"><i class="mdi mdi-help-circle"></i></span>
-            <span class="menu-item-label">About</span>
+          <a href="{% url 'dashboard:report' %}"
+             class="{% if request.resolver_match.url_name == 'report' %}is-active{% endif %} has-icon">
+            <span class="icon"><i class="mdi mdi-chart-bar"></i></span>
+            <span class="menu-item-label">Reports</span>
           </a>
         </li>
       </ul>

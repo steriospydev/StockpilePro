@@ -1,0 +1,148 @@
+{% extends 'base.html' %}
+
+{% block title%}Αναφορα {% endblock %}
+{% block css %}
+.mybox {
+  box-shadow:30px 20px 15px rgba(0, 0, 0, 0.5); /* add a shadow */
+  width: 80%; /* reduce width to 80% */
+  margin: 10px auto; /* center the box horizontally */
+  padding: 20px; /* add some padding */
+
+}
+.myform {
+  box-shadow: 0px 0px 53px rgba(0, 0, 0, 0.5); /* add a shadow */
+  width: 70%; /* reduce width to 80% */
+  margin: 10px auto; /* center the box horizontally */
+  padding: 15px; /* add some padding */
+  border-radius: 10px;
+
+}
+.myform input{
+  width: 100%;
+  border: 1px solid;
+
+
+}
+.media-content{
+overflow: hidden; // hide horizontal
+}
+
+.button-width{
+    max-width: 100px;
+}
+
+{% endblock%}
+{% block content %}
+{% include 'Component/page_title.html' with tab1='Dashboard' tab2='Reports' %}
+
+<div class="tile is-ancestor ml-3 mr-3 ">
+    <div class="tile is-parent">
+        <div class="card tile is-child">
+          <div class="card-content has-background-dark ">
+            <div class="level is-mobile">
+              <div class="level-item ">
+                <div class="is-widget-label "><h3 class="subtitle is-spaced has-text-warning">
+                  Πουλήμενα Τεμάχια
+                </h3>
+                  <h1 class="title has-text-white">
+                      {{ product_sold|floatformat:0 }}
+                  </h1>
+                </div>
+              </div>
+              <div class="level-item has-widget-icon">
+                <div class="is-widget-icon"><span class="icon has-text-warning is-large"><i
+                    class="mdi mdi-finance mdi-48px"></i></span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    <div class="tile is-parent">
+        <div class="card tile is-child">
+          <div class="card-content has-background-dark ">
+            <div class="level is-mobile">
+              <div class="level-item ">
+                <div class="is-widget-label "><h3 class="subtitle is-spaced has-text-danger">
+                  Σύνολο Στοκ
+                </h3>
+                  <h1 class="title has-text-white">
+                      {{product_in_storages|floatformat:0}}
+                  </h1>
+                </div>
+              </div>
+              <div class="level-item has-widget-icon">
+                <div class="is-widget-icon"><span class="icon has-text-danger is-large"><i
+                    class="mdi mdi-package mdi-48px"></i></span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+</div>
+<br>
+ <div class="card has-table has-mobile-sort-spaced">
+    <header class="card-header">
+      <p class="card-header-title">
+        <span class="icon"><i class="mdi mdi-currency-eur"></i></span>
+          Κόστος ανα Προμηθευτή
+    </header>
+  </div>
+<div class="b-table has-pagination mx-5">
+    <div class="table-wrapper has-mobile-cards">
+      <table class="table is-fullwidth is-striped is-hoverable is-sortable is-fullwidth">
+        <thead>
+          <tr>
+            <th>Προμηθευτής</th>
+            <th>Συνολο Τιμολογίων</th>
+            <th>Σύνολο Φόρων</th>
+          </tr>
+        </thead>
+        <tbody >
+          {% for supplier in supplier_info %}
+            <tr >
+              <td data-label="Προμηθευτής">{{supplier.supplier__company}}</td>
+              <td data-label="Α.Φ.Μ.">{{supplier.subtotal}} &#x20AC;</td>
+              <td data-label="Τηλ.">{{supplier.total_taxes}} &#x20AC;</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+
+<br>
+  <div class="card has-table has-mobile-sort-spaced">
+    <header class="card-header">
+      <p class="card-header-title">
+        <span class="icon"><i class="mdi mdi-cart"></i></span>
+          Κορυφαία σε Πωλήσεις
+    </header>
+  </div>
+ <div class="b-table has-pagination mx-5">
+    <div class="table-wrapper has-mobile-cards">
+      <table class="table is-fullwidth is-striped is-hoverable is-sortable is-fullwidth">
+        <thead>
+          <tr>
+            <th>Προιόν</th>
+            <th>Συνολο Πωλημένων </th>
+          </tr>
+        </thead>
+        <tbody >
+          {% for p in most_retrieved_product %}
+            <tr >
+              <td data-label="Προμηθευτής">{{p.item__product__product_name}}</td>
+              <td data-label="Α.Φ.Μ.">{{p.total_item_sold}}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+<br>
+
+
+{% endblock %}
