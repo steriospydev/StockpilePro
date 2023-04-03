@@ -29,5 +29,15 @@ urlpatterns = [
     path('<int:pk>/', views.ProductDetailView.as_view(), name='product-detail'),
     path('<int:pk>/edit/', views.ProductUpdateView.as_view(), name='product-update'),
     path('<int:pk>/delete', views.ProductDeleteView.as_view(), name='product-delete'),
-    path('search/', views.ProductSearchView.as_view(), name='product-search')
+    path('search/', views.ProductSearchView.as_view(), name='product-search'),
+
+    # misc
+    path('tax/new/', views.TaxCreateView.as_view(),
+         name='tax-create'),
+    path('material/new/', views.MaterialCreateView.as_view(),
+         name='material-create'),
+    path('package/new/', views.PackageCreateView.as_view(),
+         name='package-create'),
+    path('subcategory/new/', views.SubFullCreateView.as_view(),
+         name='fullsub-create')
 ]

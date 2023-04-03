@@ -2,7 +2,7 @@ from django import forms
 from django.forms import Select, FileInput
 from django.core.exceptions import ValidationError
 
-from .models import Category, Product, SubCategory
+from .models import Category, Product, SubCategory, Tax, Package, Material
 
 class CategoryForm(forms.ModelForm):
     class Meta:
@@ -46,4 +46,60 @@ class ProductForm(forms.ModelForm):
             'available': forms.CheckboxInput(attrs={'class': 'checkbox'}),
             'online_sell': forms.CheckboxInput(attrs={'class': 'checkbox'}),
             'tax_rate': forms.Select(attrs={'class': 'select'}),
+        }
+
+class SubCategoryFullForm(forms.ModelForm):
+    class Meta:
+        model = SubCategory
+        fields = ['subcategory_name', 'category']
+        labels = {
+            'subcategory_name': 'Υποκατηγορία',
+            'category': 'Κατηγορία',
+        }
+        widgets = {
+            'category_name': forms.TextInput(attrs={'class': 'input is-small is-rounded',
+                                                    'style': 'width: 50%;'}),
+            'category': forms.Select(attrs={'class': 'select is-small is-rounded',
+                                            'style': 'width: 50%;'}),
+        }
+
+class TaxForm(forms.ModelForm):
+    class Meta:
+        model = Tax
+        fields = ['value']
+        labels = {
+            'value': 'Συντελεστης ΦΠΑ',
+        }
+        widgets = {
+            'value': forms.NumberInput(attrs={
+                'class': 'input is-small is-rounded',
+                'style': 'width: 50%;',
+            })
+        }
+
+class PackageForm(forms.ModelForm):
+    class Meta:
+        model = Package
+        fields = ['material', 'package_unit', 'package_quantity']
+        labels = {
+            'package_unit': 'Μοναδα Μετρησης',
+            'package_quantity': 'Ποσοτητα',
+            'material': 'Υλικο',
+        }
+        widgets = {
+            'material': forms.Select(attrs={'class': 'input is-small is-rounded',
+                                            'style': 'width: 50%;'}),
+            'package_quantity': forms.NumberInput(attrs={'class': 'select is-small is-rounded',
+                                                         'style': 'width: 50%;'}),
+            'package_unit': forms.Select(attrs={'class': 'select is-small is-rounded',
+                                                'style': 'width: 50%;'}),
+        }
+
+
+class MaterialForm(forms.ModelForm):
+    class Meta:
+        model = Material
+        fields = ['material_name']
+        widgets = {
+            'material_name': forms.TextInput(attrs={'class': 'input'}),
         }

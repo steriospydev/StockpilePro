@@ -18,9 +18,16 @@
               <div class="field has-text-center mt-5">
                 <div class="control">
                   <a href="{% url 'product:product-list' %}"
-                     class="button is-danger mr-6">Aκύρωση</a>
-                    <button class="button is-success ml-5" type="Submit" >Αποθηκευση</button>
-                </div>
+                     class="button is-danger mb-2 mr-1">Aκύρωση</a>
+                    <button class="button is-success" type="Submit" >Αποθηκευση</button>
+
+                  <a href="{% url 'product:package-create' %}"
+                     class="button is-link mb-1">Νεα Συσκευασια</a>
+                  <a href="{% url 'product:tax-create' %}"
+                     class="button is-link ">Νεος Φόρος</a>
+                    <a href="{% url 'product:fullsub-create' %}"
+                     class="button is-link ">Νεα Υποκατηγορία</a>
+                       </div>
               </div>
 
                 <hr>

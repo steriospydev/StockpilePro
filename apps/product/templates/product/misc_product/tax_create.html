@@ -1,11 +1,11 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title%}Δημιουργία Συσκευασίας{% endblock %}
+{% block title%}Δημιουργία Φορολογικης Κλίμακας{% endblock %}
 
 {% block content %}
 
-  {% include 'Component/page_title.html' with tab1='Δημιουργία' tab2='Συσκευασία' %}
+  {% include 'Component/page_title.html' with tab1='Δημιουργία' tab2='Φορολογικης Κλίμακας' %}
 
   <div class="columns is-multiline mr-3 ml-3 ">
     <div class="column is-full-desktop  is-full-tablet is-full-mobile">
@@ -20,8 +20,7 @@
                   <a href="{% url 'product:product-create' %}"
                      class="button is-danger mr-1">Ακύρωση</a>
                   <button class="button is-success mr-5" >Αποθηκευση</button>
-                  <a href="{% url 'product:material-create' %}"
-                     class="button is-link mr-6">Νεο Υλικο</a>
+
                 </div>
               </div>
                 <br>

@@ -10,8 +10,9 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.postgres.search import TrigramSimilarity
 
 
-from .models import Category, SubCategory, Product
-from .forms import CategoryForm, ProductForm, SubCategoryForm
+from .models import (Category, SubCategory, Product, Tax, Package, Material)
+from .forms import (CategoryForm, ProductForm, SubCategoryForm,
+                    TaxForm, PackageForm, MaterialForm, SubCategoryFullForm)
 from ..invoice.models import InvoiceItem
 
 def get_invoice_report(product):
@@ -246,4 +247,69 @@ class ProductDetailView(LoginRequiredMixin, DetailView):
         context = super().get_context_data(**kwargs)
         product = self.get_object()
         context['invoice_report'] = get_invoice_report(product)
+        return context
+
+
+class TaxCreateView(LoginRequiredMixin, CreateView):
+    model = Tax
+    form_class = TaxForm
+    template_name = 'product/misc_product/tax_create.html'
+    login_url = '/'
+
+    def form_valid(self, form):
+        self.object = form.save(commit=False)
+        self.object.save()
+        success_url = reverse('product:product-create')
+        return HttpResponseRedirect(success_url)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        return context
+
+class SubFullCreateView(LoginRequiredMixin, CreateView):
+    model = SubCategory
+    form_class = SubCategoryFullForm
+    template_name = 'product/misc_product/subcategory_create.html'
+    login_url = '/'
+
+    def form_valid(self, form):
+        self.object = form.save(commit=False)
+        self.object.save()
+        success_url = reverse('product:product-create')
+        return HttpResponseRedirect(success_url)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        return context
+
+class PackageCreateView(LoginRequiredMixin, CreateView):
+    model = Package
+    form_class = PackageForm
+    template_name = 'product/misc_product/package_create.html'
+    login_url = '/'
+
+    def form_valid(self, form):
+        self.object = form.save(commit=False)
+        self.object.save()
+        success_url = reverse('product:product-create')
+        return HttpResponseRedirect(success_url)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        return context
+
+class MaterialCreateView(LoginRequiredMixin, CreateView):
+    model = Material
+    form_class = MaterialForm
+    template_name = 'product/misc_product/material_create.html'
+    login_url = '/'
+
+    def form_valid(self, form):
+        self.object = form.save(commit=False)
+        self.object.save()
+        success_url = reverse('product:package-create')
+        return HttpResponseRedirect(success_url)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
         return context

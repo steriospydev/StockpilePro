@@ -1,11 +1,11 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title%}Δημιουργία Συσκευασίας{% endblock %}
+{% block title%}Δημιουργία Υλικου Συσκευασιας{% endblock %}
 
 {% block content %}
 
-  {% include 'Component/page_title.html' with tab1='Δημιουργία' tab2='Συσκευασία' %}
+  {% include 'Component/page_title.html' with tab1='Δημιουργία' tab2='Υλικου Συσκευασιας' %}
 
   <div class="columns is-multiline mr-3 ml-3 ">
     <div class="column is-full-desktop  is-full-tablet is-full-mobile">
@@ -18,10 +18,8 @@
               <div class="field has-text-center mt-5">
                 <div class="control">
                   <a href="{% url 'product:product-create' %}"
-                     class="button is-danger mr-1">Ακύρωση</a>
-                  <button class="button is-success mr-5" >Αποθηκευση</button>
-                  <a href="{% url 'product:material-create' %}"
-                     class="button is-link mr-6">Νεο Υλικο</a>
+                     class="button is-danger mr-6">Ακύρωση</a>
+                  <button class="button is-success ml-5" >Αποθηκευση</button>
                 </div>
               </div>
                 <br>
