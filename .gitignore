@@ -61,7 +61,7 @@ cover/
 *.log
 ../.idea/
 **/migrations/**
-**/tests/**
+
 */migrations/*
 local_settings.py
 db.sqlite3

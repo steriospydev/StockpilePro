@@ -19,18 +19,18 @@ class LoginViewTestCase(BaseTestCase):
     def test_login(self):
         response = self.client.post('/', {'username': self.username, 'password': self.password})
         self.assertEqual(response.status_code, 302)
-        self.assertRedirects(response, '/index/', status_code=302)
-        self.assertTrue(response.url.endswith('index/'))
+        self.assertRedirects(response, '/bpanel/', status_code=302)
+        self.assertTrue(response.url.endswith('/bpanel/'))
         self.assertTrue(response.wsgi_request.user.is_authenticated)
 
 
 class IndexViewTestCase(BaseTestCase):
     def test_index_authenticated(self):
         self.client.login(username=self.username, password=self.password)
-        response = self.client.get('/index/')
+        response = self.client.get('/bpanel/')
         self.assertEqual(response.status_code, 200)
 
     def test_index_unauthenticated(self):
-        response = self.client.get('/index/')
+        response = self.client.get('/bpanel/')
         self.assertEqual(response.status_code, 302)
         self.assertTrue(response.url, '/')

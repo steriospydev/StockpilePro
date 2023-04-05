@@ -8,7 +8,7 @@ load_dotenv()
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
 
-LOGIN_REDIRECT_URL = 'dashboard:index'
+LOGIN_REDIRECT_URL = 'bpanel:index'
 LOGOUT_REDIRECT_URL = 'login'
 LOGIN_URL = 'login'
 LOGOUT_URL = 'login'
@@ -23,11 +23,11 @@ INSTALLED_APPS = [
     'django.contrib.postgres',
     # own
     'apps.account.apps.AccountConfig',
-    'apps.dashboard.apps.DashboardConfig',
     'apps.supplier.apps.SupplierConfig',
     'apps.storehouse.apps.StorehouseConfig',
     'apps.product.apps.ProductConfig',
     'apps.invoice.apps.InvoiceConfig',
+    'apps.bpanel.apps.BpanelConfig',
 ]
 
 MIDDLEWARE = [

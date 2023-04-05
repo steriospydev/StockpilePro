@@ -133,7 +133,7 @@ overflow: hidden; // hide horizontal
 <div class="container">
     <div class="row myform has-background-dark">
         <div class="col">
-            <form method="POST" action="{% url 'dashboard:index' %}" >
+            <form method="POST" action="{% url 'bpanel:index' %}" >
                 {% csrf_token %}
                 <div class="field is-horizontal">
                     <div class="field-body">
@@ -176,7 +176,7 @@ overflow: hidden; // hide horizontal
               </div>
               <div class="column buttons is-right p-1 m-2">
                 {%if todo.completed %}
-                    <a href="{% url 'dashboard:todo-change' todo.id %}"
+                    <a href="{% url 'bpanel:todo-change' todo.id %}"
                        class="button is-success level-item is-small button-width">
                         <span class="icon">
                             Complete
@@ -184,7 +184,7 @@ overflow: hidden; // hide horizontal
                         </span>
                     </a>
                 {% else %}
-                    <a href="{% url 'dashboard:todo-change' todo.id %}"
+                    <a href="{% url 'bpanel:todo-change' todo.id %}"
                        class="button is-danger level-item is-small  button-width">
                         <span class="icon">
                             Not Completed
@@ -192,7 +192,7 @@ overflow: hidden; // hide horizontal
                         </span>
                     </a>
                 {% endif %}
-                <a href="{% url 'dashboard:todo-remove' todo.id %}"
+                <a href="{% url 'bpanel:todo-remove' todo.id %}"
                    class="button is-warning level-item is-small  button-width">
                     <span class="icon">
                         Διαγραφή

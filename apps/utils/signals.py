@@ -13,7 +13,3 @@ def generate_sku_num(sender, instance, k=2, *args, **kwargs):
             if not sender.objects.filter(sku_num=identifier).exists():
                 break
         instance.sku_num = identifier
-
-def generate_stock_sku(sender, instance, *args, **kwargs):
-    if not instance.sku:
-        instance.sku = instance.generate_sku_num()

@@ -28,7 +28,7 @@
       <p class="menu-label">Γενικα</p>
       <ul class="menu-list">
         <li>
-          <a href="{% url 'dashboard:index' %}"
+          <a href="{% url 'bpanel:index' %}"
              class="{% if request.resolver_match.url_name == 'index' %}is-active{% endif %} router-link-active has-icon">
             <span class="icon"><i class="mdi mdi-desktop-mac"></i></span>
             <span class="menu-item-label">Dashboard</span>
@@ -93,7 +93,7 @@
       <p class="menu{% if request.resolver_match.url_name == 'supplier-list' %}is-active{% endif %}-label">About</p>
       <ul class="menu-list">
         <li>
-          <a href="{% url 'dashboard:report' %}"
+          <a href="{% url 'bpanel:report' %}"
              class="{% if request.resolver_match.url_name == 'report' %}is-active{% endif %} has-icon">
             <span class="icon"><i class="mdi mdi-chart-bar"></i></span>
             <span class="menu-item-label">Reports</span>

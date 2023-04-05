@@ -1,9 +1,9 @@
 from django import forms
-from .models import Todo
+from .models import DTask
 
-class TodoForm(forms.ModelForm):
+class DTaskForm(forms.ModelForm):
     class Meta:
-        model = Todo
+        model = DTask
         fields = ['task', 'completed']
         widgets = {
             'task': forms.TextInput(attrs={'class': 'input'}),
