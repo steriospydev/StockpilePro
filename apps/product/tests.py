@@ -108,6 +108,11 @@ class TaxModelTestCase(TestCase):
         with self.assertRaises(ValidationError):
             Tax.objects.create(value='invalid')
 
+    def test_clean_method_with_negative_value(self):
+        tax = Tax(value=-5.0)
+        with self.assertRaises(ValidationError):
+            tax.clean()
+
 class ProductModelTest(TestCase):
     def setUp(self):
         self.category = Category.objects.create(category_name='test category')
@@ -144,6 +149,10 @@ class ProductModelTest(TestCase):
         with self.assertRaises(Exception):
             new_product.save()
 
+    def test_get_absolute_url(self):
+        url = self.product.get_absolute_url()
+        self.assertEqual(url, f"/product/{self.product.id}/")
+
     def test_get_absolute_url_logged_in(self):
         self.client.login(username="testuser", password="testpass")
         url = reverse("product:product-detail", args=[str(self.product.id)])
@@ -154,6 +163,7 @@ class ProductModelTest(TestCase):
         url = reverse("product:product-detail", args=[str(self.product.id)])
         response = self.client.get(url)
         self.assertEqual(response.status_code, 302)
+
 
 # views
 class CategoryListViewTestCase(TestCase):

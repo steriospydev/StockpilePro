@@ -32,3 +32,13 @@ class SupplierTestCase(TestCase):
 
     def test_tin_length(self):
         self.assertTrue(len(self.supplier.TIN_num), 9)
+
+class ActiveManagerTestCase(TestCase):
+    def setUp(self):
+        self.active_supplier = SupplierFactory(is_active=True)
+        self.inactive_supplier = SupplierFactory(is_active=False)
+
+    def test_active_manager(self):
+        active_suppliers = Supplier.active.all()
+        self.assertIn(self.active_supplier, active_suppliers)
+        self.assertNotIn(self.inactive_supplier, active_suppliers)
