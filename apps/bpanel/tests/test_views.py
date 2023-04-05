@@ -58,6 +58,15 @@ class TestBPanelViews(TestCase):
         updated_task = DTask.objects.get(id=task.id)
         self.assertTrue(updated_task.completed)
 
+    def test_change_status_view_changes_task_status_to_false(self):
+        self.client.force_login(self.user)
+        task = DTask.objects.create(task='test task', username=self.user, completed=True)
+        change_status_url = reverse('bpanel:todo-change', args=[task.id])
+        response = self.client.post(change_status_url)
+        self.assertEqual(response.status_code, 302)
+        updated_task = DTask.objects.get(id=task.id)
+        self.assertFalse(updated_task.completed)
+
     def test_ops_report_view(self):
         self.client.force_login(self.user)
         response = self.client.get(reverse('bpanel:report'))
