@@ -2,9 +2,12 @@
 
 {% block title%}Προμηθευτής {{supplier.company}}{% endblock %}
 
+{% block bread %}
+    {% include 'Component/page_title.html' with tab1='Πληροφορίες Προμηθευτή' tab2=supplier.company %}
+
+{% endblock %}
 {% block content %}
 
-{% include 'Component/page_title.html' with tab1='Πληροφορίες Προμηθευτή' tab2=supplier.company %}
 {% include 'supplier/components/card_header.html' with currentHeader=supplier.company %}
 
 <div class="tile is-ancestor">

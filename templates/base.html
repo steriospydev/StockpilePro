@@ -16,13 +16,18 @@
     <div class="mheight" id="app">
       {% include 'Component/navbar.html' %}
       {% include 'Component/aside.html' %}
-
+      {% block bread %}{% endblock %}
       {% block content %} {% endblock %}
     </div>
 
     {% include 'Component/footer.html' %}
 
-    <script>{% block js %}{% endblock %}</script>
+    <script>{% block js %}{% endblock %}
+
+    function goBack() {
+          window.location.href = document.referrer;
+        }
+</script>
 
     <!-- Scripts below are for demo only -->
     <script type="text/javascript" src="{% static 'js/main.min.js' %}"></script>

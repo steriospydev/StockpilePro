@@ -137,3 +137,15 @@ class TestInvoiceModels(TestCase):
     def test_invoice_str_method(self):
         expected_output = f'{self.supplier.company} - {self.invoice.invoice_no}'
         self.assertEqual(str(self.invoice), expected_output)
+
+    def test_invoice_item_str_method(self):
+        expected_output = f'{self.product_1}'
+        self.assertEqual(str(self.invoice_item_1), expected_output)
+
+    def test_invoice_item_get_absolute_url(self):
+        expected_url = reverse('invoice:invoice-item-update', args=[self.invoice.id, self.invoice_item_1.id])
+        self.assertEqual(self.invoice_item_1.get_absolute_url(), expected_url)
+
+    def test_invoice_get_absolute_url(self):
+        expected_url = reverse('invoice:invoice-detail', args=[str(self.invoice.id)])
+        self.assertEqual(self.invoice.get_absolute_url(), expected_url)

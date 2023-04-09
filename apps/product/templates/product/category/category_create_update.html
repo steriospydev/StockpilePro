@@ -3,58 +3,10 @@
 
 {% block title%}Δημιουργία-Ανανέωση {% endblock %}
 
-{% block content %}
-
-  {% include 'Component/page_title.html' with tab1='Κατηγορία' tab2='Δημιουργία-Ανανέωση' %}
-
-  <div class="columns is-multiline mr-3 ml-3 ">
-    <div class="column is-full-desktop  is-full-tablet is-full-mobile">
-      <div class="card">
-        <div class="card-content has-background-dark">
-
-
-            <form method="post" class="m-3 ">
-              {% csrf_token %}
-              <div class="field has-text-center mt-5">
-                <div class="control">
-                  <a href="{% url 'product:category-list' %}"
-                     class="button is-danger mr-6">Ακύρωση</a>
-                  <button class="button is-success ml-5" >Αποθηκευση</button>
-                </div>
-              </div>
-
-                <hr>
-                  <div class="error">
-                    {% if form.errors %}
-                      {% for field in form %}
-                        {% for error in field.errors %}
-                          <div class="notification is-danger">
-                            {{ error }}
-                          </div>
-                        {% endfor %}
-                      {% endfor %}
-                    {% endif %}
-                  </div>
-                <div class="columns is-multiline">
-                {% for field in form %}
-                  <div class="column is-half">
-                    <div class="field">
-                      <label class="label has-text-white">{{ field.label }}</label>
-                      <div class="control ">
-                        {{ field }}
-                      </div>
-                    </div>
-                  </div>
-                {% endfor %}
-              </div>
-
-            </form>
-        </div>
-      </div>
-    </div>
-  </div>
-
+{% block bread %}
+    {% include 'Component/page_title.html' with tab1='Κατηγορία' tab2='Δημιουργία-Ανανέωση' %}
 {% endblock %}
-{% block js %}
 
+{% block content %}
+    {% include 'Component/form/form.html' %}
 {% endblock %}
