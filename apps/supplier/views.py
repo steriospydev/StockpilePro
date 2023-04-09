@@ -37,6 +37,14 @@ class SupplierSearchView(BaseSupplierList, SearchConstructMixin):
     """
 
     def get(self, request, **kwargs):
+        """Retrieves the HTTP GET request parameters and returns a list of suppliers
+           that match the query.
+        Time Complexity:
+            O(n), where n is the number of suppliers that match the query.
+        Space Complexity:
+            O(1), because the amount of memory used by the function
+            does not depend on the number of suppliers that match the query.
+        """
         query = request.GET.get(self.q)
         search_option = request.GET.get(self.search_option)
         if query != '':

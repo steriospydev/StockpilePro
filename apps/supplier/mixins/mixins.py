@@ -18,6 +18,14 @@ class SearchConstructMixin:
     search_option = 'search_option'
 
     def search_construct(self, term, option):
+        """Constructs a search query for the specified search term and option.
+        Time Complexity:
+            O(1), because the function performs a constant amount of
+            work to determine the correct field lookup.
+        Space Complexity:
+            O(1), because the amount of memory used by the function
+            does not depend on the length of the search term or the number of options.
+        """
         lookup = {
             'Πόλη': 'city__icontains',
             'Τηλέφωνο': 'phone__icontains',
