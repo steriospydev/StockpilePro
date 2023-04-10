@@ -1,0 +1,87 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title%}Product Report {% endblock %}
+
+{% block bread %}
+  {% include 'breadcrumb.html' with tab1='Reports' tab2='Product'%}
+{% endblock %}
+
+{% block content %}
+<div class="columns is-multiline mr-3 ml-3 ">
+    <div class="column is-full-desktop  is-full-tablet is-full-mobile">
+      <div class="card">
+        <div class="card-content has-background-dark">
+            <form method="post" class="m-3 ">
+              {% csrf_token %}
+              <div class="error">
+                {% if form.errors %}
+                    {% for field in form %}
+                        {% for error in field.errors %}
+                            <div class="notification is-danger">
+                                {{ error }}
+                            </div>
+                        {% endfor %}
+                    {% endfor %}
+                {% endif %}
+              </div>
+              <div class="columns is-multiline">
+                {% for field in form %}
+                  <div class="column is-half">
+                    <div class="field">
+                      <div class="control ">
+                        {{ field }}
+                      </div>
+                    </div>
+                  </div>
+                {% endfor %}
+                <div class="field has-text-center pt-2">
+                <div class="control">
+                  <button class="button is-success" >Δημιουργία Γραφήματος</button>
+                </div>
+              </div>
+              </div>
+            </form>
+        </div>
+      </div>
+    </div>
+  </div>
+{% if chart %}
+<div class="container mt-2 mb-2">
+  <div class="columns is-centered">
+    <div class="column is-two-thirds">
+      <figure class="image is-16by16">
+        <img src="data:image/png;base64,{{ chart }}" alt="Chart">
+      </figure>
+    </div>
+  </div>
+</div>
+{% endif %}
+<div class="b-table has-pagination mx-4">
+    <div class="table-wrapper has-mobile-cards">
+      <table class="table is-fullwidth is-striped is-hoverable is-sortable is-fullwidth">
+        <thead>
+          <tr>
+            <th>Προιoν</th>
+            <th>Αγοραστηκε</th>
+            <th>Πωληθηκε</th>
+            <th>Διαθεσιμο</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for stock in stock_aggregate %}
+            <tr>
+              <td data-label="Προιoν">{{ stock.product_name }} - {{ stock.package_str }}</td>
+              <td data-label="Αγοραστηκε">{{stock.total_bought|floatformat:0}}</td>
+              <td data-label="Πωληθηκε">{{stock.total_sold|floatformat:0}}</td>
+              <td data-label="Διαθεσιμο">{{stock.total_available|floatformat:0}}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+
+
+{% endblock %}

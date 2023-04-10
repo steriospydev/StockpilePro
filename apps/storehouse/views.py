@@ -84,7 +84,7 @@ class BaseStockList(LoginRequiredMixin, ListView):
     model = Stock
     template_name = 'storehouse/ops/stock_list.html'
     context_object_name = 'stocks'
-    paginate_by = 10
+    paginate_by = 20
     queryset = Stock.objects.filter(deplete=False)
 
     def get_queryset(self):
@@ -121,6 +121,7 @@ class StockSearchView(BaseStockList, SearchConstructMixin):
     """
     Display search results for Supplier.
     """
+
     def get_queryset(self):
         return super().get_queryset()
 

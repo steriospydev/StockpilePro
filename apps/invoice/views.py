@@ -34,7 +34,7 @@ class InvoiceList(BaseInvoiceList):
     """
     Display all products
     """
-    paginate_by = 5
+    paginate_by = 15
 
 class InvoiceDetailView(LoginRequiredMixin, DetailView):
     model = Invoice

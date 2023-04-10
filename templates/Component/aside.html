@@ -90,13 +90,27 @@
         </li>
 
       </ul>
-      <p class="menu{% if request.resolver_match.url_name == 'supplier-list' %}is-active{% endif %}-label">About</p>
+      <p class="menu-label">Reports</p>
       <ul class="menu-list">
         <li>
           <a href="{% url 'bpanel:report' %}"
              class="{% if request.resolver_match.url_name == 'report' %}is-active{% endif %} has-icon">
             <span class="icon"><i class="mdi mdi-chart-bar"></i></span>
-            <span class="menu-item-label">Reports</span>
+            <span class="menu-item-label">Overview</span>
+          </a>
+        </li>
+           <li>
+          <a href="{% url 'bpanel:invoice-chart' %}"
+             class="{% if request.resolver_match.url_name == 'invoice-chart' %}is-active{% endif %} has-icon">
+            <span class="icon"><i class="mdi mdi-chart-bar"></i></span>
+            <span class="menu-item-label">Invoice Report</span>
+          </a>
+        </li>
+          <li>
+          <a href="{% url 'bpanel:product-report' %}"
+             class="{% if request.resolver_match.url_name == 'product-report' %}is-active{% endif %} has-icon">
+            <span class="icon"><i class="mdi mdi-chart-bar"></i></span>
+            <span class="menu-item-label">Product Report</span>
           </a>
         </li>
       </ul>

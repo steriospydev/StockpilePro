@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title%}Invoice Month-Total {% endblock %}
+
+{% block bread %}
+  {% include 'breadcrumb.html' with tab1='Chart' tab2='Invoice Month-Total'%}
+{% endblock %}
+
+{% block content %}
+
+<div class="container  has-background-dark ">
+    {% for year, chart in charts.items %}
+
+      <div class="columns is-centered">
+        <div class="column is-two-thirds">
+          <figure class="image is-16by16">
+            <img src="data:image/png;base64,{{ chart }}" alt="Chart">
+          </figure>
+        </div>
+      </div>
+
+    {% endfor %}
+</div>
+<div class="container  has-background-dark ">
+  <div class="columns is-centered">
+    <div class="column is-two-thirds">
+      <figure class="image is-16by16">
+        <img src="data:image/png;base64,{{ overall_chart }}" alt="Chart">
+      </figure>
+    </div>
+  </div>
+</div>
+{% endblock %}
