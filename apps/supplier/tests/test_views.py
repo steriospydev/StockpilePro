@@ -22,11 +22,16 @@ class SupplierListViewTestCase(TestCase):
         )
         self.suppliers = []
         for i in range(15):
-            tin = str(random.randint(100000000, 999999999))  # Generate random 9-digit string
+            while True:
+                sku_num = str(random.randint(10, 99))
+                if not Supplier.objects.filter(sku_num=sku_num).exists():
+                    break
+
             supplier = SupplierFactory(
                 company=f'Supplier {i}',
                 is_active=True,
-                TIN_num=tin,
+                TIN_num=str(random.randint(100000000, 999999999)),
+                sku_num=sku_num,
             )
             self.suppliers.append(supplier)
 

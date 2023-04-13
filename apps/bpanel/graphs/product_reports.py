@@ -22,7 +22,8 @@ def construct_product_chart(product):
     ax.set_xlabel('')
     ax.set_ylabel('Quantity')
     ax.set_title(f"{name[0]}-{labels[0]}")
-    ax.legend(title=f"Διαθέσιμα: {sum(total_available)}", loc='upper left')
+    chart_title = f"Διαθέσιμα: {sum(total_available) or None}"
+    ax.legend(title=chart_title, loc='upper left')
     # Reverse the orientation of the axes
     ax.invert_xaxis()
 

@@ -1,10 +1,14 @@
 from io import BytesIO
 import base64
+from datetime import datetime
+from decimal import Decimal
+
 
 import unittest.mock as mock
 from unittest.mock import patch, Mock
 from django.test import TestCase, Client
 
+from django import forms
 from django.urls import reverse
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Permission
@@ -12,8 +16,11 @@ from django.contrib.auth.models import Permission
 import matplotlib.pyplot as plt
 
 from apps.bpanel.models import DTask
-from apps.bpanel.forms import DTaskForm
+from apps.bpanel.forms import DTaskForm, ProductChartForm
 from apps.bpanel.graphs.product_reports import construct_product_chart
+from apps.product.models import Product, Package, Material
+from apps.storehouse.models import Stock
+from apps.invoice.models import Invoice, InvoiceItem
 
 class TestBPanelViews(TestCase):
 
@@ -23,6 +30,7 @@ class TestBPanelViews(TestCase):
         self.user = User.objects.create_user(
             username='testuser', password='testpass')
         self.index_url = reverse('bpanel:index')
+        self.report_url = reverse('bpanel:product-report')
 
     def test_index_view_with_no_dtask(self):
         self.client.force_login(self.user)
@@ -92,14 +100,67 @@ class TestBPanelViews(TestCase):
         self.assertEqual(response.status_code, 302)
         self.assertRedirects(response, '/?next=/bpanel/report/')
 
-class UtilsTestCase(TestCase):
+    def test_invoice_chart_view(self):
+        self.client.force_login(self.user)
+        # Create a dictionary with hardcoded invoice data
+        invoice_data = [
+            {'month': datetime(2022, 1, 1), 'total': 100},
+            {'month': datetime(2022, 2, 1), 'total': 200},
+            {'month': datetime(2022, 3, 1), 'total': 300},
+        ]
+
+        # Mock the Invoice.objects.annotate method to return the hardcoded data
+        with patch('apps.bpanel.views.Invoice.objects.annotate') as mock_annotate:
+            mock_annotate.return_value.values.return_value.annotate.return_value.order_by.return_value = invoice_data
+
+            # Make a GET request to the view
+            response = self.client.get(reverse('bpanel:invoice-chart'))
+
+            # Check that the response was successful
+            self.assertEqual(response.status_code, 200)
+
+            # Check that the expected context variables are present
+            self.assertIn('charts', response.context)
+            self.assertIn('overall_chart', response.context)
+
+            # Check that the charts are constructed correctly
+            charts = response.context['charts']
+            self.assertEqual(len(charts), 1)
+            self.assertIn(2022, charts)
+            self.assertIsInstance(charts[2022], str)
+
+            # Check that the overall chart is constructed correctly
+            overall_chart = response.context['overall_chart']
+            self.assertIsInstance(overall_chart, str)
+
+    def test_invoice_chart_anonymous(self):
+        response = self.client.get(reverse('bpanel:invoice-chart'))
+        # assert response status code
+        self.assertEqual(response.status_code, 302)
+        self.assertRedirects(response, '/?next=/bpanel/invoice-chart/')
+
+    def test_product_report_view_with_authenticated_user(self):
+        self.client.force_login(self.user)
+        response = self.client.get(self.report_url)
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'bpanel/product_chart.html')
+        self.assertIn('stock_aggregate', response.context)
+
+    def test_product_report_view_with_anonymous_user(self):
+        response = self.client.get(self.report_url)
+        self.assertEqual(response.status_code, 302)
+        self.assertRedirects(response, f'/?next={self.report_url}')
+
+class GraphsTestCase(TestCase):
 
     @mock.patch('matplotlib.pyplot.savefig')
     def test_construct_product_chart(self, mock_savefig):
         # Create some example data
         product = [
-            {'product_name': 'Product 1', 'package_str': 'Package 1', 'total_bought': 10, 'total_sold': 5, 'total_available': 5},
-            {'product_name': 'Product 2', 'package_str': 'Package 2', 'total_bought': 20, 'total_sold': 10, 'total_available': 10},
+            {'product_name': 'Product 1', 'package_str': 'Package 1',
+             'total_bought': 10, 'total_sold': 5, 'total_available': 5},
+            {'product_name': 'Product 2', 'package_str': 'Package 2',
+             'total_bought': 20, 'total_sold': 10, 'total_available': 10},
         ]
 
         # Call the function with the example data
@@ -118,3 +179,84 @@ class UtilsTestCase(TestCase):
         image_bytes = args[0].getvalue()
         image_decoded = base64.b64decode(image_base64)
         self.assertEqual(image_bytes, image_decoded)
+
+class ProductChartFormTestCase(TestCase):
+
+    def test_form_choices(self):
+        form = ProductChartForm()
+
+        # Assert that product field is a ChoiceField
+        self.assertIsInstance(form.fields['product'], forms.ChoiceField)
+
+        # Assert that the choices consist of a list of tuples, where each tuple contains a product id and name
+        expected_choices = [(product.id, str(product)) for product in Product.objects.select_related('package__material', 'subcategory')]
+        self.assertListEqual(form.fields['product'].choices, expected_choices)
+
+# class ProductReportTestCase(TestCase):
+#     def setUp(self):
+#         self.client = Client()
+#         User = get_user_model()
+#         self.user = User.objects.create_user(
+#             username='testuser', password='testpass')
+#         self.url = reverse('bpanel:product_chart')
+#         # Create a product
+#         self.product = Product.objects.create(
+#             product_name='Test Product',
+#             subcategory=None,
+#             package=None,
+#             tax_rate=None
+#         )
+#
+#         # Create invoices
+#         self.invoice1 = Invoice.objects.create(
+#             invoice_no='001',
+#             date_of_insuance='2023-04-13',
+#             supplier=None
+#         )
+#         self.invoice2 = Invoice.objects.create(
+#             invoice_no='002',
+#             date_of_insuance='2023-04-13',
+#             supplier=None
+#         )
+#
+#         # Create invoice items for the first invoice
+#         self.item1 = InvoiceItem.objects.create(
+#             invoice=self.invoice1,
+#             product=self.product,
+#             quantity=5,
+#             price=Decimal('10.00')
+#         )
+#
+#         # Create invoice items for the second invoice
+#         self.item2 = InvoiceItem.objects.create(
+#             invoice=self.invoice2,
+#             product=self.product,
+#             quantity=3,
+#             price=Decimal('12.50')
+#         )
+#
+#         # Retrieve the stock object created by the first invoice item
+#         self.stock1 = Stock.objects.get(item=self.item1.item_ptr)
+#
+#         # Retrieve the stock object created by the second invoice item
+#         self.stock2 = Stock.objects.get(item=self.item2.item_ptr)
+#
+#         self.form_data = {'product': self.product.id}
+#         self.invalid_form_data = {'product': 'invalid_product_id'}
+#
+#     def test_post_valid_form_data(self):
+#         self.client.force_login(self.user)
+#         response = self.client.post(self.url, data=self.form_data)
+#         self.assertEqual(response.status_code, 200)
+#         self.assertTemplateUsed(response, 'bpanel/product_chart.html')
+#         self.assertIsInstance(response.context['form'], ProductChartForm)
+#         self.assertContains(response, str(self.product))
+#         self.assertIn('chart', response.context)
+#
+#     def test_post_invalid_form_data(self):
+#         self.client.force_login(self.user)
+#         response = self.client.post(self.url, data=self.invalid_form_data)
+#         self.assertEqual(response.status_code, 200)
+#         self.assertTemplateUsed(response, 'bpanel/product_chart.html')
+#         self.assertIsInstance(response.context['form'], ProductChartForm)
+#         self.assertNotIn('chart', response.context)
