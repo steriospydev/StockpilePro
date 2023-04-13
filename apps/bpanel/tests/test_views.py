@@ -1,10 +1,19 @@
+from io import BytesIO
+import base64
+
+import unittest.mock as mock
+from unittest.mock import patch, Mock
 from django.test import TestCase, Client
+
 from django.urls import reverse
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Permission
 
+import matplotlib.pyplot as plt
+
 from apps.bpanel.models import DTask
 from apps.bpanel.forms import DTaskForm
+from apps.bpanel.graphs.product_reports import construct_product_chart
 
 class TestBPanelViews(TestCase):
 
@@ -76,3 +85,36 @@ class TestBPanelViews(TestCase):
         self.assertIn('supplier_info', response.context)
         self.assertIn('product_in_storages', response.context)
         self.assertIn('most_retrieved_product', response.context)
+
+    def test_ops_report_anonymous(self):
+        response = self.client.get(reverse('bpanel:report'))
+        # assert response status code
+        self.assertEqual(response.status_code, 302)
+        self.assertRedirects(response, '/?next=/bpanel/report/')
+
+class UtilsTestCase(TestCase):
+
+    @mock.patch('matplotlib.pyplot.savefig')
+    def test_construct_product_chart(self, mock_savefig):
+        # Create some example data
+        product = [
+            {'product_name': 'Product 1', 'package_str': 'Package 1', 'total_bought': 10, 'total_sold': 5, 'total_available': 5},
+            {'product_name': 'Product 2', 'package_str': 'Package 2', 'total_bought': 20, 'total_sold': 10, 'total_available': 10},
+        ]
+
+        # Call the function with the example data
+        image_base64 = construct_product_chart(product)
+
+        # Check that the function returns a string
+        self.assertIsInstance(image_base64, str)
+
+        # Check that the mock savefig method was called with the expected arguments
+        mock_savefig.assert_called_once()
+        args, kwargs = mock_savefig.call_args
+        self.assertEqual(args[0], mock.ANY)  # Check that the first argument is a file-like object
+        self.assertEqual(kwargs['format'], 'png')  # Check that the format is PNG
+
+        # Check that the PNG image can be decoded and is not empty
+        image_bytes = args[0].getvalue()
+        image_decoded = base64.b64decode(image_base64)
+        self.assertEqual(image_bytes, image_decoded)

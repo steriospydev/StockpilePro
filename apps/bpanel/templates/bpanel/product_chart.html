@@ -46,6 +46,13 @@
       </div>
     </div>
   </div>
+{% if request.method == 'POST' and not product %}
+<div style="display: flex; justify-content: center; height: 100%;">
+      <div class="notification is-success">
+          Δεν βρέθηκαν αποτελέσματα για το προιον: {{get_product}}.
+      </div>
+    </div>
+{% endif %}
 {% if chart %}
 <div class="container mt-2 mb-2">
   <div class="columns is-centered">

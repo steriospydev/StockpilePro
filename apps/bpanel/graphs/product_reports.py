@@ -16,15 +16,14 @@ def construct_product_chart(product):
 
     # Create the bar chart using seaborn
     fig, ax = plt.subplots(figsize=(8, 6))
-    sns.barplot(x=['Total Bought', 'Total Sold', 'Total Available'], y=[sum(total_bought), sum(total_sold), sum(total_available)], ax=ax)
+    sns.barplot(x=['Αγορες', 'Πωλήσεις'], y=[sum(total_bought), sum(total_sold)], ax=ax)
 
     # Set the labels and title
     ax.set_xlabel('')
     ax.set_ylabel('Quantity')
     ax.set_title(f"{name[0]}-{labels[0]}")
-
+    ax.legend(title=f"Διαθέσιμα: {sum(total_available)}", loc='upper left')
     # Reverse the orientation of the axes
-    # ax.invert_yaxis()
     ax.invert_xaxis()
 
     # Save the chart to a PNG image in memory

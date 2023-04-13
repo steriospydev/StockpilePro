@@ -16,6 +16,8 @@ from ..storehouse.models import Storage, Stock
 
 from .graphs.invoice_reports import construct_overall, construct_month_total_chart
 from .graphs.product_reports import construct_product_chart
+
+
 @login_required
 def index(request):
     # Count objects
@@ -54,9 +56,11 @@ def change_status(request, item_id):
     item.save()
     return redirect('bpanel:index')
 
+@login_required
 def ops_report(request):
     product_sold = Stock.objects.aggregate(Sum('retrieved'))['retrieved__sum'] or 0
-    supplier_info = Invoice.objects.values('supplier__company').annotate(subtotal=Sum('subtotal'), total_taxes=Sum('total_taxes'))
+    supplier_info = Invoice.objects.values('supplier__company').annotate(subtotal=Sum('subtotal'),
+                                                                         total_taxes=Sum('total_taxes'))
     product_in_storages = Stock.objects.aggregate(total=Sum('start_quantity') - Sum('retrieved'))['total'] or 0
     most_retrieved_product = Stock.objects.values('item__product__product_name').annotate(total_item_sold=Sum(
         'retrieved')).order_by('-total_item_sold')[:5]
@@ -68,6 +72,7 @@ def ops_report(request):
         'most_retrieved_product': most_retrieved_product}
     return render(request, 'bpanel/report.html', context)
 
+@login_required
 def invoice_chart(request):
     # Aggregate the total for each month using Django ORM
     invoice_data = Invoice.objects.annotate(
@@ -86,6 +91,7 @@ def invoice_chart(request):
     context = {'charts': charts, 'overall_chart': overall_chart}
     return render(request, 'bpanel/invoice_chart.html', context)
 
+@login_required
 def product_report(request):
     context = {}
 
@@ -109,11 +115,14 @@ def product_report(request):
         if form.is_valid():
             # Retrieve product value from the form
             get_product = form.cleaned_data['product']
+            context['get_product'] = str(Product.objects.get(id=get_product))
             # Filter the stock aggregate by the selected product
             product = stock_aggregate.filter(item__product=get_product)
-            chart = construct_product_chart(product)
-            context['product'] = product
-            context['chart'] = chart
+            if product:
+                chart = construct_product_chart(product)
+                context['product'] = product
+                context['chart'] = chart
+            context['product'] = product or None
     context['stock_aggregate'] = stock_aggregate
     context['form'] = form
 
