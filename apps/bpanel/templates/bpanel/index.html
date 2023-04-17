@@ -2,26 +2,24 @@
 
 {% block title%}Διαχείρηση Αποθήκης {% endblock %}
 {% block css %}
-.mybox {
+.my-box {
   box-shadow:30px 20px 15px rgba(0, 0, 0, 0.5); /* add a shadow */
-  width: 80%; /* reduce width to 80% */
+  width: 90%; /* reduce width to 80% */
   margin: 10px auto; /* center the box horizontally */
-  padding: 20px; /* add some padding */
+  padding: 10px; /* add some padding */
 
 }
-.myform {
+.my-form {
   box-shadow: 0px 0px 53px rgba(0, 0, 0, 0.5); /* add a shadow */
-  width: 70%; /* reduce width to 80% */
+  width: 100%; /* reduce width to 80% */
   margin: 10px auto; /* center the box horizontally */
-  padding: 15px; /* add some padding */
+  padding: 10px; /* add some padding */
   border-radius: 10px;
 
 }
-.myform input{
+.my-form input{
   width: 100%;
   border: 1px solid;
-
-
 }
 .media-content{
 overflow: hidden; // hide horizontal
@@ -29,13 +27,14 @@ overflow: hidden; // hide horizontal
 
 .button-width{
     max-width: 100px;
+    margin:5px;
 }
 
 {% endblock%}
 {% block content %}
 {% include 'Component/page_title.html' with tab1='Dashboard' %}
 
-<div class="tile is-ancestor ml-3 mr-3 ">
+<div class="tile is-ancestor mr-6 ml-6">
     <div class="tile is-parent">
         <div class="card tile is-child">
           <div class="card-content has-background-dark ">
@@ -81,69 +80,73 @@ overflow: hidden; // hide horizontal
         </div>
       </div>
 </div>
-<div class="tile is-ancestor ml-3 mr-3 ">
-
-         <div class="tile is-parent">
-            <div class="card tile is-child">
-              <div class="card-content has-background-dark ">
-                <div class="level is-mobile">
-                  <div class="level-item ">
-                    <div class="is-widget-label "><h3 class="subtitle is-spaced has-text-danger">
-                        Προιόντα
-                    </h3>
-                      <h1 class="title has-text-white">
-                          {{num_products}}
-                      </h1>
-                    </div>
-                  </div>
-                  <div class="level-item has-widget-icon">
-                    <div class="is-widget-icon"><span class="icon has-text-danger is-large"><i
-                        class="mdi mdi-cart mdi-48px"></i></span>
-                    </div>
-                  </div>
-                </div>
-              </div>
+<div class="tile is-ancestor mr-6 ml-6">
+    <div class="tile is-parent">
+        <div class="card tile is-child">
+      <div class="card-content has-background-dark ">
+        <div class="level is-mobile">
+          <div class="level-item ">
+            <div class="is-widget-label "><h3 class="subtitle is-spaced has-text-danger">
+                Προιόντα
+            </h3>
+              <h1 class="title has-text-white">
+                  {{num_products}}
+              </h1>
             </div>
           </div>
-          <div class="tile is-parent">
-            <div class="card tile is-child">
-              <div class="card-content has-background-dark ">
-                <div class="level is-mobile">
-                  <div class="level-item ">
-                    <div class="is-widget-label "><h3 class="subtitle is-spaced has-text-success">
-                      Τιμολόγια
-                    </h3>
-                      <h1 class="title has-text-white">
-                          {{num_invoices}}
-                      </h1>
-                    </div>
-                  </div>
-                  <div class="level-item has-widget-icon">
-                    <div class="is-widget-icon"><span class="icon has-text-success is-large"><i
-                        class="mdi mdi-briefcase-check mdi-48px"></i></span>
-                    </div>
-                  </div>
-                </div>
-              </div>
+          <div class="level-item has-widget-icon">
+            <div class="is-widget-icon"><span class="icon has-text-danger is-large"><i
+                class="mdi mdi-cart mdi-48px"></i></span>
             </div>
-         </div>
-
+          </div>
+        </div>
       </div>
+    </div>
+    </div>
+    <div class="tile is-parent">
+    <div class="card tile is-child">
+      <div class="card-content has-background-dark ">
+        <div class="level is-mobile">
+          <div class="level-item ">
+            <div class="is-widget-label "><h3 class="subtitle is-spaced has-text-success">
+              Τιμολόγια
+            </h3>
+              <h1 class="title has-text-white">
+                  {{num_invoices}}
+              </h1>
+            </div>
+          </div>
+          <div class="level-item has-widget-icon">
+            <div class="is-widget-icon"><span class="icon has-text-success is-large"><i
+                class="mdi mdi-briefcase-check mdi-48px"></i></span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    </div>
+</div>
 
-<div class="container">
-    <div class="row myform has-background-dark">
+<header class="card-header mr-6 ml-6">
+  <p class="card-header-title">
+    <span class="icon"><i class="mdi mdi-file-document-edit-outline"></i></span>
+      Πίνακας Ανακοινώσεων
+</header>
+
+<div class="container mr-6 ml-6 mb-5">
+    <div class="row my-form has-background-dark">
         <div class="col">
             <form method="POST" action="{% url 'bpanel:index' %}" >
                 {% csrf_token %}
                 <div class="field is-horizontal">
                     <div class="field-body">
-                        <div class="field mx-2">
-                            <div class="control">
-                                <button class="button is-warning is-outlined " type="submit">Ανακοίνωση</button>
+                        <div class="field ">
+                            <div class="control ml-6 ">
+                                <button class="button is-success is-outlined " type="submit">Ανακοίνωση</button>
                             </div>
                         </div>
-                        <div class="field mx-2">
-                            <div class="control">
+                        <div class="field ">
+                            <div class="control mr-6">
                                 {{ form.task }}
                             </div>
                         </div>
@@ -154,15 +157,8 @@ overflow: hidden; // hide horizontal
     </div>
 </div>
 
-
-<header class="card-header ml-6">
-  <p class="card-header-title">
-    <span class="icon"><i class="mdi mdi-file-document-edit-outline"></i></span>
-      Πίνακας Ανακοινώσεων
-</header>
-
-    {% for todo in todos %}
-    <div class="mybox box has-background-dark has-text-white">
+{% for todo in todos %}
+    <div class="my-box box has-background-dark has-text-white">
       <article class="media">
         <div class="media-content">
           <div class="columns">
@@ -204,6 +200,5 @@ overflow: hidden; // hide horizontal
         </div>
       </article>
     </div>
-
-    {% endfor %}
+{% endfor %}
 {% endblock %}
