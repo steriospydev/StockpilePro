@@ -8,7 +8,7 @@ By automating the creation of Stock Keeping Units (SKUs) when new invoices are
 generated, the app streamlines inventory management and simplifies the tracking 
 of stock levels. Additionally, the app performs various storage operations,
 providing users with the ability to move products between different storage
-facilities and track their location in real-time. 
+facilities and track their location in real-time. However, it is worth noting that not all functional requirements have yet been met, and there is still room for improvement in terms of performance and scalability.
  
 
 ## Why is this app created?
