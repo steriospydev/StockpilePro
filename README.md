@@ -47,8 +47,7 @@ To install StockPilePro, follow these steps:
 - Create a superuser:<code> python manage.py createsuperuser</code>
 - Start the development server:<code> python manage.py runserver</code>
 
-## See also
-- [Requirements Specification](docs/Requirements Specification.md)
+
 
 ## Why is this app created?
 This app was created to address the growing needs of a local establishment that was expanding rapidly.
