@@ -10,6 +10,45 @@ of stock levels. Additionally, the app performs various storage operations,
 providing users with the ability to move products between different storage
 facilities and track their location in real-time. However, it is worth noting that not all functional requirements have yet been met, and there is still room for improvement in terms of performance and scalability.
  
+# Installation
+
+To install StockPilePro, follow these steps:
+
+- Clone the repository:
+  - git clone https://github.com/steriospydev/StockPilePro.git
+- Install PostgreSQL:
+
+  - You can download and install PostgreSQL from the official website or by using a package manager on your operating system.
+
+- Create a PostgreSQL user and database:
+
+  - Open a terminal or command prompt and type <code>sudo -u postgres psql </code>to log in to the PostgreSQL shell.
+  - Create a user with a password and a database
+    - <code>CREATE USER your_username WITH PASSWORD 'your_password';</code>
+    - <code>CREATE DATABASE your_db_name OWNER your_username ENCODING 'UTF8';</code>
+    - <code>GRANT ALL PRIVILEGES ON DATABASE your_db_name TO your_username;</code>
+
+- Modify the .env file with your PostgreSQL database credentials:
+
+  - DB_NAME=your_db_name
+  - DB_USER=your_username
+  - DB_PASSWORD=your_password
+  - DB_HOST=localhost
+  - DB_PORT=5432
+
+- Create a virtual environment:
+  <code>python3 -m venv env</code>
+- Activate the virtual environment:
+  <code>source env/bin/activate</code>
+- Install the required packages:
+  <code>pip install -r requirements.txt</code>
+- Run: <code>python manage.py makemigrations</code>
+- Run migrations:<code> python manage.py migrate</code>
+- Create a superuser:<code> python manage.py createsuperuser</code>
+- Start the development server:<code> python manage.py runserver</code>
+
+## See also
+- [Requirements Specification](docs/Requirements Specification.md)
 
 ## Why is this app created?
 This app was created to address the growing needs of a local establishment that was expanding rapidly.
@@ -50,44 +89,6 @@ The project consists of 6 apps with their own model-view-template structure:
   - The primary focus of the app is the management of storage, bins, and related operations 
 - supplier
   - Manage suppliers
-
-# Installation
-
-To install StockPilePro, follow these steps:
-
-- Clone the repository:
-  - git clone https://github.com/steriospydev/StockPilePro.git
-- Install PostgreSQL:
-
-  - You can download and install PostgreSQL from the official website or by using a package manager on your operating system.
-
-- Create a PostgreSQL user and database:
-
-  - Open a terminal or command prompt and type <code>sudo -u postgres psql </code>to log in to the PostgreSQL shell.
-  - Create a user with a password and a database
-    - <code>CREATE USER your_username WITH PASSWORD 'your_password';</code>
-    - <code>CREATE DATABASE your_db_name OWNER your_username ENCODING 'UTF8';</code>
-    - <code>GRANT ALL PRIVILEGES ON DATABASE your_db_name TO your_username;</code>
-
-- Modify the .env file with your PostgreSQL database credentials:
-
-  - DB_NAME=your_db_name
-  - DB_USER=your_username
-  - DB_PASSWORD=your_password
-  - DB_HOST=localhost
-  - DB_PORT=5432
-
-- Create a virtual environment:
-  <code>python3 -m venv env</code>
-- Activate the virtual environment:
-  <code>source env/bin/activate</code>
-- Install the required packages:
-  <code>pip install -r requirements.txt</code>
-- Run: <code>python manage.py makemigrations</code>
-- Run migrations:<code> python manage.py migrate</code>
-- Create a superuser:<code> python manage.py createsuperuser</code>
-- Start the development server:<code> python manage.py runserver</code>
-
 
 # Next steps in the project
 Moving forward with the project, there are several key steps that need to be taken to improve
