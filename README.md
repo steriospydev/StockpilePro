@@ -54,14 +54,12 @@ To install StockPilePro, follow these steps:
 
 ## Why is this app created?
 This app was created to address the growing needs of a local establishment that was expanding rapidly.
-Within the span of a year, the business had grown from a two-person operation to a team of over 10
+Within the span of a few years, the business had grown from a two-person operation to a team of over 10
 people, with multiple storage facilities to manage. However, with growth came new challenges,
 and the primary concern was how to efficiently manage and keep track of the stock.
 
-Despite urging and convincing the local establishment to use a proprietary software to manage their 
+Despite convincing the local establishment to use a proprietary software to manage their 
 inventory, I was determined to create an app for my portfolio that could address their needs.
-The business was expanding quickly, and they were in dire need of a system that could help them 
-efficiently manage their stock levels across multiple storage facilities.
 
 I understood the challenges they faced and recognized the potential benefits of
 a custom app tailored to their specific needs. So, I took on the project and developed an app that
