@@ -53,20 +53,7 @@ To install StockPilePro, follow these steps:
 - [Model Dependency](/docs/model_dependency.png)
 
 ## Why is this app created?
-This app was created to address the growing needs of a local establishment that was expanding rapidly.
-Within the span of a few years, the business had grown from a two-person operation to a team of over 10
-people, with multiple storage facilities to manage. However, with growth came new challenges,
-and the primary concern was how to efficiently manage and keep track of the stock.
-
-Despite convincing the local establishment to use a proprietary software to manage their 
-inventory, I was determined to create an app for my portfolio that could address their needs.
-
-I understood the challenges they faced and recognized the potential benefits of
-a custom app tailored to their specific needs. So, I took on the project and developed an app that
-would streamline their inventory management process. The app would also allow them to track their
-inventory in real-time, keep track of their stock levels and provide valuable insights 
-on which items were selling well and which ones needed to be restocked. This would not only save time
-and resources but would also ensure that they always had the right products available for their customers.
+StockpilePro, an impressive Django, PostgreSQL, and Bulma application, originated from a local businessman's challenge. As his business expanded rapidly, he lacked an efficient system to handle invoices, stocks, and orders. Although I referred him to a seasoned professional for guidance, I was inspired by our conversations to create an app for my portfolio. Thus, StockpilePro was born. This comprehensive application enables users to store information about products, manage suppliers, handle invoices, and seamlessly organize stock items within multiple storage facilities. With StockpilePro, businesses can efficiently track inventory and streamline their operations.
 
 The whole process was a valuable experience for me as a developer. It gave me the opportunity to work on a real-world 
 project and 
