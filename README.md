@@ -32,26 +32,10 @@ To install StockPilePro, follow these steps:
     -  <code>ALTER ROLE myprojectuser SET timezone TO 'UTC';</code>
     - <code> GRANT ALL PRIVILEGES ON DATABASE myproject TO myprojectuser;</code>
    
-- Modify the .env file with your PostgreSQL database credentials:
-
-  - SECRET_KEY= <SECRET KEY>
-  - DEBUG=True
-  - DJANGO_LOG_LEVEL='DEBUG'
-
-  - POSTGRES_HOST=localhost
-  - POSTGRES_PORT=5432
-  - POSTGRES_DB= <DB NAME>
-  - POSTGRES_USER=<DB USER>
-  - POSTGRES_PASSWORD= <DB PASSWORD>
-  - POSTGRES_DB_TEST=<DB NAME>_test
-
-
-- Create a virtual environment:
-  <code>python3 -m venv env</code>
-- Activate the virtual environment:
-  <code>source env/bin/activate</code>
-- Install the required packages:
-  <code>pip install -r requirements.txt</code>
+- Create a .env file with your PostgreSQL database credentials(refer to .env.example)
+- Create a virtual environment: <code>python3 -m venv env</code>
+- Activate the virtual environment: <code>source env/bin/activate</code>
+- Install the required packages: <code>pip install -r requirements.txt</code>
 - Run: <code>python manage.py makemigrations</code>
 - Run: <code>python manage.py mymigrations</code>
 - Run migrations:<code> python manage.py migrate</code>
