@@ -39,7 +39,7 @@ To install StockPilePro, follow these steps:
 - Run: <code>python manage.py makemigrations</code>
 - Run: <code>python manage.py mymigrations</code>
 - Run migrations:<code> python manage.py migrate</code>
-- Load sample data: python manage.py loaddata start_data/data.json
+- Load sample data:<code> python manage.py loaddata start_data/data.json</code>
 - Create a superuser:<code> python manage.py createsuperuser</code>
 - Start the development server:<code> python manage.py runserver</code>
 
