@@ -24,17 +24,27 @@ To install StockPilePro, follow these steps:
 
   - Open a terminal or command prompt and type <code>sudo -u postgres psql </code>to log in to the PostgreSQL shell.
   - Create a user with a password and a database
-    - <code>CREATE USER your_username WITH PASSWORD 'your_password';</code>
-    - <code>CREATE DATABASE your_db_name OWNER your_username ENCODING 'UTF8';</code>
-    - <code>GRANT ALL PRIVILEGES ON DATABASE your_db_name TO your_username;</code>
-
+    -  <code>psql</code>
+    -  <code>CREATE DATABASE myproject;</code>
+    -  <code>CREATE USER myprojectuser WITH PASSWORD 'password';</code>
+    -  <code>ALTER ROLE myprojectuser SET client_encoding TO 'utf8';</code>
+    -  <code>ALTER ROLE myprojectuser SET default_transaction_isolation TO 'read committed';</code>
+    -  <code>ALTER ROLE myprojectuser SET timezone TO 'UTC';</code>
+    - <code> GRANT ALL PRIVILEGES ON DATABASE myproject TO myprojectuser;</code>
+   
 - Modify the .env file with your PostgreSQL database credentials:
 
-  - DB_NAME=your_db_name
-  - DB_USER=your_username
-  - DB_PASSWORD=your_password
-  - DB_HOST=localhost
-  - DB_PORT=5432
+  - SECRET_KEY= <SECRET KEY>
+  - DEBUG=True
+  - DJANGO_LOG_LEVEL='DEBUG'
+
+  - POSTGRES_HOST=localhost
+  - POSTGRES_PORT=5432
+  - POSTGRES_DB= <DB NAME>
+  - POSTGRES_USER=<DB USER>
+  - POSTGRES_PASSWORD= <DB PASSWORD>
+  - POSTGRES_DB_TEST=<DB NAME>_test
+
 
 - Create a virtual environment:
   <code>python3 -m venv env</code>
@@ -43,7 +53,9 @@ To install StockPilePro, follow these steps:
 - Install the required packages:
   <code>pip install -r requirements.txt</code>
 - Run: <code>python manage.py makemigrations</code>
+- Run: <code>python manage.py mymigrations</code>
 - Run migrations:<code> python manage.py migrate</code>
+- Load sample data: python manage.py loaddata start_data/data.json
 - Create a superuser:<code> python manage.py createsuperuser</code>
 - Start the development server:<code> python manage.py runserver</code>
 

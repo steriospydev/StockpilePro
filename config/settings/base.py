@@ -7,7 +7,7 @@ load_dotenv()
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
-
+DJANGO_SETTINGS_MODULE = os.environ.get('DJANGO_SETTINGS_MODULE')
 LOGIN_REDIRECT_URL = 'bpanel:index'
 LOGOUT_REDIRECT_URL = 'login'
 LOGIN_URL = 'login'
