@@ -10,10 +10,10 @@ diff-match-patch==20200713
 Django>=4.1.9
 django-extensions==3.2.1
 django-import-export==3.1.0
-django_debug_toolbar==3.8.1
+django_debug_toolbar==4.1.0
 et-xmlfile==1.1.0
 factory-boy==3.2.1
-Faker==17.6.0
+Faker
 fonttools==4.39.3
 kiwisolver==1.4.4
 MarkupPy==1.14
