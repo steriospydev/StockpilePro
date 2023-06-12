@@ -78,34 +78,7 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-# LOGGING = {
-#     'version': 1,                       # the dictConfig format version
-#     'disable_existing_loggers': False,  # retain the default loggers
-#     'handlers': {
-#             'file': {
-#                 'class': 'logging.FileHandler',
-#                 'filename': 'general.log',
-#                 'level': 'DEBUG',
-#                 'formatter': 'verbose',
-#             },
-#         },
-#     'loggers': {
-#         '': {
-#             'level': os.getenv('DJANGO_LOG_LEVEL', 'WARNING'),
-#             'handlers': ['file'],
-#         },
-#     },
-#     'formatters': {
-#             'verbose': {
-#                 'format': '{name} {levelname} {asctime} {module} {process:d} {thread:d} {message}',
-#                 'style': '{',
-#             },
-#             'simple': {
-#                 'format': '{levelname} {message}',
-#                 'style': '{',
-#             },
-#         },
-# }
+
 # Internationalization
 # https://docs.djangoproject.com/en/4.1/topics/i18n/
 

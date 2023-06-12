@@ -44,9 +44,9 @@ To install StockPilePro, follow these steps:
 - Start the development server:<code> python manage.py runserver</code>
 
 ## See also
-- [System Architecture](/docs/System-Architecture.md)
-- [Requirements Specification](/docs/Requirements-Specification.md)
-- [Model Dependency](/docs/model_dependency.png)
+- [System Architecture](/design/System-Architecture.md)
+- [Requirements Specification](/design/Requirements-Specification.md)
+- [Model Dependency](/design/model_dependency.png)
 
 ## Why is this app created?
 StockpilePro, an impressive Django, PostgreSQL, and Bulma application, originated from a local businessman's challenge. As his business expanded rapidly, he lacked an efficient system to handle invoices, stocks, and orders. Although I referred him to a seasoned professional for guidance, I was inspired by our conversations to create an app for my portfolio. Thus, StockpilePro was born. This comprehensive application enables users to store information about products, manage suppliers, handle invoices, and seamlessly organize stock items within multiple storage facilities. With StockpilePro, businesses can efficiently track inventory and streamline their operations.
