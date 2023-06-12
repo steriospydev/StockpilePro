@@ -1,4 +1,5 @@
 from django.db.models.functions import TruncMonth
+from django.db.models.query import QuerySet
 import seaborn as sns
 import matplotlib.pyplot as plt
 from io import BytesIO
@@ -8,9 +9,12 @@ import pandas as pd
 import calendar
 
 
-def construct_overall(invoice_data):
+def construct_overall(invoice_data: QuerySet):
     # Convert invoice data to pandas DataFrame
+
     df = pd.DataFrame.from_records(invoice_data)
+    if df.empty:
+        return "No Data Yet!"
 
     # Extract the year from the month column
     df['year'] = df['month'].dt.year

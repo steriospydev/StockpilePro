@@ -77,7 +77,7 @@ def invoice_chart(request):
     # Aggregate the total for each month using Django ORM
     invoice_data = Invoice.objects.annotate(
         month=TruncMonth('date_of_issuance')).values('month').annotate(total=Sum('total')).order_by('month')
-
+    print(type(invoice_data))
     # Get a list of all years in the data
     years = list(set([d['month'].year for d in invoice_data]))
 
@@ -88,7 +88,7 @@ def invoice_chart(request):
 
     overall_chart = construct_overall(invoice_data)
 
-    context = {'charts': charts, 'overall_chart': overall_chart}
+    context = {'charts': charts, 'overall_chart_or_none': overall_chart}
     return render(request, 'bpanel/invoice_chart.html', context)
 
 @login_required

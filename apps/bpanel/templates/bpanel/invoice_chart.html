@@ -9,26 +9,34 @@
 
 {% block content %}
 
-<div class="container  has-background-dark ">
-    {% for year, chart in charts.items %}
-
-      <div class="columns is-centered">
-        <div class="column is-two-thirds">
-          <figure class="image is-16by16">
-            <img src="data:image/png;base64,{{ chart }}" alt="Chart">
-          </figure>
-        </div>
-      </div>
-
-    {% endfor %}
-</div>
-<div class="container  has-background-dark ">
-  <div class="columns is-centered">
-    <div class="column is-two-thirds">
-      <figure class="image is-16by16">
-        <img src="data:image/png;base64,{{ overall_chart }}" alt="Chart">
-      </figure>
+{% if overall_chart_or_none is not str %}
+  <div style="display: flex; justify-content: center; height: 100%;">
+    <div class="notification is-info">
+      {{ overall_chart_or_none }}
     </div>
   </div>
-</div>
+{% else %}
+  <div class="container  has-background-dark ">
+      {% for year, chart in charts.items %}
+
+        <div class="columns is-centered">
+          <div class="column is-two-thirds">
+            <figure class="image is-16by16">
+              <img src="data:image/png;base64,{{ chart }}" alt="Chart">
+            </figure>
+          </div>
+        </div>
+
+      {% endfor %}
+  </div>
+  <div class="container  has-background-dark ">
+    <div class="columns is-centered">
+      <div class="column is-two-thirds">
+        <figure class="image is-16by16">
+          <img src="data:image/png;base64,{{ overall_chart }}" alt="Chart">
+        </figure>
+      </div>
+    </div>
+  </div>
+{% endif %}
 {% endblock %}
