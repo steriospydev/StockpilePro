@@ -16,13 +16,13 @@ def construct_product_chart(product):
 
     # Create the bar chart using seaborn
     fig, ax = plt.subplots(figsize=(8, 6))
-    sns.barplot(x=['Αγορες', 'Πωλήσεις'], y=[sum(total_bought), sum(total_sold)], ax=ax)
+    sns.barplot(x=['Buy', 'Sell'], y=[sum(total_bought), sum(total_sold)], ax=ax)
 
     # Set the labels and title
     ax.set_xlabel('')
     ax.set_ylabel('Quantity')
     ax.set_title(f"{name[0]}-{labels[0]}")
-    chart_title = f"Διαθέσιμα: {sum(total_available) or 0}"
+    chart_title = f"Available: {sum(total_available) or 0}"
     ax.legend(title=chart_title, loc='upper left')
     # Reverse the orientation of the axes
     ax.invert_xaxis()
