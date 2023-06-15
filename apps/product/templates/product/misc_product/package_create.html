@@ -1,17 +1,17 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title%}Δημιουργία Συσκευασίας{% endblock %}
+{% block title%}New Package{% endblock %}
 
 {% block bread %}
-     {% include 'Component/page_title.html' with tab1='Δημιουργία' tab2='Συσκευασία' %}
+     {% include 'Component/page_title.html' with tab1='Create' tab2='Package' %}
 {% endblock %}
 
 {% block content %}
     <div class="field has-text-center ml-5">
         <div class="control">
             <a href="{% url 'product:material-create' %}"
-                     class="button is-link">Νεο Υλικο</a>
+                     class="button is-link">New Material</a>
         </div>
     </div>
     {% include 'Component/form/form.html' %}

@@ -1,12 +1,12 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title%}Προμηθευτές {% endblock %}
+{% block title%}Storages{% endblock %}
 {% block css %}
 {% endblock %}
 
 {% block content %}
-    {% include 'Component/page_title.html' with tab1='Αποθήκες' %}
+    {% include 'Component/page_title.html' with tab1='Storage Main' %}
     <!-- Storage Header-->
     <div class="tile is-ancestor ml-3 mr-3 ">
 
@@ -16,7 +16,7 @@
                 <div class="level is-mobile">
                   <div class="level-item ">
                     <div class="is-widget-label "><h3 class="subtitle is-spaced has-text-warning">
-                      Αποθήκες
+                      Storehouses
                     </h3>
                       <h1 class="title has-text-white">
                        {{storages}}
@@ -38,7 +38,7 @@
                 <div class="level is-mobile">
                   <div class="level-item ">
                     <div class="is-widget-label "><h3 class="subtitle is-spaced has-text-link">
-                      Θέσεις
+                      Bins
                     </h3>
                       <h1 class="title has-text-white">
                           {{total_bins}}
@@ -65,7 +65,7 @@
                 <div class="level is-mobile">
                   <div class="level-item ">
                     <div class="is-widget-label "><h3 class="subtitle is-spaced has-text-danger">
-                        Σε Xρήση
+                        In Use
                     </h3>
                       <h1 class="title has-text-white">
                           {{bins_in_use}}
@@ -87,7 +87,7 @@
                 <div class="level is-mobile">
                   <div class="level-item ">
                     <div class="is-widget-label "><h3 class="subtitle is-spaced has-text-success">
-                      Ελεύθερες
+                      Free Bins
                     </h3>
                       <h1 class="title has-text-white">
                           {{bins_occupied}}
@@ -111,7 +111,7 @@
         <header class="card-header">
           <p class="card-header-title">
           <span class="icon"><i class="mdi mdi-account-multiple"></i></span>
-              Αποθήκες
+              Storehouses
         </header>
     </div>
     <!-- Storage Table-->
@@ -120,11 +120,11 @@
       <table class="table is-fullwidth is-striped is-hoverable is-sortable is-fullwidth">
         <thead>
           <tr>
-            <th class="has-text-centered">ΑΠΟΘΗΚΗ</th>
-            <th class="has-text-centered">ΔΙΑΔΡΟΜΟΙ</th>
-            <th class="has-text-centered">ΘΕΣΕΙΣ</th>
-            <th class="has-text-centered">ΣΕ ΧΡΗΣΗ</th>
-            <th class="has-text-centered">ΕΛΕΥΘΕΡΕΣ</th>
+            <th class="has-text-centered">Storage</th>
+            <th class="has-text-centered">Lanes</th>
+            <th class="has-text-centered">Bins</th>
+            <th class="has-text-centered">In use</th>
+            <th class="has-text-centered">Free</th>
             <th class="has-text-centered"></th>
           </tr>
         </thead>
@@ -150,8 +150,4 @@
       </table>
     </div>
   </div>
-{% endblock %}
-
-
-{% block js %}
 {% endblock %}

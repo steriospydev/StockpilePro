@@ -1,10 +1,10 @@
 {% extends 'base.html' %}
 
-{% block title%}Στοκ {{stock.sku}}{% endblock %}
+{% block title%}Stock: {{stock.sku}}{% endblock %}
 
 {% block content %}
 
-{% include 'Component/page_title.html' with tab1='Πληροφορίες Στοκ' tab2=stock.sku %}
+{% include 'Component/page_title.html' with tab1='Stock Info' tab2=stock.sku %}
 {% include 'storehouse/ops/components/card_header.html' %}
 
 <div class="tile is-ancestor mx-5 has-background-dark">
@@ -15,14 +15,14 @@
           <div class="level is-mobile">
             <div class="level-item">
               <div class="is-widget-label">
-                  <h3 class="subtitle is-spaced mb-2 ">Γενικά</h3>
+                  <h3 class="subtitle is-spaced mb-2 ">General</h3>
                   <ul>
-                    <li class="is-italic">Προιόν</li>
+                    <li class="is-italic">Product</li>
                     <li class="mb-2" ><strong style="color:white;"> {{ stock.item }}</strong></li>
-                    <li class="is-italic">Αριθμός SKU</li>
+                    <li class="is-italic">SKU Num</li>
                     <li class="mb-2" ><strong style="color:white;"> {{ stock.sku }}</strong></li>
 
-                    <li class="is-italic">Τοποθετημενο/Διαθέσιμο</li>
+                    <li class="is-italic">Placed/Available</li>
                     <li class="mb-2">
                         {% if stock.is_placed %}
                             <span class="icon has-text-success "><i class="mdi mdi-check-decagram "></i></span>
@@ -35,17 +35,17 @@
                             <span class="icon has-text-danger "><i class="mdi mdi-cancel"></i></span>
                         {% endif %}
                     </li>
-                    <li class="is-italic">Ημ. Ληξης</li>
+                    <li class="is-italic">Expiration Date</li>
                     <li class="mb-2" ><strong style="color:white;">
                          <a class="button is-small is-danger    "
                            href="{% url 'storehouse:stock-update' stock.id %}">
                             {% if stock.expiration_date %}
                             {{ stock.expiration_date }}
                         {% else %}
-                            Δεν έχει οριστεί
+                            Not yet defined
                         {% endif %}
                          </a></strong></li>
-                    <li class="is-italic">Τιμολογιο</li>
+                    <li class="is-italic">Invoice</li>
                     <li class="mb-2">
                         <strong style="color:white;">
                             <a class='button is-small is-info' href="{{ stock.item.invoice.get_absolute_url }}">
@@ -53,7 +53,7 @@
                             </a>
                         </strong>
                     </li>
-                    <li class="is-italic">Ανανεώθηκε</li>
+                    <li class="is-italic">Updated at</li>
                     <li class="mb-2" ><strong style="color:white;"> {{ stock.updated_at }}</strong></li>
                   </ul>
               </div>
@@ -65,27 +65,27 @@
                             <li class="mb-4">
                             <a class="button is-small is-success"
                            href="#">
-                            <strong>Τoποθετημένο</strong></a>
+                            <strong>Placed</strong></a>
                         </li>
                         {% else %}
                         <li class="mb-4">
                             <a class="button is-small is-success is-outlined"
                            href="{% url 'storehouse:stock-place' pk=stock.id %}">
-                            <strong>Νεα Τοποθέτηση</strong></a>
+                            <strong>New Placement</strong></a>
                         </li>
                         {% endif %}
                         <li class="mb-4">
                             <a class="button is-small is-danger is-outlined"
                            href="#">
-                          <strong>Διαγραφή Στοκ  </strong></a>
+                          <strong>Delete Stock</strong></a>
                         </li>
-                        <li class="is-italic">Τιμη Αγορας</li>
+                        <li class="is-italic">Price Bought</li>
                         <li class="mb-2" ><strong style="color:white;"> {{ stock.item.unit_price }} &#x20AC;</strong></li>
-                        <li class="is-italic">Αρχικη Ποσοτητα</li>
+                        <li class="is-italic">Start Quantity</li>
                         <li class="mb-2" ><strong style="color:white;"> {{ stock.start_quantity|floatformat:0 }}</strong></li>
-                        <li class="is-italic">Τοποθετημενη</li>
+                        <li class="is-italic">Placed</li>
                         <li class="mb-2" ><strong style="color:white;"> {{ stock.stock_placed |floatformat:0}}</strong></li>
-                        <li class="is-italic">Εξαγωγή</li>
+                        <li class="is-italic">Extracted</li>
                         <li class="mb-2"
                         ><strong style="color:white;"> {{ stock.retrieved|floatformat:0 }}/{{stock.start_quantity|floatformat:0}}</strong></li>
                     </ul>
@@ -102,22 +102,22 @@
       <table class="table is-fullwidth is-striped is-hoverable is-sortable is-fullwidth">
         <thead>
           <tr>
-            <th>Αποθήκη</th>
-            <th>Θέση</th>
-            <th>Ποσότητα </th>
-            <th>Εξαγωγη</th>
-            <th>Διαθεσιμο</th>
+            <th>Storage</th>
+            <th>Bin</th>
+            <th>Quantity</th>
+            <th>Extracted</th>
+            <th>Available</th>
             <th>Actions</th>
           </tr>
         </thead>
         <tbody>
           {% for item in place_stock_objects %}
             <tr>
-              <td data-label="Αποθήκη">{{item.bin.storage}}</td>
-              <td data-label="Θέση">{{item.bin.section}}-{{item.bin.spot}}{{item.bin.bin_type}}</td>
-              <td data-label="Ποσότητα">{{item.quantity|floatformat:0}}</td>
-              <td data-label="Εξαγωγη">{{item.exit_stock|floatformat:0}}</td>
-              <td data-label="Διαθεσιμο">
+              <td data-label="Storage">{{item.bin.storage}}</td>
+              <td data-label="Bin">{{item.bin.section}}-{{item.bin.spot}}{{item.bin.bin_type}}</td>
+              <td data-label="Quantity">{{item.quantity|floatformat:0}}</td>
+              <td data-label="Extracted">{{item.exit_stock|floatformat:0}}</td>
+              <td data-label="Available">
                   {% if not item.deplete %}
                   <span class="icon has-text-success ">
                     <i class="mdi mdi-check-decagram "></i>
@@ -141,7 +141,7 @@
           {% empty %}
               <div style="display: flex; justify-content: center; height: 100%;padding:20px;">
                 <div class="notification is-success">
-                  Αυτο το στοκ δεν έχει τοποθετηθεί ακόμα.
+               Stock has not been placed yet.
                 </div>
               </div>
           {% endfor %}

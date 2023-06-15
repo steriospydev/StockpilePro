@@ -2,7 +2,7 @@
 
 {% load static %}
 
-{% block title%}Κατηγορίες {% endblock %}
+{% block title%}Browse by Categories{% endblock %}
 
 {%block css %}
 .custom-width {
@@ -14,19 +14,19 @@
 {% endblock%}
 
 {% block content %}
-    {% include 'Component/page_title.html' with tab1='Κατηγορίες' %}
+    {% include 'Component/page_title.html' with tab1='Categories' %}
 <div class="card has-table has-mobile-sort-spaced">
           <header class="card-header ml-6">
               <div class="control">
-                <a href="{% url 'product:category-create' %}" class="button is-success">Δημιουργία Kατηγορίας</a>
+                <a href="{% url 'product:category-create' %}" class="button is-success">Create Category</a>
               </div>
           </header>
         </div>
     <div class="columns  mr-5 ml-5 has-background-dark is-rounded has-text-centered ">
-      <div class="column is-3 has-text-danger has-text-weight-semibold ">Φαγωσιμα</div>
-      <div class="column is-3 has-text-link has-text-weight-semibold">Ποτα</div>
-      <div class="column is-3 has-text-success has-text-weight-semibold">Αναλώσιμα</div>
-      <div class="column is-3 has-text-warning has-text-weight-semibold">Υπολοιπα</div>
+      <div class="column is-3 has-text-danger has-text-weight-semibold ">Edible</div>
+      <div class="column is-3 has-text-link has-text-weight-semibold">Drinks</div>
+      <div class="column is-3 has-text-success has-text-weight-semibold">Expendables</div>
+      <div class="column is-3 has-text-warning has-text-weight-semibold">More</div>
     </div>
 
     <div class="tile is-ancestor">

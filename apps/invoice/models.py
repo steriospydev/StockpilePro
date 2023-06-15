@@ -11,8 +11,8 @@ from ..supplier.models import Supplier
 
 
 class TimeStamp(models.Model):
-    created_at = models.DateTimeField('Δημιουργηθηκε', auto_now_add=True)
-    updated_at = models.DateTimeField('Ανανεωθηκε', auto_now=True)
+    created_at = models.DateTimeField('Created at', auto_now_add=True)
+    updated_at = models.DateTimeField('Updated at', auto_now=True)
 
     class Meta:
         abstract = True
@@ -21,15 +21,15 @@ class TimeStamp(models.Model):
 class Invoice(TimeStamp):
     invoice_no = models.BigIntegerField('Invoice No')
     supplier = models.ForeignKey(Supplier, on_delete=models.CASCADE)
-    date_of_issuance = models.DateTimeField('Ημερομηνία')
+    date_of_issuance = models.DateTimeField('Issue Date')
 
-    subtotal = models.DecimalField('Μερικό Σύνολο', max_digits=12, decimal_places=2, blank=True, default=0)
-    total_taxes = models.DecimalField('ΦΠΑ', max_digits=12, decimal_places=2, blank=True, default=0)
-    total = models.DecimalField('Συνολο', max_digits=12, decimal_places=2, blank=True, default=0)
+    subtotal = models.DecimalField('Subtotal', max_digits=12, decimal_places=2, blank=True, default=0)
+    total_taxes = models.DecimalField('Tax', max_digits=12, decimal_places=2, blank=True, default=0)
+    total = models.DecimalField('Total', max_digits=12, decimal_places=2, blank=True, default=0)
 
     class Meta:
-        verbose_name = "Τιμολογιο"
-        verbose_name_plural = "Τιμολογια"
+        verbose_name = "Invoice"
+        verbose_name_plural = "Invoices"
         ordering = ('-created_at',)
         unique_together = ('invoice_no', 'supplier')
 
@@ -64,23 +64,23 @@ class InvoiceItem(models.Model):
                                 on_delete=models.CASCADE)
     product = models.ForeignKey(Product, related_name='product_items',
                                 on_delete=models.CASCADE)
-    quantity = models.DecimalField('Ποσότητα', default=00.00,
+    quantity = models.DecimalField('Quantity', default=00.00,
                                    max_digits=5, decimal_places=1,
                                    validators=[MinValueValidator(0)])
-    tax_rate = models.DecimalField('ΦΠΑ %', default=00.00,
+    tax_rate = models.DecimalField('Tax rate %', default=00.00,
                                    blank=True,
                                    max_digits=4, decimal_places=1,
                                    validators=[MinValueValidator(0)])
-    total_tax = models.DecimalField('Φορος', max_digits=5, decimal_places=2,
+    total_tax = models.DecimalField('Taxes', max_digits=5, decimal_places=2,
                                     blank=True,
                                     default=00.00)
-    unit_price = models.DecimalField('Τιμή Μονάδας', blank=True,
+    unit_price = models.DecimalField('Unit Price', blank=True,
                                      max_digits=8, decimal_places=2,
                                      default=00.00, validators=[MinValueValidator(0)])
-    line_subtotal = models.DecimalField('Μερικό', default=00.00,
+    line_subtotal = models.DecimalField('Subtotal', default=00.00,
                                         max_digits=8, decimal_places=2,
                                         blank=True)
-    line_total = models.DecimalField('Τιμη', default=00.00,
+    line_total = models.DecimalField('Total', default=00.00,
                                      max_digits=8, decimal_places=2,
                                      blank=True)
 

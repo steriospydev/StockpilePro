@@ -1,17 +1,17 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title%}Νέο Τιμολόγιο {% endblock %}
+{% block title%}New Invoice {% endblock %}
 
 {% block bread %}
-  {% include 'breadcrumb.html' with tab1='Δημιουργία Τιμολογίου' tab2='-'%}
+  {% include 'breadcrumb.html' with tab1='Create Invoice' tab2='-'%}
 {% endblock %}
 
 {% block content %}
     <div class="field has-text-center ml-5">
         <div class="control">
             <a href="{% url 'supplier:supplier-create' %}"
-                     class="button is-link">Νέος Προμηθευτής</a>
+                     class="button is-link">New Supplier</a>
         </div>
     </div>
     {% include 'Component/form/form.html' %}

@@ -1,17 +1,17 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title%}Δημιουργία Υποκατηγορίας{% endblock %}
+{% block title%}New Sub-Category{% endblock %}
 
 {% block bread %}
-       {% include 'breadcrumb.html' with tab1='Δημιουργία' tab2='Υποκατηγορία' %}
+       {% include 'breadcrumb.html' with tab1='Create' tab2='Sub-Category' %}
 {% endblock %}
 
 {% block content %}
     <div class="field has-text-center ml-5">
         <div class="control">
             <a href="{% url 'product:category-create' %}"
-            class="button is-link ">Νεα Κατηγορία</a>
+            class="button is-link ">New Category</a>
         </div>
     </div>
     {% include 'Component/form/form.html' %}

@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
-{% block title%}Τιμολόγια {% endblock %}
+{% block title%}Invoices {% endblock %}
 {% block css %}
     #search_term::-webkit-input-placeholder {
       color: black;
@@ -19,7 +19,7 @@
 
 {% endblock %}
 {% block content %}
-  {% include 'Component/page_title.html' with tab1='Τιμολόγια' %}
+  {% include 'Component/page_title.html' with tab1='Invoices' %}
 
   <!-- Product Header-->
   <div class="tile is-ancestor ml-3 mr-3 ">
@@ -38,10 +38,10 @@
               <div class="level-item">
                 <div class="is-widget-label ">
                   <h3 class="subtitle is-spaced has-text-success">
-                      Δημιουργία
+                      Create
                   </h3>
                   <h3 class="subtitle is-spaced has-text-success">
-                      Τιμολογίου
+                      Invoice
                   </h3>
                 </div>
               </div>
@@ -57,7 +57,7 @@
             <div class="level is-mobile">
               <div class="level-item ">
                 <div class="is-widget-label "><h3 class="subtitle is-spaced has-text-warning">
-                  Τιμολόγια
+                  Invoices
                 </h3>
                   <h1 class="title has-text-danger">
                     {{ total_invoices }}
@@ -79,7 +79,7 @@
     <header class="card-header">
       <p class="card-header-title">
         <span class="icon"><i class="mdi mdi-briefcase-check"></i></span>
-          Τιμολόγια
+          Invoices
     </header>
   </div>
   <!-- Invoice Search-->
@@ -91,7 +91,7 @@
         </div>
         <div class="control">
             <button class="button is-info" type='submit'>
-                <span>Αναζήτηση</span>
+                <span>Search</span>
                 <span class="icon has-text-light is-large">
                     <i class="mdi mdi-table-search"></i></span>
             </button>
@@ -104,9 +104,9 @@
     <div style="display: flex; justify-content: center; height: 100%;">
       <div class="notification is-success">
         {% if not invoices %}
-          Δεν βρέθηκαν αποτελέσματα τιμολογιών με προμηθευτή: {{query}}.
+          No invoice result for supplier: {{query}}.
         {% else %}
-          Bρέθηκαν {{invoices|length}} Τιμολόγια του {{query}}.
+          Found {{invoices|length}} invoices of {{query}}.
         {% endif %}
       </div>
     </div>
@@ -119,11 +119,11 @@
         <thead>
           <tr>
             <th>Invoice No.</th>
-            <th>Ημ.Εκδοσης</th>
-            <th>Προμηθευτής</th>
-            <th>Φ.Π.Α</th>
+            <th>Issue Date</th>
+            <th>Supplier</th>
+            <th>Tax Code</th>
 
-            <th>Σύνολο</th>
+            <th>Total</th>
             <th>Actions</th>
           </tr>
         </thead>
@@ -131,10 +131,10 @@
           {% for invoice in invoices %}
             <tr>
               <td data-label="Invoice No.">{{ invoice.invoice_no }}</td>
-              <td data-label="Ημ.Εκδοσης">{{invoice.date_of_issuance.date}}</td>
-              <td data-label="Προμηθευτής"> {{invoice.supplier.company}}</td>
-              <td data-label="Φ.Π.Α"> {{ invoice.total_taxes}} &#x20AC;</td>
-              <td data-label="Σύνολο"> {{ invoice.total }} &#x20AC;</td>
+              <td data-label="Issue Date">{{invoice.date_of_issuance.date}}</td>
+              <td data-label="Supplier"> {{invoice.supplier.company}}</td>
+              <td data-label="Tax Code"> {{ invoice.total_taxes}} &#x20AC;</td>
+              <td data-label="Total"> {{ invoice.total }} &#x20AC;</td>
 
 
               <td class="is-actions-cell">
@@ -150,7 +150,7 @@
             {% if request.resolver_match.url_name == 'invoice-list' %}
               <div style="display: flex; justify-content: center; height: 100%;">
                 <div class="notification is-success">
-                  Δεν υπάρχουν ακόμα αποθηκευμένα τιμολόγια.
+                  No stored invoices yet.
                 </div>
               </div>
             {% endif%}

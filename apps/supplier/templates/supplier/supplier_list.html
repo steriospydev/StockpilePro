@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
-{% block title%}Προμηθευτές {% endblock %}
+{% block title%}Suppliers{% endblock %}
 {% block css %}
     #search_term::-webkit-input-placeholder {
       color: black;
@@ -19,7 +19,7 @@
 
 {% endblock %}
 {% block content %}
-  {% include 'Component/page_title.html' with tab1='Προμηθευτές' %}
+  {% include 'Component/page_title.html' with tab1='Suppliers' %}
 
   <!-- Supplier Header-->
   <div class="tile is-ancestor ml-3 mr-3 ">
@@ -38,10 +38,10 @@
               <div class="level-item">
                 <div class="is-widget-label ">
                   <h3 class="subtitle is-spaced has-text-success">
-                      Δημιουργία
+                      Create
                   </h3>
                   <h3 class="subtitle is-spaced has-text-success">
-                      Προμηθευτή
+                      Suppplier
                   </h3>
                 </div>
               </div>
@@ -57,7 +57,7 @@
             <div class="level is-mobile">
               <div class="level-item ">
                 <div class="is-widget-label "><h3 class="subtitle is-spaced has-text-warning">
-                  Προμηθευτές
+                  Suppliers
                 </h3>
                   <h1 class="title has-text-danger">
                     {{ suppliers.count }}
@@ -92,11 +92,11 @@
         <div class="select">
 
           <select name="search_option" >
-            <option value="Επιχείρηση">Επιχείρηση</option>
+            <option value="Επιχείρηση">Company</option>
             <option value="SKU">SKU</option>
-            <option value="Πόλη">Πόλη</option>
-            <option value="Τηλέφωνο">Τηλέφωνο</option>
-            <option value="ΑΦΜ">ΑΦΜ</option>
+            <option value="Πόλη">City</option>
+            <option value="Τηλέφωνο">Phone</option>
+            <option value="ΑΦΜ">Tax Number</option>
           </select>
         </div>
       </div>
@@ -107,9 +107,9 @@
     <div style="display: flex; justify-content: center; height: 100%;">
       <div class="notification is-success">
         {% if not suppliers %}
-          Δεν βρέθηκαν αποτελέσματα προμηθευτών με {{search_option }}: {{query}}.
+         No results with {{search_option }}: {{query}}.
         {% else %}
-          Bρέθηκαν {{suppliers|length}} προμηθευτες με {{search_option }}: {{query}}.
+          {{suppliers|length}} suppliers found with {{search_option }}: {{query}}.
         {% endif %}
       </div>
     </div>
@@ -121,10 +121,10 @@
       <table class="table is-fullwidth is-striped is-hoverable is-sortable is-fullwidth">
         <thead>
           <tr>
-            <th>Προμηθευτής</th>
-            <th>Α.Φ.Μ.</th>
-            <th>Τηλ.</th>
-            <th>Πόλη</th>
+            <th>Supplier</th>
+            <th>Tax Code</th>
+            <th>Phone</th>
+            <th>City</th>
             <th>SKU_num</th>
             <th>Active</th>
             <th>Actions</th>
@@ -133,12 +133,12 @@
         <tbody >
           {% for supplier in suppliers %}
             <tr >
-              <td data-label="Προμηθευτής">{{supplier.company}}</td>
-              <td data-label="Α.Φ.Μ.">{{supplier.TIN_num}}</td>
-              <td data-label="Τηλ.">{{supplier.phone}}</td>
+              <td data-label="Supplier">{{supplier.company}}</td>
+              <td data-label="Tax Code">{{supplier.TIN_num}}</td>
+              <td data-label="City">{{supplier.phone}}</td>
               <td data-label="Πόλη">{{supplier.city}}</td>
               <td data-label="SKU_num">{{supplier.sku_num}}</td>
-              <td data-label="Ενημέρωση">
+              <td data-label="Update">
                 {% if supplier.is_active %}
                   <span class="icon has-text-success ">
                     <i class="mdi mdi-check-decagram "></i>
@@ -188,9 +188,9 @@
             {% if request.resolver_match.url_name == 'supplier-list' %}
               <div style="display: flex; justify-content: center; height: 100%;">
                 <div class="notification is-success">
-                  Δεν υπάρχουν ακόμα αποθηκευμένοι προμηθευτες.
+                  Bo suppliers in database.
                   <a href="{% url 'supplier:supplier-create' %}">
-                    Δημιουργία Νέου Προμηθευτή.
+                    Create new Supplier!
                   </a>.
                 </div>
               </div>

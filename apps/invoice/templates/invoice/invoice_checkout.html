@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title%}Νέο Τιμολόγιο {% endblock %}
+{% block title%}New Invoice {% endblock %}
 
 {% block css%}
 .box1-shadow {
@@ -10,7 +10,7 @@
 {% endblock %}
 {% block content %}
 
-  {% include 'Component/page_title.html' with tab1='Δημιουργία Τιμολογίου' %}
+  {% include 'Component/page_title.html' with tab1='Create Invoice' %}
 
 <div class="columns is-multiline is-mobile mr-3 ml-3">
   <div class="column is-full-desktop is-full-tablet is-full-mobile">
@@ -21,7 +21,7 @@
           <div class="field has-text-center mt-5 ">
             <div class="control ">
               <a href="{% url 'invoice:add-items' invoice.id %}" class="button is-danger is-outlined ml-5 mr-6 mb-2">
-                  Aκύρωση</a>
+                  Cancel</a>
                 <a href="" class="button is-success  ml-5 mr-6">
                   Eπόμενο: <strong>Υπολογισμός Φόρου/Κόστος </strong></a>
 

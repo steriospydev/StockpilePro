@@ -1,10 +1,10 @@
 {% extends 'base.html' %}
 
-{% block title%}Αποθήκη {{storage.storage_name}}{% endblock %}
+{% block title%}Storage {{storage.storage_name}}{% endblock %}
 
 {% block content %}
 
-{% include 'Component/page_title.html' with tab1='Πληροφορίες Αποθήκης' tab2=storage.storage_name %}
+{% include 'Component/page_title.html' with tab1='Storage Info' tab2=storage.storage_name %}
 
 <!--Breadcrumb-->
 <div class="card has-table has-mobile-sort-spaced">
@@ -14,13 +14,13 @@
        {{storage.storage_name}}-{{storage.id}}
     </p>
       <div class="control ml-5">
-        <a href="{% url 'storehouse:storehouse-main' %}" class="button is-info mr-6">Πίσω</a>
+        <a href="{% url 'storehouse:storehouse-main' %}" class="button is-danger mr-6">Go Back</a>
     </div>
       <div class="control ml-5">
 
         <a href="#" class="button is-success mr-6">
             <span class="icon mr-4"><i class="mdi mdi-information-outline mdi-24px"></i></span>
-                 Αποθήκη
+                 Storage
         </a>
     </div>
 
@@ -36,7 +36,7 @@
             <div class="level is-mobile">
               <div class="level-item ">
                 <div class="is-widget-label "><h3 class="subtitle is-spaced has-text-danger">
-                    Σε Xρήση
+                    In Use
                 </h3>
                   <h1 class="title has-text-white">
                       {{in_use_bins}}
@@ -58,7 +58,7 @@
             <div class="level is-mobile">
               <div class="level-item ">
                 <div class="is-widget-label "><h3 class="subtitle is-spaced has-text-info">
-                  Ελεύθερες
+                  Free
                 </h3>
                   <h1 class="title has-text-white">
                       {{free_bins}}
@@ -80,7 +80,7 @@
             <div class="level is-mobile">
               <div class="level-item ">
                 <div class="is-widget-label "><h3 class="subtitle is-spaced has-text-warning">
-                  Θέσεις
+                  Bins
                 </h3>
                   <h1 class="title has-text-white">
                       {{all_bins}}
@@ -105,13 +105,13 @@
         <header class="card-header">
             <div class="notification is-dark">
                 <span class="mr-5">
-                    Διαθέσιμες Παλέτες: {{free_floor}}
+                    Free pallet spot: {{free_floor}}
                     <span class="icon has-text-danger">
                         <i class="mdi mdi-alpha-f-box-outline mdi-24px"></i>
                     </span>
                 </span>
                 <span>
-                    Διαθέσιμα Ράφια: {{free_shelves}}
+                    Free shelf spot: {{free_shelves}}
                     <span class="icon has-text-link">
                          <i class="mdi mdi-alpha-s-box-outline mdi-24px"></i>
                     </span>
@@ -128,19 +128,19 @@
             <thead>
               <tr>
 
-                <th class="has-text-centered">ΔΙΑΔΡΟΜΟΣ</th>
-                <th class="has-text-centered">ΘΕΣΗ</th>
-                <th class="has-text-centered">ΤΥΠΟΣ</th>
-                <th class="has-text-centered">ΣΕ ΧΡΗΣΗ</th>
+                <th class="has-text-centered">Lane</th>
+                <th class="has-text-centered">Bin</th>
+                <th class="has-text-centered">Type</th>
+                <th class="has-text-centered">In Use</th>
                 <th class="has-text-centered"></th>
               </tr>
             </thead>
             <tbody class="has-text-centered">
             {% for bin in bins %}
                 <tr>
-                  <td data-label="ΔΙΑΔΡΟΜΟΣ">{{bin.section}}</td>
-                  <td  data-label="ΘΕΣΗ">{{bin.spot}}</td>
-                  <td data-label="ΤΥΠΟΣ">
+                  <td data-label="Lane">{{bin.section}}</td>
+                  <td  data-label="Bin">{{bin.spot}}</td>
+                  <td data-label="Type">
                       {% if bin.bin_type == 'F' %}
                           <span class="icon has-text-danger">
                             <i class="mdi mdi-alpha-f-box-outline mdi-24px"></i>

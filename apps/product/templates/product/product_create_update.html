@@ -1,21 +1,21 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title%}Δημιουργία-Ανανέωση {% endblock %}
+{% block title%}Create\Update{% endblock %}
 
 {% block bread %}
-    {% include 'breadcrumb.html' with tab1='Δημιουργία-Ανανέωση Προιόντος' tab2='-' %}
+    {% include 'breadcrumb.html' with tab1='Create\Update Product' tab2='-' %}
 {% endblock %}
 
 {% block content %}
     <div class="field has-text-center ml-5">
         <div class="control">
             <a href="{% url 'product:package-create' %}"
-            class="button is-link mb-1">Νεα Συσκευασια</a>
+            class="button is-link mb-1">New Package</a>
             <a href="{% url 'product:tax-create' %}"
-            class="button is-link ">Νεος Φόρος</a>
+            class="button is-link ">New Tax Rate</a>
             <a href="{% url 'product:fullsub-create' %}"
-            class="button is-link ">Νεα Υποκατηγορία</a>
+            class="button is-link ">New Subcategory</a>
         </div>
     </div>
     {% include 'Component/form/form.html' %}

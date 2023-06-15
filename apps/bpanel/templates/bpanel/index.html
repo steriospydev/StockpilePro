@@ -41,7 +41,7 @@ overflow: hidden; // hide horizontal
             <div class="level is-mobile">
               <div class="level-item ">
                 <div class="is-widget-label "><h3 class="subtitle is-spaced has-text-warning">
-                  Αποθήκες
+                  Storages
                 </h3>
                   <h1 class="title has-text-white">
                       {{ num_storages }}
@@ -63,7 +63,7 @@ overflow: hidden; // hide horizontal
             <div class="level is-mobile">
               <div class="level-item ">
                 <div class="is-widget-label "><h3 class="subtitle is-spaced has-text-link">
-                  Προμηθευτές
+                  Suppliers
                 </h3>
                   <h1 class="title has-text-white">
                       {{num_suppliers}}
@@ -87,7 +87,7 @@ overflow: hidden; // hide horizontal
         <div class="level is-mobile">
           <div class="level-item ">
             <div class="is-widget-label "><h3 class="subtitle is-spaced has-text-danger">
-                Προιόντα
+                Products
             </h3>
               <h1 class="title has-text-white">
                   {{num_products}}
@@ -109,7 +109,7 @@ overflow: hidden; // hide horizontal
         <div class="level is-mobile">
           <div class="level-item ">
             <div class="is-widget-label "><h3 class="subtitle is-spaced has-text-success">
-              Τιμολόγια
+              Invoices
             </h3>
               <h1 class="title has-text-white">
                   {{num_invoices}}
@@ -130,7 +130,7 @@ overflow: hidden; // hide horizontal
 <header class="card-header mr-6 ml-6">
   <p class="card-header-title">
     <span class="icon"><i class="mdi mdi-file-document-edit-outline"></i></span>
-      Πίνακας Ανακοινώσεων
+      Job Board
 </header>
 
 <div class="container mr-6 ml-6 mb-5">
@@ -142,7 +142,7 @@ overflow: hidden; // hide horizontal
                     <div class="field-body">
                         <div class="field ">
                             <div class="control ml-6 ">
-                                <button class="button is-success is-outlined " type="submit">Ανακοίνωση</button>
+                                <button class="button is-success is-outlined " type="submit">Publish a Task</button>
                             </div>
                         </div>
                         <div class="field ">
@@ -191,7 +191,7 @@ overflow: hidden; // hide horizontal
                 <a href="{% url 'bpanel:todo-remove' todo.id %}"
                    class="button is-warning level-item is-small  button-width">
                     <span class="icon">
-                        Διαγραφή
+                        Delete
                         <i class="mdi mdi-trash-can"></i>
                     </span>
                 </a>

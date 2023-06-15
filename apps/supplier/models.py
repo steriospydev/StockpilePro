@@ -7,8 +7,8 @@ from django.urls import reverse
 from apps.utils import signals
 
 class TimeStamp(models.Model):
-    created_at = models.DateTimeField('Δημιουργηθηκε', auto_now_add=True)
-    updated_at = models.DateTimeField('Ανανεωθηκε', auto_now=True)
+    created_at = models.DateTimeField('Created at', auto_now_add=True)
+    updated_at = models.DateTimeField('Updated at', auto_now=True)
 
     class Meta:
         abstract = True
@@ -18,11 +18,11 @@ class ActiveManager(models.Manager):
         return super().get_queryset().filter(is_active=True)
 
 class Supplier(TimeStamp):
-    company = models.CharField("Επιχειρηση", max_length=120, unique=True)
+    company = models.CharField("Company", max_length=120, unique=True)
     sku_num = models.CharField(max_length=2, unique=True,
                                blank=True, null=True, editable=False)
-    person = models.CharField("Eκπροσωπος", max_length=120, blank=True, null=True)
-    phone = models.CharField('Τηλεφωνο',
+    person = models.CharField("Representative", max_length=120, blank=True, null=True)
+    phone = models.CharField('Phone',
                              max_length=10,
                              blank=True,
                              null=True,
@@ -42,10 +42,10 @@ class Supplier(TimeStamp):
                                               r'@[A-Za-z0-9-]+(\.[A-Z|a-z]{2,})+',
                                         message="Wrong email Format."
                                     )])
-    city = models.CharField('Πολη', max_length=200, blank=True, null=True)
-    area = models.CharField('Περιοχη', max_length=200, blank=True, null=True)
-    address = models.CharField('Διευθυνση', max_length=200, blank=True, null=True)
-    zipcode = models.CharField('Τ.Κ.',
+    city = models.CharField('City', max_length=200, blank=True, null=True)
+    area = models.CharField('Area', max_length=200, blank=True, null=True)
+    address = models.CharField('Adress', max_length=200, blank=True, null=True)
+    zipcode = models.CharField('Postal Code',
                                max_length=5,
                                blank=True,
                                null=True,
@@ -54,8 +54,8 @@ class Supplier(TimeStamp):
                                         regex=r'^\d{5}$',
                                         message="Zipcode must be 5 digits."
                                     )])
-    TIN_agency = models.CharField("ΔΟΥ", max_length=120, blank=True, null=True)
-    TIN_num = models.CharField("Α.Φ.Μ",
+    TIN_agency = models.CharField("Tax Authority", max_length=120, blank=True, null=True)
+    TIN_num = models.CharField("Tax number",
                                max_length=9,
                                validators=[
                                    RegexValidator(
@@ -70,8 +70,8 @@ class Supplier(TimeStamp):
     active = ActiveManager()
 
     class Meta:
-        verbose_name = 'Προμηθευτης'
-        verbose_name_plural = 'Προμηθευτες'
+        verbose_name = 'Supplier'
+        verbose_name_plural = 'Suppliers'
         ordering = ['-created_at']
 
     def __str__(self):

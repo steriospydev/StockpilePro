@@ -2,7 +2,7 @@
 
 {% load static %}
 
-{% block title%}Κατηγορίες {% endblock %}
+{% block title%}Categories{% endblock %}
 
 {%block css %}
 .custom-width {
@@ -11,17 +11,17 @@
 {% endblock%}
 
 {% block content %}
-    {% include 'Component/page_title.html' with tab1='Κατηγορια' tab2=category.category_name %}
+    {% include 'Component/page_title.html' with tab1='Category' tab2=category.category_name %}
     <div class="card has-table has-mobile-sort-spaced ml-6">
       <header class="card-header ml-6">
         <div class="control">
-            <a href="{% url 'product:category-list' %}" class="button is-info mr-2">Πίσω</a>
+            <a href="{% url 'product:category-list' %}" class="button is-info mr-2">Go Back</a>
           </div>
           <div class="control">
-            <a href="{% url 'product:subcategory-create' category_id=category.id %}" class="button is-success mr-2">Δημιουργία Υποκατηγορίας</a>
+            <a href="{% url 'product:subcategory-create' category_id=category.id %}" class="button is-success mr-2">Create Subcategory</a>
           </div>
           <div class="control">
-            <a href="{% url 'product:category-delete' category.pk%}" class="button is-danger">Διαγραφή</a>
+            <a href="{% url 'product:category-delete' category.pk%}" class="button is-danger">Delete</a>
           </div>
       </header>
     </div>
@@ -58,7 +58,7 @@
 
          <div style="display: flex; justify-content: center; height: 100%;">
                 <div class="notification is-info">
-                  Δεν υπάρχουν ακόμα Υποκατηγορίες σε αυτήν την Κατηγορία.
+                 No subcategories in Category.
                 </div>
               </div>
 

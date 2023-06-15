@@ -1,10 +1,10 @@
 {% extends 'base.html' %}
 
-{% block title%}Τιμολόγιο {{invoice.supplier.company}}-{{invoice.invoice_no}}{% endblock %}
+{% block title%}Invoice {{invoice.supplier.company}}-{{invoice.invoice_no}}{% endblock %}
 
 {% block content %}
 
-{% include 'Component/page_title.html' with tab1='Πληροφορίες Τιμολογίου' tab2=invoice %}
+{% include 'Component/page_title.html' with tab1='Invoice Info' tab2=invoice %}
 {% include 'invoice/components/card_header.html' %}
 <div class="tile is-ancestor mx-5 has-background-dark">
     <!-- General Info-->
@@ -14,14 +14,14 @@
           <div class="level is-mobile">
             <div class="level-item">
               <div class="is-widget-label"><h3 class="subtitle is-spaced mb-2 ">
-                  Γενικά
+                  General
                   </h3>
                   <ul>
-                    <li class="is-italic">Αριθμός</li>
+                    <li class="is-italic">Number</li>
                     <li class="mb-2" ><strong style="color:white;"> {{ invoice.invoice_no}}</strong></li>
-                    <li class="is-italic">Προμηθευτής</li>
+                    <li class="is-italic">Supplier</li>
                     <li class="mb-2"> <strong style="color:white;">{{ invoice.supplier.company }}</strong></li>
-                    <li class="is-italic">Ημ.Έκδοσης</li>
+                    <li class="is-italic">Issue Date</li>
                     <li class="mb-2 "> <strong style="color:white;">{{ invoice.date_of_issuance.date }}</strong></li>
 
                   </ul>
@@ -35,14 +35,14 @@
                         <li class="mb-4">
                             <a class="button is-small is-success is-outlined "
                            href="{% url 'invoice:invoice-item-create' invoice.id %}">
-                        <strong>Προσθήκη Προιόντος</strong></a>
+                        <strong>Add Product</strong></a>
                         </li>
                         <li class="mb-4">
                             <a class="button is-small is-danger"
                            href="#">
-                        Διαγραφή Τιμολογίου</a>
+                        Delete Invoice</a>
                         </li>
-                        <li><small>Ανανεώθηκε</small></li>
+                        <li><small>Update</small></li>
                         <li class="mb-2 is-italic has-text-white"> <small>{{ invoice.updated_at }}</small></li>
                     </ul>
               </div>
@@ -58,14 +58,14 @@
           <div class="level is-mobile">
             <div class="level-item">
               <div class="is-widget-label "><h3 class="subtitle is-spaced mb-2 has-text-dark">
-                Στοιχεία Πληρωμής
+                Payment Info
               </h3>
                   <ul>
-                    <li class="is-italic"><strong>Μερικό Σύνολο</strong></li>
+                    <li class="is-italic"><strong>Subtotal</strong></li>
                     <li class="mb-2"> {{invoice.subtotal }} &#x20AC;</li>
-                    <li class="is-italic"><strong>Φόροι Τιμολογίου</strong></li>
+                    <li class="is-italic"><strong>Taxes</strong></li>
                     <li class="mb-2"> {{ invoice.total_taxes }} &#x20AC;</li>
-                      <li class="is-italic"><strong>Σύνολο</strong></li>
+                      <li class="is-italic"><strong>Total</strong></li>
                     <li class="mb-2"> {{ invoice.total }} &#x20AC;</li>
                   </ul>
               </div>
@@ -86,24 +86,24 @@
       <table class="table is-fullwidth is-striped is-hoverable is-sortable is-fullwidth">
         <thead>
           <tr>
-            <th>Προιον</th>
-            <th>Ποσοτητα</th>
-            <th>Τ.Μ. &#x20AC;</th>
-            <th>Μερικό &#x20AC;</th>
-            <th>ΦΠΑ &#x20AC;</th>
-            <th>Κόστος &#x20AC;</th>
+            <th>Product</th>
+            <th>Quantity</th>
+            <th>Unit Price &#x20AC;</th>
+            <th>Subtotal &#x20AC;</th>
+            <th>Tax &#x20AC;</th>
+            <th>Total &#x20AC;</th>
             <th>Actions</th>
           </tr>
         </thead>
         <tbody>
           {% for item in invoice_items %}
             <tr>
-              <td data-label="Προιον">{{item.product}}</td>
-              <td data-label="Ποσοτητα">{{item.quantity}}</td>
-              <td data-label="Τ.Μ."> {{item.unit_price}}</td>
-              <td data-label="Μερικό">{{item.line_subtotal}}</td>
-              <td data-label="Φορος">{{item.total_tax}}</td>
-              <td data-label="Κόστος"> {{item.line_total}}</td>
+              <td data-label="Product">{{item.product}}</td>
+              <td data-label="Quantity">{{item.quantity}}</td>
+              <td data-label="Unit Price"> {{item.unit_price}}</td>
+              <td data-label="Subtotal">{{item.line_subtotal}}</td>
+              <td data-label="Tax">{{item.total_tax}}</td>
+              <td data-label="Total"> {{item.line_total}}</td>
               <td class="is-actions-cell">
                 <div class="buttons is-right">
                   <a href="{{ item.get_absolute_url }}"
@@ -116,7 +116,7 @@
           {% empty %}
               <div style="display: flex; justify-content: center; height: 100%;">
                 <div class="notification is-success">
-                  Δεν υπάρχουν ακόμα αποθηκευμένα Προιοντα.
+                  No products available.
                 </div>
               </div>
           {% endfor %}

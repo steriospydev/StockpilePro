@@ -1,10 +1,10 @@
 {% extends 'base.html' %}
 
-{% block title%}Προιόν {{product.product_name}}{% endblock %}
+{% block title%}Product {{product.product_name}}{% endblock %}
 
 {% block content %}
 
-{% include 'Component/page_title.html' with tab1='Πληροφορίες Προιόντος' tab2=product.product_name %}
+{% include 'Component/page_title.html' with tab1='Product Info' tab2=product.product_name %}
 {% include 'product/components/card_header.html' %}
 
 <div class="tile is-ancestor ml-2">
@@ -16,12 +16,12 @@
             <div class="level-item">
               <div class="is-widget-label">
                   <h3 class="subtitle is-spaced mb-2">
-                    <strong class="has-text-danger">Γενικά</strong>
+                    <strong class="has-text-danger">General</strong>
                   </h3>
                   <ul>
-                    <li class="is-italic">Προιόν</li>
+                    <li class="is-italic">Product</li>
                     <li class="mb-2"><strong> {{ product.product_name}}</strong></li>
-                    <li class="is-italic">Ενεργό/Διαθέσιμο/Online</li>
+                    <li class="is-italic">Active/Available/Online</li>
                     <li class="mb-2">
                         {% if product.is_active %}
                             <span class="icon has-text-success "><i class="mdi mdi-check-decagram "></i></span>
@@ -39,11 +39,11 @@
                             <span class="icon has-text-danger "><i class="mdi mdi-cancel "></i></span>
                         {% endif %}
                     </li>
-                    <li class="is-italic">Αριθμός SKU</li>
+                    <li class="is-italic">SKU Number</li>
                     <li class="mb-2"> <strong>{{ product.sku_num }}</strong></li>
                     <li><a class="button is-small is-danger is-outlined"
                            href="{% url 'product:product-update' product.id %}">
-                        Ενημέρωση</a>
+                        Update</a>
                     </li>
                   </ul>
               </div>
@@ -66,17 +66,17 @@
             <div class="level is-mobile">
               <div class="level-item">
                 <div class="is-widget-label"><h3 class="subtitle is-spaced mb-2">
-                  <strong class="has-text-dark">Στοιχεία Τιμολογίων</strong>
+                  <strong class="has-text-dark">Invoice Data</strong>
                 </h3>
                     <ul>
-                      <li class="is-italic">Ποσότητα Παραγγελιών</li>
+                      <li class="is-italic">Overall Quantity</li>
                       <li class="mb-2"><strong> {{invoice_report.total_quantity}}</strong></li>
                       <li class="is-italic"></li>
-                      <li class="is-italic">Σύνολο Φόρων</li>
+                      <li class="is-italic">Overall Taxes</li>
                       <li class="mb-2"> <strong>{{invoice_report.total_taxes}} &#x20AC;</strong></li>
-                      <li class="is-italic">Συνολο Αγορών</li>
+                      <li class="is-italic">Overall Total</li>
                       <li class="mb-2"> <strong>{{invoice_report.total_value}} &#x20AC;</strong></li>
-                      <li class="is-italic">Πλήθος ΤΙμολογίων</li>
+                      <li class="is-italic">Invoice Presence</li>
                       <li class="mb-2"> <strong>{{invoice_report.no_of_invoices}}</strong></li>
                     </ul>
                 </div>
@@ -102,15 +102,15 @@
         <div class="level is-mobile">
           <div class="level-item">
             <div class="is-widget-label"><h3 class="subtitle is-spaced mb-2">
-              <strong class="has-text-info">Λοιπές Πληροφορίες</strong>
+              <strong class="has-text-info">More Info</strong>
             </h3>
                 <ul>
-                  <li class="is-italic">Σε Στοκ</li>
+                  <li class="is-italic">In Stock</li>
                   <li class="mb-2"><strong> 43</strong></li>
                   <li class="is-italic"></li>
-                  <li class="is-italic">Τελευταία Είσοδος</li>
+                  <li class="is-italic">Last Invoice</li>
                   <li class="mb-2"> <strong>March 2, 2023, 7:55 p.m.</strong></li>
-                  <li class="is-italic">Τελευτάια Έξοδος</li>
+                  <li class="is-italic">Last Withdraw</li>
                   <li class="mb-2"> <strong>March 7, 2023, 11:55 p.m.</strong></li>
                 </ul>
             </div>
@@ -133,17 +133,17 @@
           <div class="level is-mobile">
             <div class="level-item">
               <div class="is-widget-label "><h3 class="subtitle is-spaced mb-2">
-                <strong class="has-text-link">Στοιχεία Αναγνώρισης</strong>
+                <strong class="has-text-link">Identification Info</strong>
               </h3>
                   <ul>
-                    <li class="is-italic">Κατηγορία</li>
+                    <li class="is-italic">Category</li>
                     <li class="mb-2"><strong> {{product.subcategory.category }}</strong></li>
-                    <li class="is-italic">Υποκατηγορία</li>
+                    <li class="is-italic">SubCategory</li>
                     <li class="mb-2"> <strong>{{ product.subcategory }}</strong></li>
-                      <li class="is-italic">Συσκευασία</li>
+                      <li class="is-italic">Package</li>
                     <li class="mb-2"><strong> {{ product.package }}</strong></li>
 
-                    <li class="is-italic">Φ.Π.Α</li>
+                    <li class="is-italic">Tax Rate</li>
                     <li class="mb-2"> <strong>{{ product.tax_rate }} %</strong></li>
                   </ul>
               </div>

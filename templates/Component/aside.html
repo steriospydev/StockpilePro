@@ -25,7 +25,7 @@
 
   <div class="menu is-menu-main">
 
-      <p class="menu-label">Γενικα</p>
+      <p class="menu-label">General</p>
       <ul class="menu-list">
         <li>
           <a href="{% url 'bpanel:index' %}"
@@ -38,7 +38,7 @@
           <a href="{% url 'invoice:invoice-list' %}"
              class="{% if request.resolver_match.url_name == 'invoice-list' %}is-active{% endif %} router-link-active has-icon">
             <span class="icon"><i class="mdi mdi-briefcase-check"></i></span>
-            <span class="menu-item-label">Τιμολογια</span>
+            <span class="menu-item-label">Invoice</span>
           </a>
         </li>
         <li>
@@ -46,13 +46,13 @@
               class="{% if request.resolver_match.url_name == 'stock-list' %}is-active{% endif %} router-link-active has-icon">
             <span class="icon"><i class="mdi mdi-package"></i></span>
             <span class="menu-item-label">
-                Στοκ
+                Stock
             </span>
           </a>
         </li>
 
       </ul>
-      <p class="menu-label">ΠΡΟΙΟΝΤΑ</p>
+      <p class="menu-label">PRODUCT</p>
       <ul class="menu-list">
         <!--Προιόντα-->
 
@@ -60,7 +60,7 @@
           <a href="{% url 'product:product-list' %}"
              class="{% if request.resolver_match.url_name == 'product-list' %}is-active{% endif %}">
             <span class="icon"><i class="mdi mdi-table"></i></span>
-            <span class="menu-item-label">Προιόντα</span>
+            <span class="menu-item-label">Products</span>
           </a>
         </li>
 
@@ -68,7 +68,7 @@
           <a href="{% url 'product:category-list'%}"
              class="{% if request.resolver_match.url_name == 'category-list' %}is-active{% endif %}">
             <span class="icon"><i class="mdi mdi-label"></i></span>
-            <span class="menu-item-label">Κατηγορίες</span>
+            <span class="menu-item-label">Categories</span>
           </a>
         </li>
       </ul>
@@ -78,14 +78,14 @@
            <a href="{% url 'supplier:supplier-list' %}"
               class="{% if request.resolver_match.url_name == 'supplier-list' %}is-active{% endif %} router-link-active has-icon">
             <span class="icon"><i class="mdi mdi-account-multiple"></i></span>
-            <span class="menu-item-label">Προμηθευτές</span>
+            <span class="menu-item-label">Suppliers</span>
           </a>
         </li>
         <li>
          <a href="{% url 'storehouse:storehouse-main' %}"
              class="has-icon {% if request.resolver_match.url_name == 'storehouse-main' %}is-active{% endif %}">
             <span class="icon has-mark"><i class="mdi mdi-store"></i></span>
-            <span class="menu-item-label">Αποθήκες</span>
+            <span class="menu-item-label">Storage Area</span>
           </a>
         </li>
 

@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
-{% block title%}Στοκ {% endblock %}
+{% block title%}Stock{% endblock %}
 {% block css %}
     #search_term::-webkit-input-placeholder {
       color: black;
@@ -19,7 +19,7 @@
 
 {% endblock %}
 {% block content %}
-  {% include 'Component/page_title.html' with tab1='Στοκ' %}
+  {% include 'Component/page_title.html' with tab1='Stock' %}
 
   <!-- Product Header-->
   <div class="tile is-ancestor ml-3 mr-3 ">
@@ -38,10 +38,10 @@
               <div class="level-item">
                 <div class="is-widget-label ">
                   <h3 class="subtitle is-spaced has-text-success">
-                      Δημιουργία
+                      Create
                   </h3>
                   <h3 class="subtitle is-spaced has-text-success">
-                      Στοκ
+                      Stock
                   </h3>
                 </div>
               </div>
@@ -57,7 +57,7 @@
             <div class="level is-mobile">
               <div class="level-item ">
                 <div class="is-widget-label "><h3 class="subtitle is-spaced has-text-warning">
-                  Στοκ
+                  Stock
                 </h3>
                   <h1 class="title has-text-danger">
                     {{ total_stock }}
@@ -79,7 +79,7 @@
     <header class="card-header">
       <p class="card-header-title">
         <span class="icon"><i class="mdi mdi-package"></i></span>
-          Στοκ
+          Stock
     </header>
   </div>
   <!-- Product Search-->
@@ -90,7 +90,7 @@
         </div>
         <div class="control">
             <button class="button is-info" type='submit'>
-                <span>Αναζήτηση</span>
+                <span>Search</span>
                 <span class="icon has-text-light is-large"><i class="mdi mdi-account-search"></i></span>
             </button>
         </div>
@@ -121,9 +121,9 @@
     <div style="display: flex; justify-content: center; height: 100%;">
       <div class="notification is-success">
         {% if not products %}
-          Δεν βρέθηκαν αποτελέσματα στοκ με {{search_option }}: {{query}}.
+          No result with {{search_option }}: {{query}}.
         {% else %}
-          Bρέθηκαν {{stocks|length}} στοκ με {{search_option }}: {{query}}.
+          {{stocks|length}} found with stock {{search_option }}: {{query}}.
         {% endif %}
       </div>
     </div>
@@ -136,10 +136,10 @@
         <thead>
           <tr>
             <th>Stock</th>
-            <th>Ημ.Ληξης</th>
-            <th>Υπολοιπο</th>
-            <th>Τοποθετημενο</th>
-            <th>Διαθεσιμο</th>
+            <th>Exp.Date</th>
+            <th>Remainder</th>
+            <th>Placed</th>
+            <th>Available</th>
             <th>Actions</th>
           </tr>
         </thead>
@@ -192,7 +192,7 @@
             {% if request.resolver_match.url_name == 'stock-list' %}
               <div style="display: flex; justify-content: center; height: 100%;">
                 <div class="notification is-success">
-                  Δεν υπάρχει ακόμα αποθηκευμένο στοκ.
+                  No placed stock.
                 </div>
               </div>
             {% endif%}

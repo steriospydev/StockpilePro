@@ -12,8 +12,8 @@ from ..invoice.models import InvoiceItem
 
 # Create your models here.
 class TimeStamp(models.Model):
-    created_at = models.DateTimeField('Δημιουργηθηκε', auto_now_add=True)
-    updated_at = models.DateTimeField('Ανανεωθηκε', auto_now=True)
+    created_at = models.DateTimeField('Created at', auto_now_add=True)
+    updated_at = models.DateTimeField('Updated at', auto_now=True)
 
     class Meta:
         abstract = True
@@ -38,7 +38,7 @@ class BinType(models.Model):
 
 
 class Storage(TimeStamp):
-    storage_name = models.CharField("Ονομασία",
+    storage_name = models.CharField("Storage Name",
                                     unique=True,
                                     max_length=1,
                                     validators=[RegexValidator(
@@ -47,20 +47,20 @@ class Storage(TimeStamp):
                                                 ' single uppercase letter from'
                                                 ' A to Z',
                                         code='invalid_storage_name')])
-    capacity = models.CharField("Χωρητικότητα", max_length=120, blank=True, null=True)
-    location = models.CharField("Τοποθεσια", max_length=120, blank=True, null=True)
-    summary = models.TextField("Περιγραφή", blank=True, null=True)
+    capacity = models.CharField("Capacity", max_length=120, blank=True, null=True)
+    location = models.CharField("Location", max_length=120, blank=True, null=True)
+    summary = models.TextField("Description", blank=True, null=True)
 
     class Meta:
-        verbose_name = 'Αποθηκη'
-        verbose_name_plural = 'Αποθηκες'
+        verbose_name = 'Storage'
+        verbose_name_plural = 'Storages'
 
     def __str__(self):
         return f'{self.storage_name}'
 
 
 class Section(TimeStamp):
-    section_name = models.CharField('Μπλόκ', unique=True,
+    section_name = models.CharField('Lane', unique=True,
                                     max_length=1,
                                     validators=[RegexValidator(
                                         regex=r'^[A-Z]$',
@@ -70,26 +70,26 @@ class Section(TimeStamp):
                                         code='invalid_storage_name')])
 
     class Meta:
-        verbose_name = 'Διαδρομος'
-        verbose_name_plural = 'Διαδρομοι'
+        verbose_name = 'Lane'
+        verbose_name_plural = 'Lanes'
 
     def __str__(self):
         return f'{self.section_name}'
 
 
 class Spot(TimeStamp):
-    spot_name = models.CharField('Θεση', unique=True,
+    spot_name = models.CharField('Spot', unique=True,
                                  max_length=3,
                                  default='000',
                                  validators=[RegexValidator(
                                      regex=r'^[0-9]{3}$',
-                                     message='Η τιμή πρέπει να είναι από '
-                                             '001 έως 999', )]
+                                     message='Value must be'
+                                             '001 - 999', )]
                                  )
 
     class Meta:
-        verbose_name = 'Θεση'
-        verbose_name_plural = 'Θεσεις'
+        verbose_name = 'Spot'
+        verbose_name_plural = 'Spots'
 
     def __str__(self):
         return f'{self.spot_name}'
@@ -106,14 +106,14 @@ class Bin(TimeStamp, BinType):
     section = models.ForeignKey(Section, on_delete=models.CASCADE,
                                 related_name='section_bins')
     spot = models.ForeignKey(Spot, on_delete=models.CASCADE, related_name='spot_bins')
-    in_use = models.BooleanField('Σε χρηση', default=False)
+    in_use = models.BooleanField('In Use', default=False)
 
     objects = models.Manager()
     occupied = UseManager()
 
     class Meta:
-        verbose_name = 'Θεση αποθηκευσης'
-        verbose_name_plural = 'Θεσεις αποθηκευσης'
+        verbose_name = 'Bin'
+        verbose_name_plural = 'Bins'
         constraints = [
             models.UniqueConstraint(fields=['storage', 'section', 'spot', 'bin_type'],
                                     name='unique_bin')]
@@ -131,17 +131,17 @@ class StockManager(models.Manager):
 class Stock(TimeStamp):
     item = models.OneToOneField(InvoiceItem, on_delete=models.CASCADE,
                                 related_name='invoice_stock')
-    expiration_date = models.DateField('Ημ.Ληξης', null=True)
+    expiration_date = models.DateField('Exp.Date', null=True)
 
-    start_quantity = models.DecimalField('Αρχικη Ποσοτητα', max_digits=12,
+    start_quantity = models.DecimalField('Start Quantity', max_digits=12,
                                          decimal_places=2, default=0)
-    stock_placed = models.DecimalField('Τοποθετημένο στοκ', max_digits=12,
+    stock_placed = models.DecimalField('Placed', max_digits=12,
                                        decimal_places=2, default=0)
-    retrieved = models.DecimalField('Εξαγωγη', max_digits=12,
+    retrieved = models.DecimalField('Extracted', max_digits=12,
                                     decimal_places=2, default=0)
 
-    is_placed = models.BooleanField('Τοποθετηση', default=False)
-    deplete = models.BooleanField('Εξαντλημενο', default=False)
+    is_placed = models.BooleanField('Placed', default=False)
+    deplete = models.BooleanField('Deplete', default=False)
 
     sku = models.CharField('SKU', max_length=9, unique=True,
                            blank=True, null=True, editable=False)
@@ -149,8 +149,8 @@ class Stock(TimeStamp):
     objects = StockManager()
 
     class Meta:
-        verbose_name = 'Στοκ'
-        verbose_name_plural = 'Στοκ'
+        verbose_name = 'Stock'
+        verbose_name_plural = 'Stock'
         ordering = ['expiration_date']
 
     def __str__(self):
@@ -199,15 +199,15 @@ class PlaceStock(TimeStamp):
                               related_name='place_stock')
     bin = models.ForeignKey(Bin, on_delete=models.CASCADE,
                             related_name='stock_bin')
-    deplete = models.BooleanField('Εξαντλημενο', default=False)
-    quantity = models.DecimalField("Ποσότητα", max_digits=8,
+    deplete = models.BooleanField('Deplete', default=False)
+    quantity = models.DecimalField("Quantity", max_digits=8,
                                    decimal_places=2, default=0)
-    exit_stock = models.DecimalField('Εξαγωγη', max_digits=12,
+    exit_stock = models.DecimalField('Extracted', max_digits=12,
                                      decimal_places=2, default=0)
 
     class Meta:
-        verbose_name = 'Τοποθετηση'
-        verbose_name_plural = 'Τοποθετησεις'
+        verbose_name = 'Placement'
+        verbose_name_plural = 'Placements'
         ordering = ['stock__expiration_date']
 
     def get_absolute_url(self):

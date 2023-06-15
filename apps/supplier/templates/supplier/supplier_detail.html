@@ -1,9 +1,9 @@
 {% extends 'base.html' %}
 
-{% block title%}Προμηθευτής {{supplier.company}}{% endblock %}
+{% block title%}Supplier: {{supplier.company}}{% endblock %}
 
 {% block bread %}
-    {% include 'Component/page_title.html' with tab1='Πληροφορίες Προμηθευτή' tab2=supplier.company %}
+    {% include 'Component/page_title.html' with tab1='Supplier Info' tab2=supplier.company %}
 
 {% endblock %}
 {% block content %}
@@ -19,12 +19,12 @@
           <div class="level is-mobile">
             <div class="level-item">
               <div class="is-widget-label"><h3 class="subtitle is-spaced mb-2">
-                  Γενικά
+                  General
                   </h3>
                   <ul>
-                    <li class="is-italic">Επιχείρηση</li>
+                    <li class="is-italic">Company</li>
                     <li class="mb-2"><strong> {{ supplier.company}}</strong></li>
-                    <li class="is-italic">Ενεργός</li>
+                    <li class="is-italic">Active</li>
                     {% if supplier.is_active %}
                       <li class="mb-2">
                         <span class="icon has-text-success "><i class="mdi mdi-check-decagram "></i></span>
@@ -34,9 +34,9 @@
                         <span class="icon has-text-danger "><i class="mdi mdi-cancel "></i></span>
                       </li>
                     {% endif %}
-                    <li class="is-italic">Αριθμός SKU</li>
+                    <li class="is-italic">SKU num</li>
                     <li class="mb-2"> <strong>{{ supplier.sku_num }}</strong></li>
-                    <li><a class="button is-small is-success" href="{% url 'supplier:supplier-update' supplier.id %}">Ενημέρωση</a>
+                    <li><a class="button is-small is-success" href="{% url 'supplier:supplier-update' supplier.id %}">Update</a>
                     </li>
                   </ul>
 
@@ -47,7 +47,7 @@
                   <span class="icon has-text-danger is-large"><i
                   class="mdi mdi-account-circle mdi-48px"></i></span>
                   <ul>
-                    <li><small>Ανανεώθηκε</small></li>
+                    <li><small>Updated at</small></li>
                     <li class="mb-2 is-italic"> <small>{{ supplier.updated_at }}</small></li>
                   </ul>
 
@@ -64,12 +64,12 @@
           <div class="level is-mobile">
             <div class="level-item">
               <div class="is-widget-label "><h3 class="subtitle is-spaced mb-2">
-                Φορολογικά Στοιχεία
+                Tax Info
               </h3>
                   <ul>
-                    <li class="is-italic">Δ.Ο.Υ</li>
+                    <li class="is-italic">Tax Authority</li>
                     <li class="mb-2"><strong> {{supplier.TIN_agency }}</strong></li>
-                    <li class="is-italic">Α.Φ.Μ.</li>
+                    <li class="is-italic">Tax Number</li>
                     <li class="mb-2"> <strong>{{ supplier.TIN_num }}</strong></li>
                   </ul>
               </div>
@@ -94,12 +94,12 @@
             <div class="level-item">
               <div class="is-widget-label">
                 <h3 class="subtitle is-spaced mb-2">
-                Στοιχεία Επικοινωνίας
+                Contact Info
                 </h3>
                   <ul>
-                    <li class="is-italic">Εκπρόσωπος</li>
+                    <li class="is-italic">Representative</li>
                     <li class="mb-2"><strong> {{ supplier.person }}</strong></li>
-                    <li class="is-italic">Τηλέφωνο</li>
+                    <li class="is-italic">Phone</li>
                     <li class="mb-2"> <strong>{{ supplier.phone }}</strong></li>
                     <li class="is-italic">Email</li>
                     <li class="mb-2"> <strong>{{ supplier.email }}</strong></li>
@@ -122,16 +122,16 @@
         <div class="level is-mobile">
           <div class="level-item">
             <div class="is-widget-label"><h3 class="subtitle is-spaced mb-2">
-              Στοιχεία Διεύθυνσης
+              Address Info
             </h3>
                 <ul>
-                  <li class="is-italic">Διεύθυνση</li>
+                  <li class="is-italic">Address</li>
                   <li class="mb-2"><strong> {{ supplier.address }}</strong></li>
-                  <li class="is-italic">Περιοχή</li>
+                  <li class="is-italic">Area</li>
                   <li class="mb-2"> <strong>{{ supplier.area }}</strong></li>
-                  <li class="is-italic">Πόλη</li>
+                  <li class="is-italic">City</li>
                   <li class="mb-2"> <strong>{{ supplier.city }}</strong></li>
-                  <li class="is-italic">Τ.Κ.</li>
+                  <li class="is-italic">Postal Code</li>
                   <li class="mb-2"> <strong>{{ supplier.zipcode }}</strong></li>
                 </ul>
             </div>

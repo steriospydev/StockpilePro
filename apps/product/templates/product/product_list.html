@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
-{% block title%}Προιόντα {% endblock %}
+{% block title%}Products{% endblock %}
 {% block css %}
     #search_term::-webkit-input-placeholder {
       color: black;
@@ -19,7 +19,7 @@
 
 {% endblock %}
 {% block content %}
-  {% include 'Component/page_title.html' with tab1='Προιόντα' %}
+  {% include 'Component/page_title.html' with tab1='Products' %}
 
   <!-- Product Header-->
   <div class="tile is-ancestor ml-3 mr-3 ">
@@ -38,10 +38,10 @@
               <div class="level-item">
                 <div class="is-widget-label ">
                   <h3 class="subtitle is-spaced has-text-success">
-                      Δημιουργία
+                      Create
                   </h3>
                   <h3 class="subtitle is-spaced has-text-success">
-                      Προιόντος
+                      Product
                   </h3>
                 </div>
               </div>
@@ -57,7 +57,7 @@
             <div class="level is-mobile">
               <div class="level-item ">
                 <div class="is-widget-label "><h3 class="subtitle is-spaced has-text-warning">
-                  Προιόντα
+                  Overall Products
                 </h3>
                   <h1 class="title has-text-danger">
                     {{ total_products }}
@@ -66,7 +66,7 @@
               </div>
               <div class="level-item has-widget-icon">
                 <div class="is-widget-icon"><span class="icon has-text-warning is-large"><i
-                    class="mdi mdi-account-multiple mdi-48px"></i></span>
+                    class="mdi mdi-database mdi-48px"></i></span>
                 </div>
               </div>
             </div>
@@ -84,7 +84,7 @@
         </div>
         <div class="control">
             <button class="button is-info" type='submit'>
-                <span>Αναζήτηση</span>
+                <span>Search</span>
                 <span class="icon has-text-light is-large"><i class="mdi mdi-account-search"></i></span>
             </button>
         </div>
@@ -123,9 +123,9 @@
     <div style="display: flex; justify-content: center; height: 100%;">
       <div class="notification is-success">
         {% if not products %}
-          Δεν βρέθηκαν αποτελέσματα προμηθευτών με {{search_option }}: {{query}}.
+          No product result for {{search_option }}: {{query}}.
         {% else %}
-          Bρέθηκαν {{products|length}} Προιόντα με {{search_option }}: {{query}}.
+          {{products|length}} found with {{search_option }}: {{query}}.
         {% endif %}
       </div>
     </div>
@@ -137,20 +137,20 @@
       <table class="table is-fullwidth is-striped is-hoverable is-sortable is-fullwidth">
         <thead>
           <tr>
-            <th>Προιoν</th>
+            <th>Product</th>
             <th>SKU_num</th>
-            <th>Διαθέσιμο</th>
+            <th>Available</th>
             <th>Online</th>
-            <th>Ενεργό</th>
+            <th>Active</th>
             <th>Actions</th>
           </tr>
         </thead>
         <tbody>
           {% for product in products %}
             <tr>
-              <td data-label="Προιόν">{{product.product_name}} - {{product.package}}</td>
+              <td data-label="Product">{{product.product_name}} - {{product.package}}</td>
               <td data-label="SKU_num">{{product.sku_num}}</td>
-                <td data-label="Διαθέσιμο">
+                <td data-label="Available">
                 {% if product.available %}
                   <span class="icon has-text-success ">
                     <i class="mdi mdi-check-decagram "></i>
@@ -172,7 +172,7 @@
                     </span>
                 {% endif %}
               </td>
-              <td data-label="Ενεργό">
+              <td data-label="Active">
                 {% if product.is_active %}
                   <span class="icon has-text-success ">
                     <i class="mdi mdi-check-decagram "></i>
@@ -205,7 +205,7 @@
                         <button class="delete" aria-label="close"></button>
                       </header>
                       <section class="modal-card-body">
-                        Είστε σιγουροι πως θέλετε να διαγράψετε το προιόν {{product.product_name}}?
+                        Are you sure you want to delete {{product.product_name}}?
                       </section>
                       <footer class="modal-card-foot">
                         <form action="{% url 'product:product-delete' product.id %}"
@@ -225,9 +225,9 @@
             {% if request.resolver_match.url_name == 'product-list' %}
               <div style="display: flex; justify-content: center; height: 100%;">
                 <div class="notification is-success">
-                  Δεν υπάρχουν ακόμα αποθηκευμένα προιόντα.
+                 No products in database.
                   <a href="{% url 'product:product-create' %}">
-                    Δημιουργία Νέου Προιόντος.
+                    Create new product.
                   </a>.
                 </div>
               </div>
