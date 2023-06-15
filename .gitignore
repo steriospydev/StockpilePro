@@ -169,3 +169,12 @@ coverage
 /static/img/no_image.png
 /media/products/2023/02/26/ripper.jpg
 /media/products/2023/02/26/thumbnails/ripper.jpg_thumb.jpg
+/.env.example
+/.idea/.gitignore
+/.idea/misc.xml
+/.idea/modules.xml
+/.idea/inspectionProfiles/profiles_settings.xml
+/.idea/inspectionProfiles/Project_Default.xml
+/.idea/StockpilePro.iml
+/test_output.txt
+/.idea/vcs.xml
