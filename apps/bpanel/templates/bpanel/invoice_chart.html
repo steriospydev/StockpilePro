@@ -9,7 +9,7 @@
 
 {% block content %}
 
-{% if overall_chart_or_none is not str %}
+{% if overall_chart_or_none is str %}
   <div style="display: flex; justify-content: center; height: 100%;">
     <div class="notification is-info">
       {{ overall_chart_or_none }}
