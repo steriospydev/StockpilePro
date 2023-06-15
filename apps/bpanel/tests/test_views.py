@@ -121,7 +121,7 @@ class TestBPanelViews(TestCase):
 
             # Check that the expected context variables are present
             self.assertIn('charts', response.context)
-            self.assertIn('overall_chart', response.context)
+            self.assertIn('overall_chart_or_none', response.context)
 
             # Check that the charts are constructed correctly
             charts = response.context['charts']
@@ -130,7 +130,7 @@ class TestBPanelViews(TestCase):
             self.assertIsInstance(charts[2022], str)
 
             # Check that the overall chart is constructed correctly
-            overall_chart = response.context['overall_chart']
+            overall_chart = response.context['overall_chart_or_none']
             self.assertIsInstance(overall_chart, str)
 
     def test_invoice_chart_anonymous(self):

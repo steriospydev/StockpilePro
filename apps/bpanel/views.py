@@ -42,11 +42,12 @@ def index(request):
                'num_suppliers': num_suppliers}
     return render(request, 'bpanel/index.html', context)
 
+@login_required
 def remove(request, item_id):
     item = DTask.objects.get(id=item_id)
     item.delete()
     return redirect('bpanel:index')
-
+@login_required
 def change_status(request, item_id):
     item = DTask.objects.get(id=item_id)
     if item.completed:

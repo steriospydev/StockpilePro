@@ -5,6 +5,7 @@ from . import views
 app_name = 'product'
 
 urlpatterns = [
+    # category Tree
     path('categories/', views.CategoryListView.as_view(),
          name='category-list'),
     path('categories/<int:pk>/subcategories', views.CategoryDetailView.as_view(),
