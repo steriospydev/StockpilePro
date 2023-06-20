@@ -11,11 +11,21 @@ providing users with the ability to move products between different storage
 facilities and track their location in real-time. However, it is worth noting that not all functional requirements have yet been met, and there is still room for improvement in terms of performance and scalability.
  
 # Installation
-
-To install StockPilePro, follow these steps:
-
 - Clone the repository:
   - git clone https://github.com/steriospydev/StockPilePro.git
+### Method 1(Docker)
+- Install docker and docker-compose
+- Move to App's directory
+- run: <code>docker-compose build .</code>
+- run: <code>docker-compose up</code>
+- Execute start_script.py to load default data :
+  - run: <code>docker exec -it <container-id-or-name> /bin/sh</code>
+  - run: <code>python manage.py creatsuperuser </code>
+  - Inside bash run <code>python3 start_script.py</code>
+### Method 2(Virtual Environment)
+To install StockPilePro, follow these steps:
+
+
 - Install PostgreSQL:
 
   - You can download and install PostgreSQL from the official website or by using a package manager on your operating system.

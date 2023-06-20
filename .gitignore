@@ -131,7 +131,7 @@ venv.bak/
 tion
 
 /site
-
+/docker_example
 # mypy
 .mypy_cache/
 .dmypy.json
