@@ -13,6 +13,7 @@ facilities and track their location in real-time. However, it is worth noting th
 # Installation
 - Clone the repository:
   - git clone https://github.com/steriospydev/StockPilePro.git
+  - 
 ### Method 1(Docker)
 - Install docker and docker-compose
 - Move to App's directory
@@ -20,14 +21,13 @@ facilities and track their location in real-time. However, it is worth noting th
 - run: <code>docker-compose up</code>
 - Execute start_script.py to load default data :
   - run: <code>docker exec -it <container-id-or-name> /bin/sh</code>
+  - run: <code>python3 start_script.py</code>
   - run: <code>python manage.py creatsuperuser </code>
-  - Inside bash run <code>python3 start_script.py</code>
+
+  
 ### Method 2(Virtual Environment)
 To install StockPilePro, follow these steps:
-
-
 - Install PostgreSQL:
-
   - You can download and install PostgreSQL from the official website or by using a package manager on your operating system.
 
 - Create a PostgreSQL user and database:
