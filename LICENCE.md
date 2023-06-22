@@ -1,6 +1,7 @@
 MIT License
 
 Copyright © 2023 steriospydev
+
 Copyright © 2019-2020 JustBoil.me (https://justboil.me)
 
 Permission is hereby granted, free of charge, to any person obtaining a copy

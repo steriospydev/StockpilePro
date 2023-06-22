@@ -62,14 +62,14 @@ To install StockPilePro, follow these steps:
 - [Model Dependency](/design/model_dependency.png)
 
 ## Why is this app created?
-StockpilePro, an impressive Django, PostgreSQL, and Bulma application, originated from a local businessman's challenge. As his business expanded rapidly, he lacked an efficient system to handle invoices, stocks, and orders. Although I referred him to a seasoned professional for guidance, I was inspired by our conversations to create an app for my portfolio. Thus, StockpilePro was born. This comprehensive application enables users to store information about products, manage suppliers, handle invoices, and seamlessly organize stock items within multiple storage facilities. With StockpilePro, businesses can efficiently track inventory and streamline their operations.
+StockpilePro, a Django, PostgreSQL, and Bulma application, originated from a local businessman's challenge. As his business expanded rapidly, he lacked an efficient system to handle invoices, stocks, and orders. Although I referred him to a  professional for guidance, I was inspired by our conversations to create an app for my portfolio. Thus, StockpilePro was born. This comprehensive application enables users to store information about products, manage suppliers, handle invoices, and seamlessly organize stock items within multiple storage facilities. With StockpilePro, businesses can efficiently track inventory and streamline their operations.
 
 The whole process was a valuable experience for me as a developer. It gave me the opportunity to work on a real-world 
 project and 
 gain practical skills that I could apply in future endeavors. Overall, I learned the importance of listening to the needs of the business and creating solutions that could address their specific challenges.
 
 # Structure
-The project consists of 6 apps with their own model-view-template structure:
+The project consists of 6 apps with their own MVT structure:
 - accounts
     - responsible for register/login contains the login form and template for now
 - bpanel
