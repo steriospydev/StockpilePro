@@ -53,6 +53,9 @@ To install StockPilePro, follow these steps:
 - Create a superuser:<code> python manage.py createsuperuser</code>
 - Start the development server:<code> python manage.py runserver</code>
 
+
+* In order to run python manage.py test in local env run this in psql:
+  * <code>ALTER USER myprojectuser CREATEDB;</code> 
 ## See also
 - [System Architecture](/design/System-Architecture.md)
 - [Requirements Specification](/design/Requirements-Specification.md)
