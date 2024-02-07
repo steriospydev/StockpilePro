@@ -66,8 +66,7 @@ StockpilePro, a Django, PostgreSQL, and Bulma application, originated from a loc
 
 The whole process was a valuable experience for me as a developer. It gave me the opportunity to work on a real-world 
 project and 
-gain practical skills that I could apply in future endeavors. Overall, I learned the importance of listening to the needs of the business and creating solutions that could address their specific challenges.
-
+gain practical skills that I could apply in future endeavors.
 # Structure
 The project consists of 6 apps with their own MVT structure:
 - accounts
